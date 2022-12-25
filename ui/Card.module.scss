@@ -1,57 +1,150 @@
-#twelvePoint {
-  position: relative;
-  background: red;
-  width: 80px;
-  height: 80px;
-  text-align: center;
+@import "../styles/breakpoints";
+
+@keyframes scaleDown {
+  from {
+    opacity: 0.5;
+    transform: scale(1.1);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-#twelvePoint:before,
-#twelvePoint:after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 80px;
-  width: 80px;
-  background: red;
+@keyframes slideInFromBottom {
+  0% {
+    bottom: 150px;
+  }
+  100% {
+    bottom: 220px;
+  }
 }
 
-#twelvePoint:before {
-  transform: rotate(30deg);
-}
+@keyframes happyHover {
+  from {
 
-#twelvePoint:after {
-  transform: rotate(60deg);
+  }
+
+  to {
+
+  }
 }
 
 .hero {
-  &__image {
+  width: 100%;
+  animation: 500ms ease-out scaleDown;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
+  height: 600px;
+
+  &__imageWrap {
+    position: relative;
     width: 100%;
-    height: 100vh;
+    img {
+      width: 100vw;
+      height: 600px;
+    }
+  }
+
+  &__content {
+    position: relative;
+    animation: 900ms ease slideInFromBottom;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    left: 50px;
+    bottom: 220px;
+  }
+
+  &__ctaContainer {
+    visibility: inherit;
+    opacity: 1;
+    transform: matrix(1, 0, 0, 1, 0, 0);
+    transition: transform 0.3s ease-out;
+
+    &:hover{
+      transform: translateY(10px);
+    }
+
+    &__cta {
+      justify-content: flex-start;
+
+      a {
+        color: #363636;
+        border-color: #ffffff;
+      }
+    }
   }
 }
 
 .card {
-  padding: 20px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  transition: transform 0.3s ease-out;
+  margin: 20px;
   position: relative;
   overflow: hidden;
-  filter: grayscale(100%);
+  border-radius: 10px;
 
-  &__image {
-    border-radius: 10px;
-    width: 400px;
-    height: 250px;
+  @include mobile-up {
+    width: 300px;
+    height: 300px;
   }
 
-  &:hover{
-    filter: grayscale(0);
+  @include small-desktop {
+    width: 350px;
+    height: 500px;
+    }
+
+  @include mid-desktop {
+    width: 400px;
+    height: 600px;
+  }
+
+  @include large-desktop {
+    width: 350px;
+    height: 500px;
+  }
+
+  @include desktop-up{
+    width: 500px;
+    height: 600px;
+    &:hover {
+      transform: translateY(-10px);
+    }
+  }
+
+
+  &__image {
+    align-self: center;
+    @include mobile {
+      width: 300px;
+      height: 200px;
+    }
+    @include tablet {
+      width: 300px;
+      height: 200px;
+    }
+    @include desktop-up {
+      width: 600px;
+      height: 300px;
+    }
+
+  }
+
+  &__content {
+    padding: 20px;
   }
 
   &:hover &__line {
-    transform: scaleX(6.5);
-  }
+    @include desktop-up {
+      border-radius: 20px;
+      transform: scaleX(6.5);
+    }
 
+  }
   &__line {
     border-radius: 20px;
     align-self: flex-end;

@@ -11,7 +11,7 @@ export default function Home() {
     <Layout>
         <h1>Hello World. Hope you like our website</h1>
         <div className={styles.heroContainer}>
-            <Hero imageSrc={"/MVIMG_20210102_150104.jpeg"} imageAlt={"picture of entrance"} content={"GREAT PLANTS WOOHOO!"}/>
+            <Hero imageSrc={"/MVIMG_20210102_150104.jpeg"} imageAlt={"picture of entrance"} content={"GREAT PLANTS WOOHOOHI!"} cta={"/home"} ctaText={"CLICK TO FIND OUT MORE"}/>
         </div>
         <div className={styles.buttonCards}>
             <SquareCard imageSrc={"/yogaclass2.jpeg"} content={"HELLO"}/>
