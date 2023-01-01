@@ -7,7 +7,6 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
   justify-content: center;
   position: sticky;
   height: 100px;
-  background-color: #fafafa;
 }
 
 .navigation {
@@ -15,6 +14,7 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
   display: flex;
   justify-content: center;
   flex-direction: row;
+
   ul {
     padding: 0;
     margin: 0;
