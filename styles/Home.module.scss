@@ -12,7 +12,6 @@
 .heroContainer{
   display: flex;
   width: 100vw;
-  height: 700px;
   transition: opacity .3s ease-in-out,visibility .3s ease-in-out;
 }
 
@@ -30,6 +29,18 @@
   flex-wrap: wrap;
   align-self: center;
   align-items: center;
+}
+
+.roundCards{
+  display: flex;
+  align-items: center;
+
+  @include mobile-up {
+    flex-direction: column;
+  }
+  @include tablet-up {
+    flex-direction: row;
+  }
 }
 
 .footer {
