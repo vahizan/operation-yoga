@@ -16,12 +16,35 @@ Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packag
 npx create-next-app --example with-cypress with-cypress-app
 ```
 
-```bash
-yarn create next-app --example with-cypress with-cypress-app
-```
+## Build docker image
 
 ```bash
-pnpm create next-app --example with-cypress with-cypress-app
+docker build -t operation-yoga:latest -f ./docker/[NODE_ENV]/Dockerfile .
 ```
 
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+## Tag docker image
+
+```bash
+ docker tag <IMAGE_ID> <URL>/httpd:version1.0
+
+```
+
+## Tag docker image with heroku repo
+
+```bash
+ docker tag <IMAGE_ID> registry.heroku.com/<HEROKU_APP_NAME>/web
+
+```
+
+## Pushing to Heroku 
+
+```bash
+docker push registry.heroku.com/<HEROKU_APP_NAME>/web
+```
+
+## Releasing in Heroku
+```bash
+heroku login
+heroku container:login
+heroku container:release web --app=<HEROKU_APP_NAME>
+```

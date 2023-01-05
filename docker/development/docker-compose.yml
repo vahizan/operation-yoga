@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  operation-yoga:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    image: operation-yoga-development
+    ports:
+      - '3001:3000'

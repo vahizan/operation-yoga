@@ -9,6 +9,10 @@
     "e2e": "start-server-and-test dev http://localhost:3000 cypress",
     "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless"
   },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.2"
+  },
   "dependencies": {
     "next": "latest",
     "react": "18.2.0",
