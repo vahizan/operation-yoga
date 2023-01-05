@@ -1,8 +1,13 @@
+@import "../../styles/breakpoints.scss";
+
 $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
 .navigationContainer {
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
   width: 100%;
-  z-index: 10;
   display: flex;
   justify-content: center;
   position: sticky;
@@ -18,6 +23,7 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
   ul {
     padding: 0;
     margin: 0;
+    align-self: center;
   }
 }
 
@@ -29,7 +35,10 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
 
 .navMenu {
-  width:150px;
+  @include desktop-up {
+    width:150px;
+  }
+
   text-align: center;
   padding-top: 20px;
   padding-bottom: 20px;
@@ -38,12 +47,13 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
   &__root {
     &__children {
-      display: none;
+      padding-left: 20px;
+      padding-right: 20px;
       opacity: 0;
     }
 
     &:hover &__children {
-      display: block;
+      background: white;
       opacity: 1;
     }
   }
@@ -57,11 +67,8 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
   &:hover {
     display: block;
-    left: 0;
-    top: 0;
     background-image: $glow-bg;
     transition: opacity .3s ease;
-    mix-blend-mode: plus-lighter;
     z-index: 2;
     border-radius: 10px;
   }
