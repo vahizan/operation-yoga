@@ -1,6 +1,50 @@
 @import "../../styles/breakpoints.scss";
+@import "../../styles/utils.scss";
 
 $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
+
+@keyframes shotup {
+  0% {
+    transform: translateY(300%) ;
+    opacity: 0;
+  }
+  90% {
+    transform: translateY(-50px);
+  }
+  100% {
+    transform: translateY(0%) ;
+    opacity: 1;
+  }
+}
+
+@keyframes slideOut {
+  0% {
+    width: 0%;
+    // transform: scale(.3);
+    opacity: 0;
+  }
+
+  100% {
+    width: 30%;
+    // transform:scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    width: 30%;
+    // transform: scale(.3);
+    opacity: 1;
+  }
+
+  100% {
+    width: 0%;
+    // transform:scale(1);
+    opacity: 0;
+  }
+}
+
 
 .navigationContainer {
   top: 0;
@@ -72,4 +116,177 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
     z-index: 2;
     border-radius: 10px;
   }
+}
+
+
+.verticalNavMenu {
+  text-align: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+
+  &__root {
+    font-size: 28px;
+    &__children {
+      font-size: 18px;
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+  }
+
+}
+
+.leftDrawer__hamburger{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 100px;
+  position: fixed;
+  z-index: 100;
+  height: 60px;
+  width: 60px;
+  left: 20px;
+  top: 20px;
+}
+
+.leftDrawer__content {
+  overflow-y: auto;
+  padding-top: 50px;
+  @include shadow();
+  background-color: white;
+  position: fixed;
+  left: 0;
+  height: 100%;
+  width: 0;
+  z-index: 10;
+  opacity: 0;
+  transition: all 600ms cubic-bezier(.62,.04,.3,1.56);
+  transition-delay: 100ms;
+}
+
+.leftDrawer__content__show {
+  @include mobile-up {
+    width: 100%;
+  }
+
+  @include desktop-up {
+    width:30%
+  }
+  opacity: 1;
+}
+
+
+.verticalNavItem {
+  width: 100%;
+  padding: 10px;
+  list-style-type: none;
+
+  @include desktop-up {
+    &:hover {
+      display: block;
+      background-image: $glow-bg;
+      transition: opacity .3s ease;
+      z-index: 2;
+      border-radius: 10px;
+    }
+  }
+
+}
+
+.hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+.hamburger {
+  top: -5px;
+  z-index: 110;
+  width: 30px;
+  height: 30px;
+  position: relative;
+}
+
+.hamburger .bar{
+  padding: 0;
+  top: 20px;
+  width: 30px;
+  height: 4px;
+  background-color: black;
+  display: block;
+  border-radius: 4px;
+  transition: all 0.4s ease-in-out;
+  position: absolute;
+}
+
+.hamburger .bar {
+  transition: all 0.4s ease-in-out, transform 0.4s ease-in-out 0.4s;
+}
+
+
+.bar1 {
+  top: 0;
+}
+
+.bar2,
+.bar3 {
+  top: 13.5px;
+}
+
+.bar3 {
+  right: 0;
+}
+
+.hamburger .bar4 {
+  top: 10px;
+}
+
+.hamburger .bar5 {
+  top: 30px;
+}
+
+.hamburger .bar {
+  transition: all 0.4s ease-in-out, transform 0.4s ease-in-out 0.4s;
+}
+
+.hamburger .bar2 {
+  width: 1px;
+  transform: rotate(90deg);
+  left: 13.5px;
+}
+
+.hamburger .bar3 {
+  width: 1px;
+  left: 13.5px;
+
+}
+
+.checkbox:checked + label > .hamburger > .bar1{
+  top: 13.5px;
+  background-color: transparent;
+}
+
+.checkbox:checked + label > .hamburger > .bar2{
+  left: 0px;
+  width: 30px;
+  transform: rotate(45deg);
+}
+
+.checkbox:checked + label > .hamburger > .bar3{
+  left: 0;
+  width: 30px;
+  transform: rotate(-45deg);
+}
+
+.checkbox:checked + label > .hamburger > .bar4{
+  background-color: transparent;
+}
+
+.checkbox:checked + label > .hamburger > .bar5{
+  bottom: 13.5px;
+  background-color: transparent;
 }
