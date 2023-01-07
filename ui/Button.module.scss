@@ -1,0 +1,19 @@
+@import "styles/utils";
+
+.enquiryButton {
+  &:hover {
+    background-image: $glow-bg;
+  }
+  font-weight: bolder;
+  text-transform: capitalize;
+  z-index: 100;
+  top:30px;
+  right: 20px;
+  border: 2px solid black;
+  background-color: white;
+  border-radius: 100px;
+  padding: 10px 30px;
+  font-size: 20px;
+  cursor: pointer;
+  outline: inherit;
+}
