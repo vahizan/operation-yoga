@@ -1,7 +1,6 @@
 @import "../../styles/breakpoints.scss";
 @import "../../styles/utils.scss";
 
-$glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
 @keyframes shotup {
   0% {
@@ -138,6 +137,9 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 }
 
 .leftDrawer__hamburger{
+  &:hover {
+    background-image: $glow-bg;
+  }
   display: flex;
   align-items: center;
   justify-content: center;
