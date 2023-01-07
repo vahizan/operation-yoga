@@ -19,13 +19,13 @@ export default function Home() {
       </div>
       <div className={styles.roundCards}>
         <RoundCard
-          imgSrc={"/spa.jpeg"}
-          imgAlt={"Spa Picture"}
+          imgSrc={"/IMG-20211010-WA0222.jpeg"}
+          imgAlt={"Yoga with everyone and with nature"}
           headingText={"Yoga"}
           headingUrl={"/Yoga"}
         />
         <RoundCard
-          imgSrc={"/spa.jpeg"}
+          imgSrc={"/IMG_20210521_164303.jpeg"}
           imgAlt={"Spa Picture"}
           headingText={"Indian Culture"}
           headingUrl={"/indian-culture"}
@@ -38,12 +38,33 @@ export default function Home() {
         />
       </div>
       <div className={styles.buttonCards}>
-        <SquareCard imageSrc={"/yogaclass2.jpeg"} content={"HELLO"} />
-        <SquareCard imageSrc={"/yogaclass2.jpeg"} content={"HELLO SQUARE"} />
+        <SquareCard
+          imageSrc={"/drop-in-classes.jpeg"}
+          content={"Daily Drop In Classes "}
+        />
+        <SquareCard
+          imageSrc={"/training.jpeg"}
+          content={"200 Hour Teachers' Training Course"}
+        />
+        <SquareCard
+          imageSrc={"/IMG_20220821_122707.jpeg"}
+          content={"Yoga Retreats"}
+        />
       </div>
+
       <div className={styles.buttonCards}>
-        <SquareCard imageSrc={"/yogaclass2.jpeg"} content={"HELLO"} />
-        <SquareCard imageSrc={"/yogaclass2.jpeg"} content={"HELLO SQUARE"} />
+        <SquareCard
+          imageSrc={"/IMG_20220106_210626.jpeg"}
+          content={"Sanskrit Classes"}
+        />
+        <SquareCard
+          imageSrc={"/Foodayurvedic.jpeg"}
+          content={"Cooking workshops"}
+        />
+        <SquareCard
+          imageSrc={"/IMG_20210329_181618__01.jpeg"}
+          content={"Daily Drop In Meditation"}
+        />
       </div>
     </Layout>
   );

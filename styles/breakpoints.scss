@@ -6,7 +6,6 @@ $s-desktop-min:769px;
 $s-desktop-max:1024px;
 $m-desktop-min:1025px;
 $m-desktop-max:1200px;
-$xlarge-desktop-min:1201px;
 
 @mixin mobile {
 @media (min-width: #{$mobile-min}) and (max-width: #{$mobile-max}) {
@@ -51,7 +50,7 @@ $xlarge-desktop-min:1201px;
 }
 
 @mixin large-desktop {
-  @media (min-width: #{$xlarge-desktop-min}) {
+  @media (min-width: #{$m-desktop-max+1}) {
     @content;
   }
 }

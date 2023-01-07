@@ -79,6 +79,12 @@
 }
 
 .card {
+  font-size: 25px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  &:hover{
+    opacity: 0.6;
+  }
   @include shadow();
   display: flex;
   justify-content: space-between;
@@ -95,8 +101,8 @@
   }
 
   @include small-desktop {
-    width: 350px;
-    height: 350px;
+    width: 300px;
+    height: 300px;
     }
 
   @include mid-desktop {
@@ -105,8 +111,8 @@
   }
 
   @include large-desktop {
-    width: 500px;
-    height: 500px;
+    width: 400px;
+    height: 400px;
   }
 
   @include desktop-up{
@@ -125,8 +131,15 @@
 
   &__content {
     position: absolute;
-    padding: 20px;
-    bottom: 0;
+    margin: 20px;
+    border-radius: 20px;
+    text-align: center;
+    top: 0;
+    left:0;
+    right: 0;
+    padding: 10px;
+
+    background-color: rgba(255,255,255,.8);
   }
 
   &:hover &__line {
@@ -151,6 +164,7 @@
 }
 
 .roundCard {
+  text-transform: uppercase;
   margin: 20px;
   transition: all 0.3s ease;
   display: flex;
@@ -180,8 +194,8 @@
     }
 
     @include large-desktop {
-      width: 400px;
-      height: 400px;
+      width: 350px;
+      height: 350px;
     }
   }
 
