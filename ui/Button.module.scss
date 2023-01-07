@@ -1,6 +1,7 @@
 @import "styles/utils";
 
 .enquiryButton {
+  @include autoFontSize(20);
   &:hover {
     background-image: $glow-bg;
   }
@@ -13,7 +14,6 @@
   background-color: white;
   border-radius: 100px;
   padding: 10px 30px;
-  font-size: 20px;
   cursor: pointer;
   outline: inherit;
 }

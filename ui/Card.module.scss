@@ -47,13 +47,7 @@
     flex-direction: column;
     left:20px;
     bottom: 50px;
-
-    @include mobile-up {
-      font-size: 0.5em;
-    }
-    @include desktop-up {
-      font-size: 1.0em;
-    }
+    @include autoFontSize(15);
   }
 
   &__ctaContainer {
@@ -79,7 +73,7 @@
 }
 
 .card {
-  font-size: 25px;
+  @include autoFontSize(18);
   text-transform: uppercase;
   font-weight: bolder;
   &:hover{
@@ -164,6 +158,7 @@
 }
 
 .roundCard {
+  @include autoFontSize(15);
   text-transform: uppercase;
   margin: 20px;
   transition: all 0.3s ease;
