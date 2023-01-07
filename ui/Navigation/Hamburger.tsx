@@ -1,3 +1,5 @@
+"use client";
+
 import styles from "./Navigation.module.scss";
 import { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 
@@ -8,6 +10,7 @@ export default function Hamburger({ updateValue }: Props) {
   const checkboxEvent: ChangeEventHandler<HTMLInputElement> = (event) => {
     updateValue(event.currentTarget.checked);
   };
+
   return (
     <>
       <input

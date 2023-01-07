@@ -5,7 +5,7 @@ import Hamburger from "./Hamburger";
 import { NavMenuType } from "./types";
 import { NAVIGATION_MENU_VALUES } from "../../constants/Navigation.constants";
 import VerticalNavMenu from "./VerticalNavMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const renderNavItems = (navMenuItems: NavMenuType[]) => {
   if (!navMenuItems) {
