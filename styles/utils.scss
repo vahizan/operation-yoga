@@ -1,5 +1,22 @@
+@import "./breakpoints";
+
 @mixin shadow() {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 }
 
 $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
+
+@mixin autoFontSize($size) {
+  @include mobile-up {
+    font-size: $size*0.8px;
+  }
+  @include small-desktop {
+    font-size: $size*1.2px;
+  }
+  @include mid-desktop {
+    font-size: $size*1.4px;
+  }
+  @include large-desktop {
+    font-size: $size*1.6px;
+  }
+}
