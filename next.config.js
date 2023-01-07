@@ -1,5 +1,13 @@
 module.exports = {
   output: "standalone",
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.google.com",
+      },
+    ],
+  },
   i18n: {
     // These are all the locales you want to support in
     // your application

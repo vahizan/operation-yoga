@@ -1,4 +1,3 @@
-import Link from "next/link";
 import styles from "../styles/Home.module.scss";
 import Layout from "./Layout";
 import SquareCard from "../ui/SquareCard";
@@ -8,12 +7,12 @@ import RoundCard from "../ui/RoundCard";
 export default function Home() {
   return (
     <Layout>
-      <h1>Hello World. Hope you like our website</h1>
+      <h1>Welcome to our space</h1>
       <div className={styles.heroContainer}>
         <Hero
-          imageSrc={"/MVIMG_20210102_150104.jpeg"}
-          imageAlt={"picture of entrance"}
-          content={"GREAT PLANTS WOOHOOHI!"}
+          imageSrc={"/Ganga.jpeg"}
+          imageAlt={"picture of ganga"}
+          content={"Veda Yogshala and Spa"}
           cta={"/home"}
           ctaText={"CLICK TO FIND OUT MORE"}
         />
