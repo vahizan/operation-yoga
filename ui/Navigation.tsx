@@ -1,12 +1,9 @@
 import styles from "./Navigation/Navigation.module.scss";
 import NavMenu from "./Navigation/NavMenu";
 import { NavMenuType } from "./Navigation/types";
-import { NAVIGATION_MENU_VALUES } from "../constants/Navigation.constants";
-import Hamburger from "./Navigation/Hamburger";
-import LeftDrawer from "./Navigation/LeftDrawer";
 
 interface Props {
-  rootTitle: {};
+  navItems: NavMenuType[]
 }
 
 const renderNavItems = (navMenuItems: NavMenuType[]) => {
@@ -17,18 +14,19 @@ const renderNavItems = (navMenuItems: NavMenuType[]) => {
     return (
       <NavMenu
         root={navMenu.root}
-        children={navMenu.children}
+        children={navMenu?.children}
         key={`${navMenu.root.title}_${i}`}
       />
     );
   });
 };
-export default function Navigation() {
+
+export default function Navigation({navItems}: Props) {
   return (
     <div className={styles.navigationContainer}>
       {/*<div className={styles.logo}>LOGO HERE</div>*/}
       <nav className={styles.navigation}>
-        {renderNavItems(NAVIGATION_MENU_VALUES)}
+        {renderNavItems(navItems)}
       </nav>
     </div>
   );

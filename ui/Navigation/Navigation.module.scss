@@ -140,6 +140,7 @@
   &:hover {
     background-image: $glow-bg;
   }
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -177,6 +178,10 @@
     width:30%
   }
   opacity: 1;
+}
+
+.leftDrawer__content__hide {
+  opacity: 0;
 }
 
 

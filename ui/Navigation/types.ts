@@ -10,5 +10,5 @@ export type NavItemType = {
 
 export type NavMenuType = {
     root: NavItemType
-    children?: NavMenuType[]
+    children?: NavMenuType[] | undefined
 }

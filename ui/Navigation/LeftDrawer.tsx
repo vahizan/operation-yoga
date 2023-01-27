@@ -25,7 +25,7 @@ const renderNavItems = (navMenuItems: NavMenuType[]) => {
 export default function LeftDrawer() {
   const [isChecked, setChecked] = useState(false);
   return (
-    <div className={styles.leftDrawer}>
+    <div>
       <div className={styles.leftDrawer__hamburger}>
         <Hamburger updateValue={setChecked} />
       </div>
