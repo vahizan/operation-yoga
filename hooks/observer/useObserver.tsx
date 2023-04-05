@@ -1,4 +1,4 @@
-import { MutableRefObject, useEffect, useRef } from "react";
+import { MutableRefObject, RefObject, useEffect, useRef } from "react";
 
 interface Props {
   observerCallback: IntersectionObserverCallback;
@@ -10,9 +10,9 @@ interface Props {
 }
 
 export function useObserver<T>({ observerCallback, options }: Props): {
-  containerRef: MutableRefObject<T | undefined>;
+  containerRef: RefObject<T>;
 } {
-  const containerRef = useRef<T>();
+  const containerRef = useRef<T>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(observerCallback, options);

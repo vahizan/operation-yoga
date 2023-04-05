@@ -11,5 +11,5 @@ export type NavItemType = {
 export type NavMenuType = {
   root: NavItemType;
   children?: NavMenuType[] | undefined;
-  key: string | number;
+  key?: string | number;
 };

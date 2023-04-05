@@ -19,7 +19,12 @@ export default function Hero({
     <div className={styles.hero}>
       {imageSrc && (
         <div className={styles.hero__imageWrap}>
-          <Image width={500} height={500} src={imageSrc} alt={imageAlt} />
+          <Image
+            width={500}
+            height={500}
+            src={imageSrc}
+            alt={imageAlt || "image is unavailable"}
+          />
         </div>
       )}
       <header className={styles.hero__content}>

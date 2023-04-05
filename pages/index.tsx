@@ -6,7 +6,7 @@ import RoundCard from "../ui/RoundCard";
 import useObserver from "../hooks/observer/useObserver";
 
 export default function Home() {
-  const observerCircleImages = useObserver({
+  const observerCircleImages = useObserver<HTMLDivElement>({
     observerCallback: () => {
       return null;
     },
@@ -28,7 +28,10 @@ export default function Home() {
           ctaText={"CLICK TO FIND OUT MORE"}
         />
       </div>
-      <div className={styles.roundCards} ref={observerCircleImages}>
+      <div
+        className={styles.roundCards}
+        ref={observerCircleImages.containerRef}
+      >
         <RoundCard
           imgSrc={"/IMG-20211010-WA0222.jpeg"}
           imgAlt={"Yoga with everyone and with nature"}
