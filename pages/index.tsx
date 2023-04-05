@@ -3,8 +3,19 @@ import Layout from "./Layout";
 import SquareCard from "../ui/SquareCard";
 import Hero from "../ui/Hero/Hero";
 import RoundCard from "../ui/RoundCard";
+import useObserver from "../hooks/observer/useObserver";
 
 export default function Home() {
+  const observerCircleImages = useObserver({
+    observerCallback: () => {
+      return null;
+    },
+    options: {
+      root: null,
+      rootMargin: "0px",
+      thresholds: [1.0],
+    },
+  });
   return (
     <Layout>
       <h1>Welcome to our space</h1>
@@ -17,7 +28,7 @@ export default function Home() {
           ctaText={"CLICK TO FIND OUT MORE"}
         />
       </div>
-      <div className={styles.roundCards}>
+      <div className={styles.roundCards} ref={observerCircleImages}>
         <RoundCard
           imgSrc={"/IMG-20211010-WA0222.jpeg"}
           imgAlt={"Yoga with everyone and with nature"}
