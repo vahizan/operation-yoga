@@ -6,24 +6,23 @@ import {
   FocusEventHandler,
   MouseEventHandler,
   SetStateAction,
-  useState,
 } from "react";
 
 interface Props {
   setNavigationOpen: Dispatch<SetStateAction<boolean>>;
+  isNavigationOpen: boolean;
 }
 
-export default function Hamburger({ setNavigationOpen }: Props) {
-  const [isButtonClicked, setButtonClick] = useState(false);
-
+export default function Hamburger({
+  setNavigationOpen,
+  isNavigationOpen,
+}: Props) {
   const clickHandler: MouseEventHandler<HTMLInputElement> = (event) => {
-    setButtonClick(!isButtonClicked);
-    setNavigationOpen(!isButtonClicked);
+    setNavigationOpen(!isNavigationOpen);
   };
 
   const onBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
-    setButtonClick(!isButtonClicked);
-    setNavigationOpen(!isButtonClicked);
+    setNavigationOpen(false);
   };
 
   return (
@@ -34,7 +33,7 @@ export default function Hamburger({ setNavigationOpen }: Props) {
         type="button"
         id="hamburger-button"
         data-test-id="hamburger-button"
-        className={`${isButtonClicked && styles.buttonClicked} ${
+        className={`${isNavigationOpen && styles.buttonClicked} ${
           styles.hamburgerButton
         } `}
       />

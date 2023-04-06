@@ -35,31 +35,29 @@ const blurEvent =
   ): FocusEventHandler<HTMLInputElement> =>
   () => {
     setBlur(true);
-    console.log("setBlur in left drawer");
   };
 
 export default function LeftDrawer() {
-  const [isChecked, setChecked] = useState(false);
+  const [isOpen, setOpen] = useState(false);
   const [isBlurred, setBlurred] = useState(false);
 
   useEffect(() => {
     if (isBlurred) {
-      console.log("isBlurred leftDrawer", isBlurred);
-      setChecked(false);
+      setOpen(false);
     }
-  }, [isBlurred, setChecked]);
+  }, [isBlurred, setOpen]);
 
   return (
     <div onBlur={blurEvent(setBlurred)}>
       <div className={styles.leftDrawer__hamburger}>
-        <Hamburger setNavigationOpen={setChecked} />
+        <Hamburger setNavigationOpen={setOpen} isNavigationOpen={isOpen} />
       </div>
 
       <div
         data-test-id="drawer"
         className={`${styles.leftDrawer__content}
           ${
-            isChecked
+            isOpen
               ? styles.leftDrawer__content__show
               : styles.leftDrawer__content__hide
           }

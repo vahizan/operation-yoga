@@ -23,6 +23,8 @@ describe("Navigation", () => {
       cy.get('[data-test-id="drawer"]').should("be.visible"); // verify that the drawer is now visible
       cy.get("body").click("topRight");
       cy.get('[data-test-id="drawer"]').should("not.be.visible"); // verify that the drawer is now visible
+      cy.get("body").click("topRight");
+      cy.get('[data-test-id="drawer"]').should("not.be.visible"); // verify that the drawer is now visible
     });
   });
 });
