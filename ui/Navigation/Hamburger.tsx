@@ -1,25 +1,43 @@
 "use client";
 
 import styles from "./Navigation.module.scss";
-import { ChangeEventHandler, Dispatch, SetStateAction } from "react";
+import {
+  Dispatch,
+  FocusEventHandler,
+  MouseEventHandler,
+  SetStateAction,
+} from "react";
 
 interface Props {
-  updateValue: Dispatch<SetStateAction<boolean>>;
+  setNavigationOpen: Dispatch<SetStateAction<boolean>>;
+  isNavigationOpen: boolean;
 }
-export default function Hamburger({ updateValue }: Props) {
-  const checkboxEvent: ChangeEventHandler<HTMLInputElement> = (event) => {
-    updateValue(event.currentTarget.checked);
+
+export default function Hamburger({
+  setNavigationOpen,
+  isNavigationOpen,
+}: Props) {
+  const clickHandler: MouseEventHandler<HTMLInputElement> = (event) => {
+    setNavigationOpen(!isNavigationOpen);
+  };
+
+  const onBlurHandler: FocusEventHandler<HTMLInputElement> = () => {
+    setNavigationOpen(false);
   };
 
   return (
     <>
       <input
-        onChange={checkboxEvent}
-        type="checkbox"
-        id="checkbox"
-        className={`${styles.checkbox} ${styles.hidden}`}
+        onClick={clickHandler}
+        onBlur={onBlurHandler}
+        type="button"
+        id="hamburger-button"
+        data-test-id="hamburger-button"
+        className={`${isNavigationOpen && styles.buttonClicked} ${
+          styles.hamburgerButton
+        } `}
       />
-      <label htmlFor="checkbox">
+      <label htmlFor="hamburger-button">
         <div className={`${styles.hamburger}`}>
           <span className={`${styles.bar} ${styles.bar1}`}></span>
           <span className={`${styles.bar} ${styles.bar2}`}></span>

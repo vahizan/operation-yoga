@@ -1,5 +1,4 @@
 import { NavMenuType } from "../ui/Navigation/types";
-import { root } from "postcss";
 
 export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
   {

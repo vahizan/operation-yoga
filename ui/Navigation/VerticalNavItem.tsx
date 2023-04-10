@@ -12,7 +12,12 @@ const renderIcon = (
     return <>{icon}</>;
   }
 };
-const renderItem = (title, link, icon, imageAlt) => {
+const renderItem = (
+  title: string,
+  link: string,
+  icon: string | SVGElement | ReactNode,
+  imageAlt: string
+) => {
   return (
     <>
       {icon && imageAlt && (
@@ -30,7 +35,7 @@ export default function VerticalNavItem({
   title,
   link,
   icon,
-  imageAlt,
+  imageAlt = "image is not available",
   isRoot,
 }: NavItemType) {
   return isRoot ? (

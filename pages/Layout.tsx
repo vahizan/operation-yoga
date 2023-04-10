@@ -1,10 +1,11 @@
 import Head from "next/head";
+import { ReactNode } from "react";
 import styles from "../styles/Layout.module.scss";
 import Footer from "./Footer";
 import LeftDrawer from "../ui/Navigation/LeftDrawer";
 import EnquiryButton from "../ui/Button/EnquiryButton";
 
-export default function Layout({ children }) {
+export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className={styles.header}>

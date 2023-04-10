@@ -5,11 +5,18 @@ import Hamburger from "./Hamburger";
 import { NavMenuType } from "./types";
 import { NAVIGATION_MENU_VALUES } from "../../constants/Navigation.constants";
 import VerticalNavMenu from "./VerticalNavMenu";
-import { useEffect, useState } from "react";
+import {
+  Dispatch,
+  FocusEventHandler,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
+import { set } from "immutable";
 
-const renderNavItems = (navMenuItems: NavMenuType[]) => {
+const renderNavItems = (navMenuItems: NavMenuType[]): JSX.Element[] | null => {
   if (!navMenuItems) {
-    return;
+    return null;
   }
   return navMenuItems.map((navMenu, i) => {
     return (
@@ -22,18 +29,35 @@ const renderNavItems = (navMenuItems: NavMenuType[]) => {
   });
 };
 
+const blurEvent =
+  (
+    setBlur: Dispatch<SetStateAction<boolean>>
+  ): FocusEventHandler<HTMLInputElement> =>
+  () => {
+    setBlur(true);
+  };
+
 export default function LeftDrawer() {
-  const [isChecked, setChecked] = useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [isBlurred, setBlurred] = useState(false);
+
+  useEffect(() => {
+    if (isBlurred) {
+      setOpen(false);
+    }
+  }, [isBlurred, setOpen]);
+
   return (
-    <div className={styles.leftDrawer}>
+    <div onBlur={blurEvent(setBlurred)}>
       <div className={styles.leftDrawer__hamburger}>
-        <Hamburger updateValue={setChecked} />
+        <Hamburger setNavigationOpen={setOpen} isNavigationOpen={isOpen} />
       </div>
 
       <div
+        data-test-id="drawer"
         className={`${styles.leftDrawer__content}
           ${
-            isChecked
+            isOpen
               ? styles.leftDrawer__content__show
               : styles.leftDrawer__content__hide
           }
