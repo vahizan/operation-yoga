@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { IArticlePost } from "../interfaces";
-import MongooseDatabaseConnection from "../../../connector/MongoDatabaseConnection";
-import { Connection } from "mongoose";
+import MongooseDatabaseConnection from "../../connector/MongoDatabaseConnection";
 import Blog from "../../model/Blog.model";
 
 // placeholder handler replace with required logic
