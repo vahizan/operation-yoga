@@ -23,6 +23,7 @@
     "mongoose": "^7.0.3",
     "next": "latest",
     "react": "18.2.0",
+    "react-calendar": "^4.2.1",
     "react-dom": "18.2.0",
     "sass": "^1.56.2"
   },

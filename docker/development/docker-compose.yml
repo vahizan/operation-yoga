@@ -6,5 +6,8 @@ services:
       context: ../../
       dockerfile: docker/development/Dockerfile
     image: operation-yoga-development
+    environment:
+      - PB_VERSION=0.15.1
     ports:
       - '3001:3000'
+      - '8081:8080'
