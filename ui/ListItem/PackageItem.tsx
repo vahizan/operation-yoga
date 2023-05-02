@@ -1,5 +1,7 @@
+"use client";
+
 import React, { FC } from "react";
-import styles from "./ListItem.module.scss";
+import styles from "./PackageItem.module.scss";
 import { IPackage } from "../../pages/api/interfaces";
 import { useRouter } from "next/router";
 
