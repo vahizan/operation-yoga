@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
+let cached = global.mongo;
+
 export class MongooseDatabaseConnection {
   private readonly dbUrl: string;
-  private connection: mongoose.Connection | undefined;
   private readonly options: Record<string, any> | undefined;
 
   constructor(dbUrl: string, options?: Record<string, any>) {
@@ -13,25 +14,28 @@ export class MongooseDatabaseConnection {
   }
 
   public async connect() {
-    if (this.connection) {
-      return this.connection;
+    if (cached) {
+      return cached;
     }
 
-    if (this.options) {
-      await mongoose.connect(this.dbUrl, this.options);
-    } else {
-      await mongoose.connect(this.dbUrl);
+    try {
+      if (this.options) {
+        await mongoose.connect(this.dbUrl, this.options);
+      } else {
+        await mongoose.connect(this.dbUrl);
+      }
+
+      cached = mongoose.connection;
+    } catch (err) {
+      console.error("Error connecting to server: ", err);
     }
-
-    this.connection = mongoose.connection;
-
-    return this.connection;
+    return cached;
   }
 
   public async disconnect() {
-    if (this.connection) {
+    if (cached) {
       await mongoose.disconnect();
-      this.connection = undefined;
+      cached = undefined;
     }
   }
 }

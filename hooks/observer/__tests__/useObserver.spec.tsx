@@ -22,6 +22,6 @@ describe("useObserver", () => {
   it("should render hook and return a reference to a container", () => {
     const { result } = renderHook(() => useObserver(props));
 
-    expect(result.current.containerRef).toEqual({ current: undefined });
+    expect(result.current.containerRef).toEqual({ current: null });
   });
 });

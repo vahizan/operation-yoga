@@ -16,6 +16,7 @@ export default function Home() {
       thresholds: [1.0],
     },
   });
+
   return (
     <Layout>
       <h1>Welcome to our space</h1>
@@ -24,7 +25,7 @@ export default function Home() {
           imageSrc={"/Ganga.jpeg"}
           imageAlt={"picture of ganga"}
           content={"Veda Yogshala and Spa"}
-          cta={"/home"}
+          cta={"/schedule"}
           ctaText={"CLICK TO FIND OUT MORE"}
         />
       </div>
