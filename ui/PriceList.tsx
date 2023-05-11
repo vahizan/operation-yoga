@@ -1,6 +1,7 @@
 import { FC } from "react";
 import PackageItem from "./ListItem/PackageItem";
 import { IPackage } from "../pages/api/interfaces";
+import Layout from "./Layout";
 
 interface Props {
   packages: IPackage[] | [];

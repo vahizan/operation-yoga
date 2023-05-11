@@ -4,7 +4,6 @@ import PackageItem from "../PackageItem";
 import { useRouter } from "next/router";
 import restoreAllMocks = jest.restoreAllMocks;
 import { PackageType } from "../../../pages/api/interfaces";
-import { waitFor } from "@testing-library/dom";
 
 jest.mock("next/router", () => {
   return {
