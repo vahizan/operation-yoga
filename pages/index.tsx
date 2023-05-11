@@ -1,5 +1,5 @@
 import styles from "../styles/Home.module.scss";
-import Layout from "./Layout";
+import Layout from "../ui/Layout";
 import SquareCard from "../ui/SquareCard";
 import Hero from "../ui/Hero/Hero";
 import RoundCard from "../ui/RoundCard";
