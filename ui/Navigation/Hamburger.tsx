@@ -18,6 +18,8 @@ export default function Hamburger({
   isNavigationOpen,
 }: Props) {
   const clickHandler: MouseEventHandler<HTMLInputElement> = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
     setNavigationOpen(!isNavigationOpen);
   };
 
@@ -29,7 +31,6 @@ export default function Hamburger({
     <>
       <input
         onClick={clickHandler}
-        onBlur={onBlurHandler}
         type="button"
         id="hamburger-button"
         data-test-id="hamburger-button"
