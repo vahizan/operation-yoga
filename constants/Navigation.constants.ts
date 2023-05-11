@@ -6,6 +6,7 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
     children: [
       { root: { title: "Location", link: "/location" } },
       { root: { title: "Booking", link: "/booking" } },
+      { root: { title: "Lessons", link: "/lessons" } },
       { root: { title: "Contact Us", link: "/contact-us" } },
     ],
   },

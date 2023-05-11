@@ -2,5 +2,13 @@
 @import "../../styles/utils";
 
 .eventItemContainer {
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 18px;
+  align-items: center;
 }

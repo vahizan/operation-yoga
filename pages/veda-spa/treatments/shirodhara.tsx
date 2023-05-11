@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Layout from "../../Layout";
+import Layout from "../../../ui/Layout";
 
 export default function Shirodhara() {
   return (

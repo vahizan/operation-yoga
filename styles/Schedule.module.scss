@@ -1,5 +1,23 @@
 @import "../styles/breakpoints.scss";
 
 .scheduleContainer {
+  min-width: 100%;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.lessonsContainer {
+  padding: 30px;
+  margin: 20px;
+}
+
+.loading {
+  font-size: 24px;
+  text-align: center;
+  align-self: center;
+  padding: 20px;
 }

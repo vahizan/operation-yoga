@@ -1,5 +1,5 @@
 import Link from "next/link";
-import Layout from "../Layout";
+import Layout from "../../ui/Layout";
 import styles from "./VedaSpa.module.scss";
 
 export default function SpaTreatments() {
