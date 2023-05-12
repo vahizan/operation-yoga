@@ -15,7 +15,7 @@ export default async function handler(
   }
 
   const mongoConnector = new MongooseDatabaseConnection(
-    process.env.MONGO_DB_URI || "",
+    process.env.MONGODB_URI || "",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
