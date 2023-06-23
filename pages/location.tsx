@@ -15,7 +15,7 @@ export default function Location() {
         <p> Several shops and cafes can be found along the road  – it is a busy hub for fellow yogis seeking respite from busy city life… </p>
 
       <p> We are also a short walk from the spiritual Parmarth Ashram , which hosts daily Ganga Arti – evening prayers to the river Ganga. </p>
-      <img src="/Locationmap.jpg" />
+      <img src="/Locationmap.jpeg" />
       <p> Veda Yogshala Laxman Jhula Road Rishikesh </p>
       </main>
     </div>
