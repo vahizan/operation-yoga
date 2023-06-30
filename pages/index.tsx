@@ -22,8 +22,8 @@ export default function Home() {
       <h1>Welcome to our space</h1>
       <div className={styles.heroContainer}>
         <Hero
-          imageSrc={"/Ganga.jpeg"}
-          imageAlt={"picture of ganga"}
+          videoUrl={"https://d399a6wtv3gpjg.cloudfront.net/videoshort.mp4"}
+          videoAlt={"picture of ganga"}
           content={"Veda Yogshala and Spa"}
           cta={"/schedule"}
           ctaText={"CLICK TO FIND OUT MORE"}

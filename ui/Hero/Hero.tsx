@@ -2,29 +2,20 @@ import Image from "next/image";
 import styles from "../Card.module.scss";
 
 interface Props {
-  imageSrc?: string;
-  imageAlt?: string;
+  videoUrl?: string;
+  videoAlt?: string;
   content: string;
   cta?: string;
   ctaText?: string;
 }
-export default function Hero({
-  imageSrc,
-  imageAlt,
-  content,
-  cta,
-  ctaText,
-}: Props) {
+export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
   return (
     <div className={styles.hero}>
-      {imageSrc && (
-        <div className={styles.hero__imageWrap}>
-          <Image
-            width={500}
-            height={500}
-            src={imageSrc}
-            alt={imageAlt || "image is unavailable"}
-          />
+      {videoUrl && (
+        <div className={styles.hero__videoWrap}>
+          <video controls={false} autoPlay muted loop>
+            <source src={videoUrl} type="video/mp4" />
+          </video>
         </div>
       )}
       <header className={styles.hero__content}>
