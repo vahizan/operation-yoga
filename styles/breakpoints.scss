@@ -6,6 +6,12 @@ $s-desktop-min:769px;
 $s-desktop-max:1024px;
 $m-desktop-min:1025px;
 $m-desktop-max:1200px;
+$l-desktop-min:1201px;
+$l-desktop-max:1400px;
+$xl-desktop-min:1401px;
+$xl-desktop-max:1800px;
+$xxl-desktop-min: 1801px;
+$xxl-desktop-max:2560px;
 
 @mixin mobile {
 @media (min-width: #{$mobile-min}) and (max-width: #{$mobile-max}) {
@@ -50,7 +56,19 @@ $m-desktop-max:1200px;
 }
 
 @mixin large-desktop {
-  @media (min-width: #{$m-desktop-max+1}) {
+  @media (min-width: #{$m-desktop-max}+1) and (max-width: #{$l-desktop-max}) {
+    @content;
+  }
+}
+
+@mixin x-large-desktop {
+  @media (min-width: #{$l-desktop-max}+1) and (max-width: #{$xl-desktop-max}) {
+    @content;
+  }
+}
+
+@mixin xx-large-desktop {
+  @media (min-width: #{$xl-desktop-max}+1) and (max-width: #{$xxl-desktop-max}) {
     @content;
   }
 }

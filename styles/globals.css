@@ -1,5 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Martel&family=Poppins:wght@300;400&family=Raleway:wght@300;500&display=swap');
 
+main {
+  width: 100%;
+  position: relative;
+  min-height: 100%;
+}
+
 .error {
   color: red;
 }

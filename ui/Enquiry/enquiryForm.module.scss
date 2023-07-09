@@ -3,9 +3,6 @@
 
 .enquiryForm {
   height: 82vh;
-  @include mobile-up {
-
-  }
   @include tablet-up {
     width: 70%;
   }
@@ -43,7 +40,6 @@
       width:100%;
       font-weight: bolder;
       text-transform: capitalize;
-      z-index: 100;
       border: 1px solid black;
       border-radius: 5px;
       background-color: initial;
