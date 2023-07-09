@@ -4,6 +4,7 @@ import SquareCard from "../ui/SquareCard";
 import Hero from "../ui/Hero/Hero";
 import RoundCard from "../ui/RoundCard";
 import useObserver from "../hooks/observer/useObserver";
+import Logo from 'public/logo.svg';
 
 export default function Home() {
   const observerCircleImages = useObserver<HTMLDivElement>({
@@ -19,7 +20,6 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>Veda Yoga Wellness Centre</h1>
       <main>
         <div className={styles.heroContainer}>
           <Hero

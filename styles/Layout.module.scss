@@ -2,8 +2,37 @@
 
 .header {
   display: flex;
+  width: 100%;
+  background-color: white;
+  z-index: 100;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    font-size: 1.5rem;
+
+    h1{
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+
+    &__imageContainer {
+      width: 100%;
+      align-self: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-around;
+
+      &__yogaAlliance{
+        margin: 20px;
+      }
+    }
+
+  }
 
   &__enquiry {
     z-index: 100;
