@@ -12,8 +12,18 @@ interface Props {
 const ProfileBlock: FC<Props> = ({ title, imageUrl, imageAlt, paragraphs }) => {
   return (
     <div className={styles.profileBlock}>
-      <h3>{title}</h3>
-      {imageUrl && <Image alt={imageAlt || ""} src={imageUrl} />}
+      <div className={styles.profileBlock__hero}>
+        <h3>{title}</h3>
+        {imageUrl && (
+          <Image
+            className={styles.profileBlock__image}
+            width={500}
+            height={500}
+            alt={imageAlt || ""}
+            src={imageUrl}
+          />
+        )}
+      </div>
       <div className={styles.profileBlock__paragraphs}>
         {paragraphs.map((paragraph) => (
           <p>{paragraph}</p>

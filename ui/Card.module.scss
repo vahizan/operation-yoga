@@ -114,6 +114,12 @@
     height: 300px;
   }
 
+  @include large-desktop {
+    width: 350px;
+    height: 350px;
+  }
+
+
   @include desktop-up{
     &:hover {
       transform: translateY(-10px);

@@ -50,8 +50,13 @@
       padding: 5px;
       outline: inherit;
     }
+  }
 
-
+  &__submit {
+    height: 50px;
+    background: none;
+    border-radius: 5px;
+    margin-top: 51px;
   }
 
 }

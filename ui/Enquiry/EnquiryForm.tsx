@@ -1,10 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./enquiryForm.module.scss";
-import useApi from "../../hooks/useApi/useApi";
 import { sendEmail } from "../../hooks/api";
-import Email from "../../hooks/interfaces/Email";
-import { Simulate } from "react-dom/test-utils";
-import submit = Simulate.submit;
 
 interface FormValues {
   name: string;
@@ -68,30 +64,39 @@ const EnquiryForm = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(false);
-    setSendError(undefined);
-    setSendSuccess(undefined);
-
-    sendEmail({
-      sender: formValues.email,
-      subject: formValues.subject,
-      text: formValues.message,
-    })
-      .then((success) => {
-        setSendSuccess(true);
-      })
-      .catch((err) => {
-        setSendError(err);
-      });
     setSubmitted(true);
   };
+
+  useEffect(() => {
+    if (isSubmitted) {
+      if (!validateForm()) {
+        return;
+      }
+      sendEmail({
+        sender: formValues.email,
+        subject: formValues.subject,
+        text: formValues.message,
+      })
+        .then(() => {
+          setSendError(false);
+          setSendSuccess(true);
+        })
+        .catch(() => {
+          setSendError(true);
+          setSendSuccess(false);
+        })
+        .finally(() => {
+          setSubmitted(false);
+        });
+    }
+  }, [isSubmitted]);
 
   return (
     <form className={styles.enquiryForm} onSubmit={handleSubmit}>
       <div className={styles.enquiryForm__field}>
         <label htmlFor="name">Name</label>
         <input
-          placeholder={"Name"}
+          placeholder="Name"
           type="text"
           id="name"
           name="name"
@@ -107,7 +112,7 @@ const EnquiryForm = () => {
           type="email"
           id="email"
           name="email"
-          placeholder={"Email"}
+          placeholder="Email"
           value={formValues.email}
           onBlur={handleBlur}
           onChange={handleChange}
@@ -120,7 +125,7 @@ const EnquiryForm = () => {
           type="text"
           id="subject"
           name="subject"
-          placeholder={"Subject"}
+          placeholder="Subject"
           value={formValues.subject}
           onBlur={handleBlur}
           onChange={handleChange}
@@ -130,7 +135,7 @@ const EnquiryForm = () => {
       <div className={styles.enquiryForm__textAreaField}>
         <label htmlFor="message">Message</label>
         <textarea
-          placeholder={"Enter your message"}
+          placeholder="Enter your message"
           id="message"
           name="message"
           value={formValues.message}
@@ -140,20 +145,24 @@ const EnquiryForm = () => {
         {errors.message && <span className="error">{errors.message}</span>}
       </div>
       <button
+        className={styles.enquiryForm__submit}
         disabled={Boolean(
-          errors.email || errors.name || errors.message || errors.subject
+          isSubmitted ||
+            errors.email ||
+            errors.name ||
+            errors.message ||
+            errors.subject
         )}
         type="submit"
       >
         Submit
       </button>
-      {isSubmitted && isSendSuccess && (
+      {isSendSuccess && (
         <div className={styles.enquiryForm__successMessage}>
           Enquiry sent successfully
         </div>
       )}
-
-      {isSubmitted && sendError && (
+      {sendError && (
         <div className={styles.enquiryForm__errorMessage}>
           Failed to send your enquiry. Please try again
         </div>

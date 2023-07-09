@@ -2,7 +2,45 @@
 @import "../styles/utils";
 
 .profileBlock {
+  margin: 20px;
+  padding:20px;
+  display: flex;
+  flex-direction: column;
+  @include desktop-up() {
+    flex-direction: row;
+  }
+
+  &__hero {
+    display: flex;
+    flex-direction: column;
+  }
   &__paragraphs {
+    padding:20px;
+    align-self: baseline;
+  }
+
+  &__image {
+    align-self: center;
+    border-radius: 100%;
+    @include mobile() {
+      width: 200px;
+      height: 200px;
+
+    }
+    @include tablet() {
+      width: 250px;
+      height: 250px;
+    }
+
+    @include small-desktop() {
+      width: 350px;
+      height: 350px;
+    }
+
+    @include large-desktop() {
+      width: 500px;
+    }
 
   }
+
 }
