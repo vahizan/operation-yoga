@@ -19,4 +19,32 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
   @include large-desktop {
     font-size: $size*1.6px;
   }
+  @include x-large-desktop {
+    font-size: $size*2px;
+  }
+  @include xx-large-desktop {
+    font-size: $size*2.5px;
+  }
 }
+
+@mixin autoPaddingLayout() {
+  @include mobile-up {
+    padding: 10px 20px;
+  }
+  @include small-desktop {
+    padding: 20px 50px;
+  }
+  @include mid-desktop {
+    padding: 20px 50px;
+  }
+  @include large-desktop {
+    padding: 20px 70px;
+  }
+  @include x-large-desktop {
+    padding: 30px 80px;
+  }
+  @include xx-large-desktop {
+    padding: 40px 100px;
+  }
+}
+

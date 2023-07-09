@@ -18,6 +18,8 @@ export default function Lessons() {
   const [date, setDate] = useState<Value>(currDate);
   const [day, setDay] = useState<number>(currDate.getDay());
 
+  console.log("DAY", day);
+  console.log("DATES", date);
   const { data, apiCallErrorMessage, apiLoading } = useApi<
     Record<string, string>,
     Array<ISession>
@@ -32,23 +34,23 @@ export default function Lessons() {
     }
   };
 
-  const renderLessons = () => {
-    return data?.map((session) => {
-      const lessons = session.lessons;
-      return lessons.map((lesson) => {
-        return (
-          <LessonTile
-            startTime={lesson.startTime}
-            endTime={lesson.endTime}
-            instructor={lesson.instructor}
-            availability={20}
-            location={`${lesson.location.city}, ${lesson.location.country}`}
-            lessonName={lesson.title}
-          />
-        );
-      });
-    });
-  };
+  // const renderLessons = () => {
+  //   return data?.map((session) => {
+  //     const lessons = session.lessons;
+  //     return lessons.map((lesson) => {
+  //       return (
+  //         <LessonTile
+  //           startTime={lesson.startTime}
+  //           endTime={lesson.endTime}
+  //           instructor={lesson.instructor}
+  //           availability={20}
+  //           location={`${lesson.location.city}, ${lesson.location.country}`}
+  //           lessonName={lesson.title}
+  //         />
+  //       );
+  //     });
+  //   });
+  // };
 
   return (
     <Layout>
@@ -65,22 +67,22 @@ export default function Lessons() {
             maxDate={generateMaxDate(2)}
             minDate={new Date()}
           />
-          {apiCallErrorMessage && !apiLoading && (
-            <div>
-              Error retrieving lessons for this week, please try again later
-            </div>
-          )}
-          {data && !apiCallErrorMessage && !apiLoading && (
-            <div ref={lessonsRef} className={styles.lessonsContainer}>
-              {renderLessons()}
-            </div>
-          )}
+          {/*{apiCallErrorMessage && !apiLoading && (*/}
+          {/*  <div>*/}
+          {/*    Error retrieving lessons for this week, please try again later*/}
+          {/*  </div>*/}
+          {/*)}*/}
+          {/*{data && !apiCallErrorMessage && !apiLoading && (*/}
+          {/*  <div ref={lessonsRef} className={styles.lessonsContainer}>*/}
+          {/*    {renderLessons()}*/}
+          {/*  </div>*/}
+          {/*)}*/}
 
-          {apiLoading && (
-            <div className={styles.loading}>
-              Please wait, finding all available packages ...
-            </div>
-          )}
+          {/*{apiLoading && (*/}
+          {/*  <div className={styles.loading}>*/}
+          {/*    Please wait, finding all available packages ...*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </main>
       </div>
     </Layout>

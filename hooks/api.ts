@@ -5,8 +5,8 @@ import axios from "axios";
 export const getSchedule = async (
   body?: Record<string, string>
 ): Promise<ISession[]> => {
-  const response = await fetch("/api/lessons?" + new URLSearchParams(body));
-  return response.json();
+  const response = await axios.get("/api/lessons?" + new URLSearchParams(body));
+  return response?.data;
 };
 
 export const sendEmail = async (body?: Email): Promise<string> => {

@@ -1,7 +1,7 @@
 @import "../styles/breakpoints.scss";
 
 .container {
-  padding: 0 0.5rem;
+  padding: 0.5rem 1rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,7 +25,7 @@
 
 .roundCards{
   display: flex;
-  align-items: center;
+  justify-content: center;
 
   @include mobile-up {
     flex-direction: column;
@@ -34,3 +34,4 @@
     flex-direction: row;
   }
 }
+

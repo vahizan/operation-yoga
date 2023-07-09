@@ -13,7 +13,9 @@ export const usePackages = (
   useEffect(() => {
     axios
       .get("/api/schedule")
-      .then((data) => setPackages(data as unknown as IPackage[]))
+      .then((data) => {
+        setPackages(data.data as unknown as IPackage[]);
+      })
       .catch((err) => setApiErrorMessage(err))
       .finally(() => setApiLoading(false));
   }, [dependencies]);

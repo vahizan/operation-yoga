@@ -11,7 +11,7 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
     ],
   },
   {
-    root: { title: "About Us", link: "/about-us" },
+    root: { title: "About Us", link: "/about" },
     children: [
       { root: { title: "Our Mission", link: "/mission" } },
       { root: { title: "Our Teachers", link: "/teachers" } },

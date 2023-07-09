@@ -1,11 +1,14 @@
 import EnquiryForm from "../ui/Enquiry/EnquiryForm";
+import styles from "./enquire.module.scss";
 import Layout from "../ui/Layout";
 
 export const Enquire = () => {
   return (
     <Layout>
-      <h1>Submit an Enquiry</h1>
-      <EnquiryForm />
+      <main className={styles.enquireContainer}>
+        <h1>Submit an Enquiry</h1>
+        <EnquiryForm />
+      </main>
     </Layout>
   );
 };
