@@ -16,7 +16,7 @@
     "incremental": true,
     "baseUrl": "."
   },
-  "types": ["node", "jest", "@testing-library/jest-dom", "@types/jest"],
+  "types": ["node", "jest", "@testing-library/jest-dom", "@types/jest","@testing-library/jest-dom"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","**/*.spec.ts"],
   "exclude": ["node_modules"]
 }

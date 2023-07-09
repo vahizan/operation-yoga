@@ -1,0 +1,57 @@
+@import "styles/utils";
+@import "styles/breakpoints";
+
+.enquiryForm {
+  height: 82vh;
+  @include mobile-up {
+
+  }
+  @include tablet-up {
+    width: 70%;
+  }
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: flex-start;
+  flex-direction: column;
+
+  &__textAreaField {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    label {
+      @include autoFontSize(15);
+    }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+    }
+  }
+  &__field{
+
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+    label {
+      font-weight: bolder;
+      @include autoFontSize(15);
+      margin-right: 10px;
+
+    }
+    input {
+      width:100%;
+      font-weight: bolder;
+      text-transform: capitalize;
+      z-index: 100;
+      border: 1px solid black;
+      border-radius: 5px;
+      background-color: initial;
+      padding: 5px;
+      outline: inherit;
+    }
+
+
+  }
+
+}

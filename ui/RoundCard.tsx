@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./Card.module.scss";
 
 interface Props {
@@ -20,7 +21,7 @@ export default function RoundCard({
           {headingText}
         </a>
       </h1>
-      <img src={imgSrc} alt={imgAlt} />
+      <Image width={500} height={500} src={imgSrc} alt={imgAlt} />
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import styles from "../Card.module.scss";
 
 interface Props {

@@ -11,7 +11,7 @@ export default function Layout({ children }: { children: ReactNode }) {
       <div className={styles.header}>
         <LeftDrawer />
         <div className={styles.header__enquiry}>
-          <EnquiryButton text={"enquire"} />
+          <EnquiryButton text={"enquire"} url={"/enquire"} />
         </div>
       </div>
 
