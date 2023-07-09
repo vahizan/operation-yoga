@@ -42,3 +42,13 @@ export const vivekVisitingInstructor = [
 export const baldevVisitingInstructor = [
   "Bunny Ji also has his roots in Rishikesh and as such has qualified as a yoga instructor.  He has a Masters in Yoga from the Sanskrit University of Haridwar, as well as a Yoga Teacher’s Training Certificate (200 hours) from Sanskriti Yogashala. He teaches a variety of styles, including Hatha yoga and vinyasa and  Ashtanga Vinyasa for all levels from beginners to advanced practitioners. His strength is also in Reiki healing and massage therapy.",
 ];
+
+const teachersConstants = {
+  pushpaBlock,
+  jayBlock,
+  jyotiBlock,
+  vivekVisitingInstructor,
+  baldevVisitingInstructor,
+};
+
+export default teachersConstants;

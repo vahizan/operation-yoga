@@ -1,5 +1,4 @@
 import styles from "../styles/Home.module.scss";
-import Link from "next/link";
 import ProfileBlock from "../ui/ProfileBlock";
 import {
   baldevVisitingInstructor,
@@ -7,9 +6,9 @@ import {
   jyotiBlock,
   pushpaBlock,
   vivekVisitingInstructor,
-} from "./constants";
+} from "../constants/Teachers.constants";
 
-export default function Location() {
+export const Teachers = () => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
@@ -48,4 +47,6 @@ export default function Location() {
       </main>
     </div>
   );
-}
+};
+
+export default Teachers;
