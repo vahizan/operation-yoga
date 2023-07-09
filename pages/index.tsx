@@ -67,22 +67,20 @@ export default function Home() {
             content={"Yoga Retreats"}
           />
         </div>
-
-        <div className={styles.buttonCards}>
-          <SquareCard
-            imageSrc={"/IMG_20220106_210626.jpeg"}
-            content={"Sanskrit Classes"}
-          />
-          <SquareCard
-            imageSrc={"/Foodayurvedic.jpeg"}
-            content={"Cooking workshops"}
-          />
-          <SquareCard
-            imageSrc={"/IMG_20210329_181618__01.jpeg"}
-            content={"Daily Drop In Meditation"}
-          />
-        </div>
-      </main>
+      <div className={styles.buttonCards}>
+        <SquareCard
+          imageSrc={"/IMG_20220106_210626.jpeg"}
+          content={"Hindi and Sanskrit Classes"}
+        />
+        <SquareCard
+          imageSrc={"/Foodayurvedic.jpeg"}
+          content={"Cooking workshops"}
+        />
+        <SquareCard
+          imageSrc={"/IMG_20210329_181618__01.jpeg"}
+          content={"Ayurveda and Spa"}
+        />
+      </div>
     </Layout>
   );
 }
