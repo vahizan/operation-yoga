@@ -13,7 +13,7 @@ const useApi = <T, K>(
   body?: T,
   options: HookOptions = { ignoreLoader: false }
 ) => {
-  const [apiData, setApiData] = useState<K | undefined>();
+  const [data, setData] = useState<K | undefined>();
   const [apiLoading, setApiLoading] = useState(false);
   const [apiCallErrorMessage, setApiCallErrorMessage] = useState<
     string | undefined
@@ -26,26 +26,26 @@ const useApi = <T, K>(
       }
       const data = await func(body);
       setApiCallErrorMessage(undefined);
-      setApiData(data);
+      setData(data);
       setApiLoading(false);
     } catch (err) {
       setApiLoading(false);
       const error = err as AxiosError;
       const code = error.response?.status;
-      let message = error.response?.data.message;
+      let message = error.message;
 
       if (message && message.match(/timeout/)) {
         message = "Something went wrong. Please refresh and try again.";
       }
-      setApiData(undefined);
+      setData(undefined);
       setApiCallErrorMessage(message);
     }
   };
   useEffect(() => {
     fetchData().catch();
-  }, dependencies);
+  }, [dependencies]);
 
-  return { data: apiData, apiLoading, apiCallErrorMessage };
+  return { data, apiLoading, apiCallErrorMessage };
 };
 
 export default useApi;

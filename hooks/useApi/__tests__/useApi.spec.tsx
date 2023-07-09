@@ -7,6 +7,7 @@ jest.mock("../../api", () => {
   return {
     ...jest.requireActual("../../api"),
     getLessons: jest.fn(),
+    getSchedule: jest.fn(),
   };
 });
 
@@ -48,24 +49,6 @@ describe("useApi", () => {
 
     act(() => {
       expect(result.current.data).toBe(undefined);
-    });
-  });
-
-  //TODO: skip this for now
-  it.skip("should set timeout error message when Error is timeout related", async () => {
-    const setErrorStatusCodeMock = jest.fn();
-    (getSchedule as jest.Mock).mockRejectedValue({
-      response: { data: { message: "timeout exceeded" }, status: 401 },
-    });
-
-    const { result, rerender } = renderHook(() => useApi(getSchedule, []));
-
-    rerender();
-
-    act(() => {
-      expect(result.current.apiCallErrorMessage).toEqual(
-        "Something went wrong. Please refresh and try again."
-      );
     });
   });
 });

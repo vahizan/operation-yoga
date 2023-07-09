@@ -52,12 +52,6 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
           link: "/veda-yogshala/mantra-chanting",
         },
       },
-      {
-        root: { title: "Sound Healing", link: "/veda-yogshala/sound-healing" },
-      },
-      {
-        root: { title: "Reiki Healing", link: "/veda-yogshala/reiki-healing" },
-      },
     ],
   },
   {
