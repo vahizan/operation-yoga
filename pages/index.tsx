@@ -70,7 +70,7 @@ export default function Home() {
       <div className={styles.buttonCards}>
         <SquareCard
           imageSrc={"/IMG_20220106_210626.jpeg"}
-          content={"Sanskrit Classes"}
+          content={"Hindi and Sanskrit Classes"}
         />
         <SquareCard
           imageSrc={"/Foodayurvedic.jpeg"}
@@ -78,7 +78,7 @@ export default function Home() {
         />
         <SquareCard
           imageSrc={"/IMG_20210329_181618__01.jpeg"}
-          content={"Daily Drop In Meditation"}
+          content={"Ayurveda and Spa"}
         />
       </div>
     </Layout>
