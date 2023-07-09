@@ -59,7 +59,7 @@ export default function Home() {
         />
         <SquareCard
           imageSrc={"/training.jpeg"}
-          content={"200 Hour Teachers' Training Course"}
+          content={"Teachers' Training Courses"}
         />
         <SquareCard
           imageSrc={"/IMG_20220821_122707.jpeg"}
