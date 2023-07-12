@@ -22,7 +22,7 @@ export default function Home() {
       <main>
         <div className={styles.heroContainer}>
           <Hero
-            videoUrl={""}
+            videoUrl={"https://d399a6wtv3gpjg.cloudfront.net/videoshort.mp4"}
             videoAlt={"picture of ganga"}
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
