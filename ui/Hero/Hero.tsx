@@ -1,4 +1,5 @@
 import styles from "../Card.module.scss";
+import Image from "next/image";
 
 interface Props {
   videoUrl?: string;
@@ -17,6 +18,14 @@ export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
           </video>
         </div>
       )}
+      <div className={styles.hero__placeholderImage}>
+        <Image
+          alt={"picture of the river ganges"}
+          src={"/Ganga.jpeg"}
+          width={500}
+          height={500}
+        />
+      </div>
       <header className={styles.hero__content}>
         <h1>{content}</h1>
         {cta && ctaText && (

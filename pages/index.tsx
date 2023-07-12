@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "../styles/Home.module.scss";
 import Layout from "../ui/Layout";
 import SquareCard from "../ui/SquareCard";
@@ -23,7 +24,7 @@ export default function Home() {
         <div className={styles.heroContainer}>
           <Hero
             videoUrl={"https://d399a6wtv3gpjg.cloudfront.net/videoshort.mp4"}
-            videoAlt={"picture of ganga"}
+            videoAlt={"instructor teaching yoga by the ganges"}
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
             ctaText={"CLICK TO FIND OUT MORE"}
