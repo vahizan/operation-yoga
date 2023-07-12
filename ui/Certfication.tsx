@@ -6,13 +6,13 @@ const Certification = () => {
       <Image
         width={70}
         height={70}
-        src={"/../public/rys100-yogaalliance.png"}
+        src={"/rys100-yogaalliance.png"}
         alt={"rhys yoga alliance logo"}
       />
       <Image
         width={70}
         height={70}
-        src={"/../public/yacep-yogaalliance.png"}
+        src={"/yacep-yogaalliance.png"}
         alt={"yacep yoga alliance logo"}
       />
     </>
