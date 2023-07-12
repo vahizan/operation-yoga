@@ -31,6 +31,15 @@ const nextConfig = {
     // a non-locale prefixed path e.g. `/hello`
     defaultLocale: "en-GB",
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/i,
+      issuer: /\.[jt]sx?$/,
+      use: ["@svgr/webpack"],
+    });
+
+    return config;
+  },
 };
 
 module.exports = withMDX(nextConfig);

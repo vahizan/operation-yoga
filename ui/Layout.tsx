@@ -5,38 +5,26 @@ import styles from "../styles/Layout.module.scss";
 import Footer from "./Footer";
 import LeftDrawer from "./Navigation/LeftDrawer";
 import EnquiryButton from "./Button/EnquiryButton";
-import Logo from "../public/logo.svg";
+import Link from "next/link";
+import YogshalaFancyLogo from "./YogshalaFancyLogo";
+import Certification from "./Certfication";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
       <div className={styles.header}>
         <LeftDrawer />
+        <div className={styles.header__certification}>
+          <Certification />
+        </div>
         <div className={styles.header__content}>
-          <div className={styles.header__content__imageContainer}>
-            <Image
-              className={styles.header__content__imageContainer__yogaAlliance}
-              width={70}
-              height={70}
-              src={"/../public/rys100-yogaalliance.png"}
-              alt={"rhys yoga alliance logo"}
-            />
-            <Image
-              width={500}
-              height={150}
-              priority
-              src={Logo}
-              alt="Yogshala Logo"
-            />
-            <Image
-              className={styles.header__content__imageContainer__yogaAlliance}
-              width={70}
-              height={70}
-              src={"/../public/yacep-yogaalliance.png"}
-              alt={"yacep yoga alliance logo"}
-            />
-          </div>
+          <Link href={"/"}>
+            <YogshalaFancyLogo />
+          </Link>
           <h1>Veda Yoga Wellness Centre</h1>
+          <div className={styles.header__content__certification}>
+            <Certification />
+          </div>
         </div>
         <div className={styles.header__enquiry}>
           <EnquiryButton text={"enquire"} url={"/enquire"} />
