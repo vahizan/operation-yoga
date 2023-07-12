@@ -1,4 +1,6 @@
 import styles from "../Card.module.scss";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
 interface Props {
   videoUrl?: string;
@@ -7,14 +9,37 @@ interface Props {
   cta?: string;
   ctaText?: string;
 }
+
 export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
+  const [shouldLoadImage, setShouldLoadImage] = useState(true);
+
+  useEffect(() => {
+    const networkInformation = navigator.connection as NetworkInformation & {
+      effectiveType?: string;
+    };
+    console.log("networkInformation", networkInformation);
+    if (networkInformation?.effectiveType === "4g") {
+      setShouldLoadImage(false);
+    }
+  }, []);
+
   return (
     <div className={styles.hero}>
-      {videoUrl && (
+      {!shouldLoadImage && videoUrl && (
         <div className={styles.hero__videoWrap}>
           <video controls={false} autoPlay muted loop>
             <source src={videoUrl} type="video/mp4" />
           </video>
+        </div>
+      )}
+      {shouldLoadImage && (
+        <div className={styles.hero__placeholderImage}>
+          <Image
+            alt={"picture of the river ganges"}
+            src={"/Ganga.jpeg"}
+            width={500}
+            height={500}
+          />
         </div>
       )}
       <header className={styles.hero__content}>

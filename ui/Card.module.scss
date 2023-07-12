@@ -26,6 +26,12 @@
   position: relative;
   min-width: 100%;
 
+  &__placeholderImage {
+   img {
+     width: 100%;
+   }
+  }
+
   &__videoWrap {
     width: 100%;
     animation: 500ms ease-out scaleDown;
