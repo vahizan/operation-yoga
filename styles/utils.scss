@@ -11,19 +11,19 @@ $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
     font-size: $size*0.8px;
   }
   @include small-desktop {
-    font-size: $size*1.2px;
+    font-size: $size;
   }
   @include mid-desktop {
-    font-size: $size*1.4px;
+    font-size: $size*1.2px;
   }
   @include large-desktop {
     font-size: $size*1.6px;
   }
   @include x-large-desktop {
-    font-size: $size*2px;
+    font-size: $size*2.5px;
   }
   @include xx-large-desktop {
-    font-size: $size*2.5px;
+    font-size: $size*4px;
   }
 }
 

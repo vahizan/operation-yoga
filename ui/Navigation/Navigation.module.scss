@@ -126,7 +126,7 @@
   flex-direction: column;
 
   &__root {
-    @include autoFontSize(28);
+    @include autoFontSize(24);
     &__children {
       @include autoFontSize(18);
       padding-left: 20px;

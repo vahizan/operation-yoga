@@ -19,11 +19,10 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1>Veda Yoga Wellness Centre</h1>
       <main>
         <div className={styles.heroContainer}>
           <Hero
-            videoUrl={"https://d399a6wtv3gpjg.cloudfront.net/videoshort.mp4"}
+            videoUrl={""}
             videoAlt={"picture of ganga"}
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
@@ -59,6 +58,8 @@ export default function Home() {
             content={"Daily Drop In Classes "}
           />
           <SquareCard
+            isUnavailable={true}
+            unavailableReason={"Under Construction"}
             imageSrc={"/training.jpeg"}
             content={"200 Hour Teachers' Training Course"}
           />

@@ -79,13 +79,26 @@
 
 }
 
+.unavailableReason {
+  font-weight: bolder;
+  position: absolute;
+  z-index: 100;
+  opacity: 1;
+  padding:10px;
+  height: 30px;
+  @include autoFontSize(25);
+}
 .card {
   @include autoFontSize(18);
   text-transform: uppercase;
   font-weight: bolder;
 
-  &:hover{
-    opacity: 0.6;
+  &__unavailable {
+    opacity: 0.3;
+  }
+
+  &__unavailable:hover {
+    opacity: 0.3;
   }
 
   @include shadow();

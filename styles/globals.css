@@ -3,7 +3,13 @@
 main {
   width: 100%;
   position: relative;
-  min-height: 100%;
+  min-height: 85vh;
+}
+.content {
+  padding: 25px;
+  margin: 20px;
+  width: 100%;
+  font-size: 18px;
 }
 
 .error {

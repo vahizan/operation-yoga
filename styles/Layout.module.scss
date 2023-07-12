@@ -1,9 +1,47 @@
 @import "../styles/breakpoints.scss";
+@import "../styles/utils";
+
+
 
 .header {
+  h1 {
+    @include autoFontSize(40);
+    padding: 0;
+    margin: 0;
+
+  }
   display: flex;
+  width: 100%;
+  background-color: white;
+  z-index: 100;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+
+  &__certification {
+    display: flex;
+    position: absolute;
+    left: 100px;
+    margin-top: 15px;
+    @include mobile {
+      display: none;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    align-items: center;
+    font-size: 1.5rem;
+    justify-content: center;
+
+    &__certification {
+      @include tablet-up {
+        display: none;
+      }
+    }
+  }
 
   &__enquiry {
     z-index: 100;
@@ -16,7 +54,6 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 

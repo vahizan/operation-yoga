@@ -12,7 +12,6 @@ import {
   useEffect,
   useState,
 } from "react";
-import { set } from "immutable";
 
 const renderNavItems = (navMenuItems: NavMenuType[]): JSX.Element[] | null => {
   if (!navMenuItems) {
@@ -52,7 +51,6 @@ export default function LeftDrawer() {
       <div className={styles.leftDrawer__hamburger}>
         <Hamburger setNavigationOpen={setOpen} isNavigationOpen={isOpen} />
       </div>
-
       <div
         data-test-id="drawer"
         className={`${styles.leftDrawer__content}
