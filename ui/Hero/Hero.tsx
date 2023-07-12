@@ -14,11 +14,11 @@ export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
   const [shouldLoadImage, setShouldLoadImage] = useState(true);
 
   useEffect(() => {
-    const networkInformation = navigator.connection as NetworkInformation;
+    const networkInformation = navigator.connection as NetworkInformation & {
+      effectiveType?: string;
+    };
     console.log("networkInformation", networkInformation);
-    const effectiveType: string = networkInformation?.effectiveType;
-    console.log("EFFECTIVE TYPE", effectiveType);
-    if (effectiveType === "4g") {
+    if (networkInformation?.effectiveType === "4g") {
       setShouldLoadImage(false);
     }
   }, []);
