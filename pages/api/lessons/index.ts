@@ -9,7 +9,6 @@ export default async function handler(
   res: NextApiResponse<IPackage[] | { error: string }>
 ) {
   const { query, method } = req;
-  console.log("QUERY", query);
   const q = query as unknown as ILessonQuery;
 
   if (method !== "GET") {
