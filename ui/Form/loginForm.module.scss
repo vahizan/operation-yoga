@@ -1,0 +1,42 @@
+@import "styles/colours.scss";
+@import "styles/utils.scss";
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  text-align: center;
+
+  .formGroup {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    text-align: left;
+    @include formGroup();
+  }
+
+  .forgotLink {
+    align-self: flex-end;
+    text-align: right;
+    @include autoFontSize(13);
+    padding: 20px;
+    text-decoration-color: $font-color-secondary;
+    text-decoration: underline;
+  }
+  button {
+    @include autoFontSize(16);
+    &:hover {
+      background-image: $glow-bg;
+    }
+    font-weight: bolder;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+  }
+}

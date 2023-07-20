@@ -1,5 +1,7 @@
 import { FC, FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
+import styles from "./loginForm.module.scss";
+import Link from "next/link";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
@@ -33,9 +35,9 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      {error && <p>{error}</p>}
-      <div>
+    <form className={styles.loginForm} onSubmit={handleSubmit}>
+      {error && <div className={"error"}>{error}</div>}
+      <div className={styles.formGroup}>
         <label htmlFor="email">Email</label>
         <input
           type="email"
@@ -44,7 +46,7 @@ const LoginForm: FC = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
       </div>
-      <div>
+      <div className={styles.formGroup}>
         <label htmlFor="password">Password</label>
         <input
           type="password"
@@ -53,6 +55,9 @@ const LoginForm: FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      <Link className={styles.forgotLink} href={"/forgot-password"}>
+        Forgot?
+      </Link>
       <button type="submit">Login</button>
     </form>
   );

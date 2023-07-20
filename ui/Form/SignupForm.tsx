@@ -2,6 +2,8 @@ import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
+import styles from "./signupForm.module.scss";
+
 const SignupForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -44,45 +46,52 @@ const SignupForm = () => {
   };
 
   return (
-    <div>
-      {error && <p>{error}</p>}
+    <div className={styles.signupFormContainer}>
+      {error && <div className={`${styles.errorMessage} error`}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <label>
-          Name:
+        <div className={styles.formGroup}>
+          <label htmlFor={"name"}>Name:</label>
           <input
+            id={"name"}
+            name={"name"}
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
-        </label>
-        <br />
-        <label>
-          Email:
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor={"email"}>Email:</label>
           <input
+            name={"email"}
+            id={"email"}
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-        </label>
-        <br />
-        <label>
-          Password:
+        </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor={"password"}>Password:</label>
           <input
+            name={"password"}
+            id={"password"}
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-        </label>
-        <br />
-        <label>
-          Phone Number (Optional):
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor={"phone"}>Phone Number (Optional):</label>
           <input
+            name={"phone"}
+            id={"phone"}
             type="text"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
           />
-        </label>
-        <br />
+        </div>
+
         <button type="submit">Sign Up</button>
       </form>
     </div>

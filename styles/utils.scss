@@ -6,6 +6,41 @@
 
 $glow-bg: radial-gradient( circle at 631.27px 4.12244px, #0141FF55, #0000000f );
 
+@mixin actionButton() {
+    @include autoFontSize(16);
+    &:hover {
+      background-image: $glow-bg;
+    }
+    font-weight: bolder;
+    width: 100%;
+    padding: 10px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
+}
+
+@mixin formGroup() {
+    label {
+      display: block;
+      @include autoFontSize(15);
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: $font-color;
+    }
+    input {
+      width: 100%;
+      padding: 10px 20px;
+      border: 1px solid #ccc;
+      border-radius: 100px;
+      &:focus {
+        outline: none;
+        border-color: $font-color;;
+      }
+    }
+}
+
 @mixin autoFontSize($size) {
   @include mobile-up {
     font-size: $size*0.8px;

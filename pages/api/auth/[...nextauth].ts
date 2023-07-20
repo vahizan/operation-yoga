@@ -6,11 +6,15 @@ import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
 import Email from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
 import clientPromise from "../../../connector/clientPromise";
-import { authorizeLogin } from "../../../helpers/loginValidator";
+import { authorizeLogin } from "../../../helpers/authenticationHelper";
 
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
+    signOut: "/signOut",
+    error: "/error",
+    verifyRequest: "/verify-request",
+    newUser: "/new-user",
   },
   session: {
     strategy: "jwt",
@@ -29,9 +33,16 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     Email({
-      server: process.env.SMTP_HOST,
+      name: "forgot-password",
+      server: {
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT),
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASSWORD,
+        },
+      },
       from: process.env.EMAIL_FROM,
-      sendVerificationRequest: () => {},
     }),
   ],
   callbacks: {
@@ -50,6 +61,7 @@ export const authOptions: NextAuthOptions = {
         return {
           ...token,
           id: u.id,
+          email: user.email,
         };
       }
       return token;

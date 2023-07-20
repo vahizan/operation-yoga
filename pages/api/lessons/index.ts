@@ -3,6 +3,7 @@ import { ILessonQuery, IPackage } from "../interfaces";
 import MongooseDatabaseConnection from "../../../connector/MongoDatabaseConnection";
 import { SESSIONS } from "../../../model/Session.model";
 import { lessonSession } from "../../../model/LessonSession.aggregate";
+import createMongoConnection from "../../../connector/createMongoConnection";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,14 +17,7 @@ export default async function handler(
     return;
   }
 
-  const mongoConnector = new MongooseDatabaseConnection(
-    process.env.MONGODB_URI || "",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      dbName: process.env.MONGO_DB_NAME,
-    }
-  );
+  const mongoConnector = createMongoConnection();
 
   const connection = await mongoConnector.connect();
 

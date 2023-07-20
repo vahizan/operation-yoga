@@ -1,9 +1,10 @@
-import MongooseDatabaseConnection from "../connector/MongoDatabaseConnection";
 import { USER_MODEL_NAME } from "../model/User.model";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
 import { comparePassword } from "./loginHelper";
+import createMongoConnection from "../connector/createMongoConnection";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const authorizeLogin = async (
   credentials: Record<string, string> | undefined
@@ -13,14 +14,7 @@ export const authorizeLogin = async (
       return null;
     }
 
-    const mongoConnector = new MongooseDatabaseConnection(
-      process.env.MONGODB_URI || "",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        dbName: process.env.MONGO_DB_NAME,
-      }
-    );
+    const mongoConnector = createMongoConnection();
 
     const connection = await mongoConnector.connect();
     if (!connection) {
@@ -54,4 +48,14 @@ export const authorizeLogin = async (
 export const hasSession = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
   return !!session;
+};
+
+export const getTokenPayload = (
+  verificationToken: string,
+  secret?: string
+): JwtPayload | string | undefined => {
+  if (!secret) {
+    return undefined;
+  }
+  return jwt.verify(verificationToken, secret);
 };

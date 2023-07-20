@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { User, USER_MODEL_NAME } from "../../../model/User.model";
 import MongooseDatabaseConnection from "../../../connector/MongoDatabaseConnection";
 import { hashPassword } from "../../../helpers/loginHelper";
+import createMongoConnection from "../../../connector/createMongoConnection";
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,14 +16,7 @@ export default async function handler(
       return;
     }
 
-    const mongoConnector = await new MongooseDatabaseConnection(
-      process.env.MONGODB_URI || "",
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        dbName: process.env.MONGO_DB_NAME,
-      }
-    );
+    const mongoConnector = createMongoConnection();
 
     const connection = await mongoConnector.connect();
 
