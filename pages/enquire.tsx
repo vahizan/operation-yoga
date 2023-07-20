@@ -1,4 +1,4 @@
-import EnquiryForm from "../ui/Enquiry/EnquiryForm";
+import EnquiryForm from "../ui/Form/EnquiryForm";
 import styles from "./enquire.module.scss";
 import Layout from "../ui/Layout";
 

@@ -91,4 +91,11 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
       { root: { title: "Video", link: "/gallery/video" } },
     ],
   },
+  {
+    root: { title: "Account", link: "/login" },
+    children: [
+      { root: { title: "Login", link: "/login" } },
+      { root: { title: "Register", link: "/register" } },
+    ],
+  },
 ];

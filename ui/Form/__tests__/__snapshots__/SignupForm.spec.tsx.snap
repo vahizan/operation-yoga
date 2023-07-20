@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignupForm renders the form 1`] = `
+<div>
+  <div>
+    <form>
+      <label>
+        Name:
+        <input
+          type="text"
+          value=""
+        />
+      </label>
+      <br />
+      <label>
+        Email:
+        <input
+          type="email"
+          value=""
+        />
+      </label>
+      <br />
+      <label>
+        Password:
+        <input
+          type="password"
+          value=""
+        />
+      </label>
+      <br />
+      <label>
+        Phone Number (Optional):
+        <input
+          type="text"
+          value=""
+        />
+      </label>
+      <br />
+      <button
+        type="submit"
+      >
+        Sign Up
+      </button>
+    </form>
+  </div>
+</div>
+`;
