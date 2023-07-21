@@ -18,10 +18,14 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
     ],
   },
   {
-    root: { title: "Veda Yogshala", link: "/veda-yogshala" },
+    root: { title: "Veda Yoga Centre", link: "/veda-yoga-centre" },
     children: [
-      { root: { title: "Yoga Classes", link: "/veda-yogshala/yoga-classes" } },
-      { root: { title: "Yoga Retreat", link: "/veda-yogshala/yoga-retreat" } },
+      {
+        root: { title: "Yoga Classes", link: "/veda-yoga-centre/yoga-classes" },
+      },
+      {
+        root: { title: "Yoga Retreat", link: "/veda-yoga-centre/yoga-retreat" },
+      },
       {
         root: {
           title: "Teachers' Training Courses",

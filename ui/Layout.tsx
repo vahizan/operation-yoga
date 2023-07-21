@@ -12,35 +12,33 @@ import Certification from "./Certfication";
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <>
-      <div className={styles.header}>
-        <LeftDrawer />
-        <div className={styles.header__certification}>
-          <Certification />
-        </div>
-        <div className={styles.header__content}>
-          <Link href={"/"}>
-            <YogshalaFancyLogo />
-          </Link>
-          <h1>Veda Yoga Wellness Centre</h1>
-          <div className={styles.header__content__certification}>
+      <Head>
+        <title>Yoga Time</title>
+        <meta name="description" content="Yogshala" />
+        <link
+          rel="icon"
+          href="/Users/vahizanvijayanathan/Desktop/Dev/Personal Projects/operation-yoga/public/favicon.ico"
+        />
+      </Head>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <LeftDrawer />
+          <div className={styles.header__certification}>
             <Certification />
           </div>
+          <div className={styles.header__content}>
+            <Link href={"/"}>
+              <YogshalaFancyLogo />
+            </Link>
+            <h1>{"VEDA YOGA WELLNESS CENTRE"}</h1>
+            <div className={styles.header__content__certification}>
+              <Certification />
+            </div>
+          </div>
+          <div className={styles.header__enquiry}>
+            <EnquiryButton text={"enquire"} url={"/enquire"} />
+          </div>
         </div>
-        <div className={styles.header__enquiry}>
-          <EnquiryButton text={"enquire"} url={"/enquire"} />
-        </div>
-      </div>
-
-      <div className={styles.container}>
-        <Head>
-          <title>Yoga Time</title>
-          <meta name="description" content="Yogshala" />
-          <link
-            rel="icon"
-            href="/Users/vahizanvijayanathan/Desktop/Dev/Personal Projects/operation-yoga/public/favicon.ico"
-          />
-        </Head>
-
         <main className={styles.main}>{children}</main>
       </div>
       <Footer />
