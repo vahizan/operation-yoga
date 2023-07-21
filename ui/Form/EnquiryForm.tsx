@@ -67,6 +67,7 @@ const EnquiryForm = () => {
     setSubmitted(true);
   };
 
+  const errorMessageClassName = `${styles.enquiryForm__errorMessage} error`;
   useEffect(() => {
     if (isSubmitted) {
       if (!validateForm()) {
@@ -104,7 +105,9 @@ const EnquiryForm = () => {
           onBlur={handleBlur}
           onChange={handleChange}
         />
-        {errors.name && <span className="error">{errors.name}</span>}
+        {errors.name && (
+          <div className={errorMessageClassName}>{errors.name}</div>
+        )}
       </div>
       <div className={styles.enquiryForm__field}>
         <label htmlFor="email">Email</label>
@@ -117,7 +120,9 @@ const EnquiryForm = () => {
           onBlur={handleBlur}
           onChange={handleChange}
         />
-        {errors.email && <span className="error">{errors.email}</span>}
+        {errors.email && (
+          <div className={errorMessageClassName}>{errors.email}</div>
+        )}
       </div>
       <div className={styles.enquiryForm__field}>
         <label htmlFor="subject">Subject</label>
@@ -130,7 +135,9 @@ const EnquiryForm = () => {
           onBlur={handleBlur}
           onChange={handleChange}
         />
-        {errors.subject && <span className="error">{errors.subject}</span>}
+        {errors.subject && (
+          <span className={errorMessageClassName}>{errors.subject}</span>
+        )}
       </div>
       <div className={styles.enquiryForm__textAreaField}>
         <label htmlFor="message">Message</label>
@@ -142,7 +149,9 @@ const EnquiryForm = () => {
           onBlur={handleBlur}
           onChange={handleChange}
         />
-        {errors.message && <span className="error">{errors.message}</span>}
+        {errors.message && (
+          <span className={errorMessageClassName}>{errors.message}</span>
+        )}
       </div>
       <button
         className={styles.enquiryForm__submit}

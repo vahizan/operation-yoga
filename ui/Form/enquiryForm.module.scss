@@ -1,8 +1,8 @@
 @import "styles/utils";
 @import "styles/breakpoints";
+@import "styles/colours";
 
 .enquiryForm {
-  height: 82vh;
   @include tablet-up {
     width: 70%;
   }
@@ -12,47 +12,59 @@
   justify-content: flex-start;
   flex-direction: column;
 
+  &__errorMessage {
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+
   &__textAreaField {
+    resize: vertical;
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    width:100%;
+    padding-top:20px;
+
     label {
-      @include autoFontSize(15);
+      @include autoFontSize(20);
+      padding-bottom: 10px;
     }
     textarea {
+      padding: 20px;
+      border-radius: 5px;
       width: 100%;
       min-height: 200px;
     }
   }
+
   &__field{
-
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    width: 100%;
+    @include formGroup();
+    margin-bottom: 10px;
+    margin-top: 10px;
     label {
-      font-weight: bolder;
-      @include autoFontSize(15);
-      margin-right: 10px;
-
+      @include autoFontSize(20);
+      padding-bottom: 5px;
+      padding-top: 10px;
     }
+
     input {
-      width:100%;
-      font-weight: bolder;
-      text-transform: capitalize;
-      border: 1px solid black;
-      border-radius: 5px;
-      background-color: initial;
-      padding: 5px;
-      outline: inherit;
+      padding-bottom: 10px;
     }
   }
 
   &__submit {
-    height: 50px;
-    background: none;
-    border-radius: 5px;
-    margin-top: 51px;
+    @include autoFontSize(16);
+    &:hover {
+      background-image: $glow-bg;
+    }
+    font-weight: bolder;
+    width: 100%;
+    margin-top:30px;
+    padding: 10px;
+    color: white;
+    background-color: black;
+    border: none;
+    border-radius: 100px;
+    cursor: pointer;
   }
 
 }
