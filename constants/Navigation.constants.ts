@@ -8,45 +8,47 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
   { root: { title: "Our Teachers", link: "/teachers" } },
   { root: { title: "Contact Us", link: "/contact-us" } },
   { root: { title: "Quick Booking", link: "/quick-booking" } },
-  { root: { title: "Veda Yoga Centre", link: "/veda-yoga-centre" } },
   {
-    root: { title: "Yoga Classes", link: "/veda-yoga-centre/yoga-classes" },
+    root: { title: "Veda Yoga Centre", link: "/veda-yoga-centre" },
+    children: [
+      {
+        root: { title: "Yoga Classes", link: "/veda-yoga-centre/yoga-classes" },
+      },
+      {
+        root: { title: "Yoga Retreat", link: "/veda-yoga-centre/yoga-retreat" },
+      },
+      {
+        root: {
+          title: "Teachers' Training Courses",
+          link: "/veda-yogshala/teacher-training-courses",
+        },
+      },
+      {
+        root: {
+          title: "Language Courses",
+          link: "/veda-yogshala/language-courses",
+        },
+      },
+      {
+        root: {
+          title: "Indian Cooking Classes",
+          link: "/veda-yogshala/indian-cooking-classes",
+        },
+      },
+      {
+        root: {
+          title: "Pranayama & Meditation",
+          link: "/veda-yogshala/pranayama-meditation",
+        },
+      },
+    ],
   },
   {
-    root: { title: "Yoga Retreat", link: "/veda-yoga-centre/yoga-retreat" },
+    root: { title: "Veda Spa", link: "/veda-spa" },
+    children: [
+      { root: { title: "Spa Treatments", link: "/veda-spa/spa-treatments" } },
+    ],
   },
-  {
-    root: {
-      title: "Teachers' Training Courses",
-      link: "/veda-yogshala/teacher-training-courses",
-    },
-  },
-  {
-    root: {
-      title: "Language Courses",
-      link: "/veda-yogshala/language-courses",
-    },
-  },
-  {
-    root: {
-      title: "Indian Cooking Classes",
-      link: "/veda-yogshala/indian-cooking-classes",
-    },
-  },
-  {
-    root: {
-      title: "Pranayama & Meditation",
-      link: "/veda-yogshala/pranayama-meditation",
-    },
-  },
-  {
-    root: {
-      title: "Mantra Chanting",
-      link: "/veda-yogshala/mantra-chanting",
-    },
-  },
-  { root: { title: "Veda Spa", link: "/veda-spa" } },
-  { root: { title: "Spa Treatments", link: "/veda-spa/spa-treatments" } },
   {
     root: { title: "Blog", link: "/blog" },
     children: [
