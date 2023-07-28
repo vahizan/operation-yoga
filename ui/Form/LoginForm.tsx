@@ -2,17 +2,21 @@ import { FC, FormEvent, useState } from "react";
 import { signIn } from "next-auth/react";
 import styles from "./loginForm.module.scss";
 import Link from "next/link";
+import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoggingIn, setLoggingIn] = useState<boolean>();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setLoggingIn(true);
 
     if (!email || !password) {
       setError("Please fill in all fields");
+      setLoggingIn(false);
       return;
     }
 
@@ -32,11 +36,11 @@ const LoginForm: FC = () => {
     } else {
       setError("");
     }
+    setLoggingIn(false);
   };
 
   return (
     <form className={styles.loginForm} onSubmit={handleSubmit}>
-      {error && <div className={"error"}>{error}</div>}
       <div className={styles.formGroup}>
         <label htmlFor="email">Email</label>
         <input
@@ -58,7 +62,10 @@ const LoginForm: FC = () => {
       <Link className={styles.forgotLink} href={"/forgot-password"}>
         Forgot?
       </Link>
-      <button type="submit">Login</button>
+      <button type="submit">
+        {isLoggingIn ? <BouncingDotsLoader /> : <span>Login</span>}
+      </button>
+      {error && <div className={"error"}>{error}</div>}
     </form>
   );
 };

@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 import styles from "./signupForm.module.scss";
+import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
 
 const SignupForm = () => {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ const SignupForm = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
+  const [isSigningUp, setSigningUp] = useState<boolean>();
 
   const router = useRouter();
 
@@ -19,10 +21,13 @@ const SignupForm = () => {
 
     if (!name || !email || !password) {
       setError("Please fill in all required fields.");
+      setSigningUp(false);
       return;
     }
 
     try {
+      setSigningUp(true);
+
       const response = await axios.post(
         "/api/auth/signup",
         JSON.stringify({ name, email, password, phone }),
@@ -42,12 +47,13 @@ const SignupForm = () => {
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
+    } finally {
+      setSigningUp(false);
     }
   };
 
   return (
     <div className={styles.signupFormContainer}>
-      {error && <div className={`${styles.errorMessage} error`}>{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className={styles.formGroup}>
           <label htmlFor={"name"}>Name:</label>
@@ -92,7 +98,10 @@ const SignupForm = () => {
           />
         </div>
 
-        <button type="submit">Sign Up</button>
+        <button type="submit">
+          {isSigningUp ? <BouncingDotsLoader /> : <span>Sign Up</span>}
+        </button>
+        {error && <div className={`${styles.errorMessage} error`}>{error}</div>}
       </form>
     </div>
   );

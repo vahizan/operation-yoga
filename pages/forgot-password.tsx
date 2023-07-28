@@ -3,16 +3,20 @@ import { signIn } from "next-auth/react";
 import axios, { AxiosError } from "axios";
 import styles from "./forgotPassword.module.scss";
 import Layout from "../ui/Layout";
+import BouncingDotsLoader from "../ui/Loader/BouncingDotsLoader";
 
 export const ForgotPassword: FC = () => {
   const [email, setEmail] = useState<string>();
   const [message, setMessage] = useState<string>();
+  const [isLoading, setLoading] = useState<boolean>();
 
   const handleForgotPassword = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    setLoading(true);
     if (!email) {
       setMessage("Please provide an email address");
+      setLoading(false);
       return;
     }
     axios
@@ -24,6 +28,9 @@ export const ForgotPassword: FC = () => {
       })
       .catch(() => {
         setMessage("Error please try again later");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -43,7 +50,9 @@ export const ForgotPassword: FC = () => {
             required
           />
         </div>
-        <button onClick={handleForgotPassword}>Reset Password</button>
+        <button onClick={handleForgotPassword}>
+          {isLoading ? <BouncingDotsLoader /> : <span>Reset Password</span>}
+        </button>
       </div>
     </Layout>
   );

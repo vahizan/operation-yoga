@@ -12,9 +12,23 @@
   justify-content: flex-start;
   flex-direction: column;
 
+  &__submitErrorMessage, &__successMessage {
+    align-self: center;
+    padding:20px;
+    @include autoFontSize(16);
+  }
+
   &__errorMessage {
-    margin-bottom: 5px;
     margin-top: 5px;
+    margin-bottom: 5px;
+    color: red;
+  }
+  &__successMessage {
+    color: $light-turquoise;
+  }
+
+  &__submitErrorMessage {
+    color: red;
   }
 
   &__textAreaField {
