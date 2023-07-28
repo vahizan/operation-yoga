@@ -1,6 +1,7 @@
 import styles from "./Navigation.module.scss";
 import { ReactNode } from "react";
 import { NavItemType } from "./types";
+import Link from "next/link";
 
 const renderIcon = (
   icon: string | SVGElement | ReactNode,
@@ -40,7 +41,6 @@ export default function NavItem({
 }: NavItemType) {
   return isRoot ? (
     <div key={title} className={`${styles.navItem} ${styles.navItem__root}`}>
-      {" "}
       {renderItem(title, link, icon, imageAlt)}
     </div>
   ) : (
