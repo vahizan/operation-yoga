@@ -109,9 +109,25 @@
   padding: 10px;
   list-style-type: none;
 
-  a {
-    display: block;
-    padding: 5px 0;
+  &__root {
+    a {
+      @include autoFontSize(25);
+    }
+  }
+
+  button {
+    padding: inherit;
+    @include autoFontSize(17);
+    font-weight: bolder;
+    width: 100%;
+    color: initial;
+    background-color: initial;
+    border: none;
+    cursor: pointer;
+
+    a{
+      display: block;
+    }
   }
 
   &:hover {
