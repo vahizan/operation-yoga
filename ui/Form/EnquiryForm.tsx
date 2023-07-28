@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./enquiryForm.module.scss";
 import { sendEmail } from "../../hooks/api";
+import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
 
 interface FormValues {
   name: string;
@@ -18,7 +19,13 @@ const initialState: FormValues = {
   message: "",
   phoneExt: "",
 };
-
+function timeoutFunc<T>(
+  callback: (val: T | undefined) => void,
+  seconds: number,
+  val?: T
+) {
+  setTimeout(() => callback(val), seconds);
+}
 const EnquiryForm = () => {
   const [formValues, setFormValues] = useState<FormValues>(initialState);
   const [errors, setErrors] = useState<FormValues>(initialState);
@@ -30,6 +37,7 @@ const EnquiryForm = () => {
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    validateForm();
     setFormValues({ ...formValues, [name]: value });
   };
 
@@ -70,7 +78,10 @@ const EnquiryForm = () => {
   const errorMessageClassName = `${styles.enquiryForm__errorMessage} error`;
   useEffect(() => {
     if (isSubmitted) {
+      setSendSuccess(undefined);
+      setSendError(undefined);
       if (!validateForm()) {
+        setSubmitted(false);
         return;
       }
       sendEmail({
@@ -81,6 +92,13 @@ const EnquiryForm = () => {
         .then(() => {
           setSendError(false);
           setSendSuccess(true);
+          setFormValues({
+            subject: "",
+            message: "",
+            email: "",
+            phoneExt: "",
+            name: "",
+          });
         })
         .catch(() => {
           setSendError(true);
@@ -91,6 +109,14 @@ const EnquiryForm = () => {
         });
     }
   }, [isSubmitted]);
+
+  useEffect(() => {
+    timeoutFunc(setSendSuccess, 3000);
+  }, [isSendSuccess]);
+
+  useEffect(() => {
+    timeoutFunc(setSendError, 3000);
+  }, [sendError]);
 
   return (
     <form className={styles.enquiryForm} onSubmit={handleSubmit}>
@@ -164,7 +190,7 @@ const EnquiryForm = () => {
         )}
         type="submit"
       >
-        Submit
+        {isSubmitted ? <BouncingDotsLoader /> : <span>Submit</span>}
       </button>
       {isSendSuccess && (
         <div className={styles.enquiryForm__successMessage}>
@@ -172,7 +198,7 @@ const EnquiryForm = () => {
         </div>
       )}
       {sendError && (
-        <div className={styles.enquiryForm__errorMessage}>
+        <div className={styles.enquiryForm__submitErrorMessage}>
           Failed to send your enquiry. Please try again
         </div>
       )}
