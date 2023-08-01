@@ -27,7 +27,6 @@ export default function Home() {
             videoAlt={"instructor teaching yoga by the ganges"}
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
-            ctaText={"CLICK TO FIND OUT MORE"}
           />
         </div>
         <div

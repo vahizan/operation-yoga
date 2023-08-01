@@ -1,16 +1,32 @@
 @import "../styles/breakpoints.scss";
 @import "../styles/utils";
+@import "../styles/animations";
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
 
 .header {
-  h1 {
-    @include autoFontSize(50);
-    padding: 0;
-    margin: 0;
+  height: inherit;
+  transition:  height 0.3s ease-out;
 
+  &__scroll {
+    top: 0;
+    position: fixed;
+    height: 100px;
+    background-color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s, height 0.3s ease-in;
   }
+
   display: flex;
   width: 100%;
-  background-color: white;
   z-index: 100;
   flex-direction: row;
   justify-content: center;
@@ -36,17 +52,99 @@
     justify-content: center;
 
     &__certification {
+      &__hidden {
+        top: 0;
+        position: absolute;
+        visibility: hidden;
+        opacity: 0;
+        transition: opacity 0.1s ease-out;
+      }
+
+      opacity: 1;
+      position: inherit;
+      visibility: visible;
+      transition: opacity 0.1s ease-in;
       @include tablet-up {
         display: none;
       }
     }
+
+    &__mainLogo {
+      svg {
+        height: 80px;
+        @include logoLotusAnimation(2);
+        transition: height 0.3ms ease-in;
+      }
+    }
+
+    &__title {
+      z-index: 0;
+      opacity: 1;
+      position:inherit;
+      @include autoFontSize(50);
+      transition: opacity 0.2s;
+      &__hidden {
+        opacity: 0;
+        font-size: 0;
+        transition: opacity 0.5ms ease-in;
+      }
+    }
   }
 
-  &__enquiry {
+  &__rightContent {
+    display: flex;
     z-index: 100;
     position: fixed;
-    top: 26px;
-    right: 30px
+    flex-direction: column;
+    top: 12px;
+    right: 8px;
+    align-items: center;
+
+    @include tablet-up {
+      flex-direction: row;
+      top: 26px;
+      right: 30px;
+    }
+
+    &__loginContainer {
+      margin-top: 5px;
+      @include tablet-up {
+        margin-top: 0;
+      }
+    }
+
+    &__accountContainer {
+      &__button {
+        display: none;
+        @include tablet-up {
+          display: block;
+        }
+      }
+
+      &__iconButton {
+        @include tablet-up {
+          display: none;
+        }
+        margin-top: 5px;
+        padding: 5px 10px;
+        border: 2px solid black;
+        border-radius: 30px;
+        &:hover {
+          background-image: $glow-bg;
+        }
+        cursor: pointer;
+        outline: inherit;
+        display: block;
+        background-color: inherit;
+
+        svg {
+          position: relative;
+          top: 2px;
+          width: 22px;
+        }
+      }
+    }
+
   }
 }
 

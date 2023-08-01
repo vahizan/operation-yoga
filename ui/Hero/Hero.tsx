@@ -17,7 +17,6 @@ export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
     const networkInformation = navigator.connection as NetworkInformation & {
       effectiveType?: string;
     };
-    console.log("networkInformation", networkInformation);
     if (networkInformation?.effectiveType === "4g") {
       setShouldLoadImage(false);
     }

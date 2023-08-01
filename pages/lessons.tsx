@@ -18,8 +18,6 @@ export default function Lessons() {
   const [date, setDate] = useState<Value>(currDate);
   const [day, setDay] = useState<number>(currDate.getDay());
 
-  console.log("DAY", day);
-  console.log("DATES", date);
   const { data, apiCallErrorMessage, apiLoading } = useApi<
     Record<string, string>,
     Array<ISession>
