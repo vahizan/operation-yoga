@@ -6,12 +6,12 @@ interface Props {
   text: string;
   url: string;
 }
-const EnquiryButton: FC<Props> = ({ text, url }) => {
+const NavigationButton: FC<Props> = ({ text, url }) => {
   return (
-    <button className={styles.enquiryButton}>
+    <button className={styles.navigationButton}>
       <Link href={url}>{text}</Link>
     </button>
   );
 };
 
-export default EnquiryButton;
+export default NavigationButton;

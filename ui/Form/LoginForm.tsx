@@ -20,23 +20,19 @@ const LoginForm: FC = () => {
       return;
     }
 
-    const result = await signIn("credentials", {
+    await signIn("credentials", {
       redirect: true,
       callbackUrl: "/",
       email,
       password,
-    });
-
-    if (!result) {
-      setError("Unable to login right now");
-    }
-
-    if (result?.error) {
-      setError("Invalid username or password. Please try again");
-    } else {
-      setError("");
-    }
-    setLoggingIn(false);
+    })
+      .catch((err) => {
+        console.log("err", err);
+        setError("Invalid username or password. Please try again");
+      })
+      .finally(() => {
+        setLoggingIn(false);
+      });
   };
 
   return (
@@ -62,7 +58,7 @@ const LoginForm: FC = () => {
       <Link className={styles.forgotLink} href={"/forgot-password"}>
         Forgot?
       </Link>
-      <button type="submit">
+      <button disabled={isLoggingIn} type="submit">
         {isLoggingIn ? <BouncingDotsLoader /> : <span>Login</span>}
       </button>
       {error && <div className={"error"}>{error}</div>}
