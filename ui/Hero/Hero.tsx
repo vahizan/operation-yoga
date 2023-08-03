@@ -3,14 +3,23 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {
-  videoUrl?: string;
+  desktopVideoUrl: string;
+  mobileVideoUrl: string;
+  placeholderImageUrl: string;
   videoAlt?: string;
   content: string;
   cta?: string;
   ctaText?: string;
 }
 
-export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
+export default function Hero({
+  desktopVideoUrl,
+  mobileVideoUrl,
+  placeholderImageUrl,
+  content,
+  cta,
+  ctaText,
+}: Props) {
   const [shouldLoadImage, setShouldLoadImage] = useState(true);
 
   useEffect(() => {
@@ -24,10 +33,25 @@ export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
 
   return (
     <div className={styles.hero}>
-      {!shouldLoadImage && videoUrl && (
+      {!shouldLoadImage && (
         <div className={styles.hero__videoWrap}>
-          <video controls={false} autoPlay muted loop>
-            <source src={videoUrl} type="video/mp4" />
+          <video
+            className={styles.hero__videoWrap__desktop}
+            controls={false}
+            autoPlay
+            muted
+            loop
+          >
+            <source src={desktopVideoUrl} type="video/mp4" />
+          </video>
+          <video
+            className={styles.hero__videoWrap__mobile}
+            controls={false}
+            autoPlay
+            muted
+            loop
+          >
+            <source src={mobileVideoUrl} type="video/mp4" />
           </video>
         </div>
       )}
@@ -35,7 +59,7 @@ export default function Hero({ videoUrl, content, cta, ctaText }: Props) {
         <div className={styles.hero__placeholderImage}>
           <Image
             alt={"picture of the river ganges"}
-            src={"/Ganga.jpeg"}
+            src={placeholderImageUrl}
             width={500}
             height={500}
           />

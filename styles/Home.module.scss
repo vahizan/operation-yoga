@@ -38,6 +38,15 @@
   display: flex;
   justify-content: center;
 
+  &__indianCulture {
+    img {
+      width: 110% !important;
+
+      @include tablet-up{
+        width: 270px !important;
+      }
+    }
+  }
   @include mobile-up {
     flex-direction: column;
   }

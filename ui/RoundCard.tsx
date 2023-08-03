@@ -6,6 +6,7 @@ interface Props {
   imgAlt: string;
   headingText: string;
   headingUrl: string;
+  className?: string;
 }
 
 export default function RoundCard({
@@ -13,9 +14,13 @@ export default function RoundCard({
   imgAlt,
   headingText,
   headingUrl,
+  className,
 }: Props) {
+  const mainClassName = className
+    ? `${styles.roundCard} ${className}`
+    : styles.roundCard;
   return (
-    <div className={styles.roundCard}>
+    <div className={mainClassName}>
       <h1>
         <a className={styles.roundCard__text} href={headingUrl}>
           {headingText}

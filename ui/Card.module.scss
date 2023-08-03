@@ -36,7 +36,18 @@
     width: 100%;
     animation: 500ms ease-out scaleDown;
     box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 3px 0px;
-
+    &__desktop{
+      display: none;
+      @include tablet-up{
+        display: block;
+      }
+    }
+    &__mobile{
+      display: block;
+      @include tablet-up{
+        display: none;
+      }
+    }
     video {
       object-fit: cover;
       @include desktop-up {
