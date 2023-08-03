@@ -12,13 +12,13 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/login",
     signOut: "/signOut",
-    error: "/error",
     verifyRequest: "/verify-request",
     newUser: "/new-user",
   },
   session: {
     strategy: "jwt",
   },
+  secret: process.env.NEXTAUTH_SECRET,
   adapter: MongoDBAdapter(clientPromise),
   providers: [
     CredentialsProvider({

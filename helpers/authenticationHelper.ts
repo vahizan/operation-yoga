@@ -10,6 +10,7 @@ export const authorizeLogin = async (
   credentials: Record<string, string> | undefined
 ) => {
   {
+    console.log("CREDENTIALS");
     if (!credentials?.email || !credentials.password) {
       return null;
     }

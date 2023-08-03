@@ -23,7 +23,6 @@ export default function Home() {
       <main>
         <div className={styles.heroContainer}>
           <Hero
-            placeholderImageUrl={"/Ganga.jpeg"}
             desktopVideoUrl={
               "https://d399a6wtv3gpjg.cloudfront.net/hero-video-desktop.mp4"
             }
