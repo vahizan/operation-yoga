@@ -18,14 +18,12 @@
 
 @keyframes slideOut {
   0% {
-    width: 0%;
-    // transform: scale(.3);
+    width: 0;
     opacity: 0;
   }
 
   100% {
     width: 30%;
-    // transform:scale(1);
     opacity: 1;
   }
 }
@@ -130,13 +128,16 @@
     }
   }
 
-  &:hover {
-    display: block;
-    background-image: $glow-bg;
-    transition: opacity .3s ease;
-    z-index: 2;
-    border-radius: 10px;
+  @include desktop-up {
+    &:hover {
+      display: block;
+      background-image: $glow-bg;
+      transition: opacity .3s ease;
+      z-index: 2;
+      border-radius: 10px;
+    }
   }
+
 }
 
 
