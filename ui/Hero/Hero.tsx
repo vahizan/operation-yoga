@@ -56,14 +56,25 @@ export default function Hero({
         </div>
       )}
       {shouldLoadImage && (
-        <div className={styles.hero__placeholderImage}>
-          <Image
-            alt={"picture of the river ganges"}
-            src={placeholderImageUrl}
-            width={500}
-            height={500}
-          />
-        </div>
+        <>
+          <video
+            className={styles.hero__videoWrap__mobile}
+            autoPlay={false}
+            controls
+            muted
+            loop
+          >
+            <source src={mobileVideoUrl} type="video/mp4" />
+          </video>
+          <div className={styles.hero__placeholderImage}>
+            <Image
+              alt={"picture of the river ganges"}
+              src={placeholderImageUrl}
+              width={500}
+              height={500}
+            />
+          </div>
+        </>
       )}
       <header className={styles.hero__content}>
         <h1>{content}</h1>
