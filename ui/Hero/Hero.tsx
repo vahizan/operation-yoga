@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 interface Props {
   desktopVideoUrl: string;
   mobileVideoUrl: string;
-  placeholderImageUrl: string;
   videoAlt?: string;
   content: string;
   cta?: string;
@@ -15,7 +14,6 @@ interface Props {
 export default function Hero({
   desktopVideoUrl,
   mobileVideoUrl,
-  placeholderImageUrl,
   content,
   cta,
   ctaText,
@@ -56,14 +54,26 @@ export default function Hero({
         </div>
       )}
       {shouldLoadImage && (
-        <div className={styles.hero__placeholderImage}>
-          <Image
-            alt={"picture of the river ganges"}
-            src={placeholderImageUrl}
-            width={500}
-            height={500}
-          />
-        </div>
+        <>
+          <video
+            className={styles.hero__videoWrap__desktop}
+            controls={true}
+            autoPlay={false}
+            muted
+            loop
+          >
+            <source src={desktopVideoUrl} type="video/mp4" />
+          </video>
+          <video
+            className={styles.hero__videoWrap__mobile}
+            autoPlay={false}
+            controls
+            muted
+            loop
+          >
+            <source src={mobileVideoUrl} type="video/mp4" />
+          </video>
+        </>
       )}
       <header className={styles.hero__content}>
         <h1>{content}</h1>
