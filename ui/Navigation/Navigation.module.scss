@@ -102,11 +102,18 @@
 }
 
 .navItem {
+  display: flex;
+  justify-content:center ;
   text-align: center;
   width: 100%;
-  padding: 10px;
+  padding: 20px;
   list-style-type: none;
 
+  &__button {
+    padding: 15px 25px;
+    width: 100%;
+
+  }
   &__root {
     a {
       @include autoFontSize(25);

@@ -26,9 +26,9 @@ const renderItem = (
           {renderIcon(icon, imageAlt)}
         </span>
       )}
-      <button className={styles.navItem__button}>
-        <Link href={link}>{title}</Link>
-      </button>
+      <Link className={styles.navItem__button} href={link}>
+        {title}
+      </Link>
     </>
   );
 };
