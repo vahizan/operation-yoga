@@ -23,7 +23,13 @@ export default function Home() {
       <main>
         <div className={styles.heroContainer}>
           <Hero
-            videoUrl={"https://d399a6wtv3gpjg.cloudfront.net/videoshort.mp4"}
+            placeholderImageUrl={"/Ganga.jpeg"}
+            desktopVideoUrl={
+              "https://d399a6wtv3gpjg.cloudfront.net/hero-video-desktop.mp4"
+            }
+            mobileVideoUrl={
+              "https://d399a6wtv3gpjg.cloudfront.net/hero-video-mobile.mp4"
+            }
             videoAlt={"instructor teaching yoga by the ganges"}
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
@@ -40,7 +46,8 @@ export default function Home() {
             headingUrl={"/Yoga"}
           />
           <RoundCard
-            imgSrc={"/IMG_20210521_164303.jpeg"}
+            className={styles.roundCards__indianCulture}
+            imgSrc={"https://d399a6wtv3gpjg.cloudfront.net/Indian+culture.jpeg"}
             imgAlt={"Spa Picture"}
             headingText={"Indian Culture"}
             headingUrl={"/indian-culture"}
