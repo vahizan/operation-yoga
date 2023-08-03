@@ -4,11 +4,13 @@ import { useState } from "react";
 import axios, { AxiosError } from "axios";
 import Layout from "../../ui/Layout";
 import styles from "./resetPassword.module.scss";
+import BouncingDotsLoader from "../../ui/Loader/BouncingDotsLoader";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [resetStatus, setResetStatus] = useState("");
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleResetPassword = () => {
@@ -20,6 +22,7 @@ const ResetPassword = () => {
       setResetStatus("Passwords do not match");
       return;
     }
+    setLoading(true);
     axios
       .post("/api/auth/reset-password", {
         password,
@@ -36,7 +39,12 @@ const ResetPassword = () => {
           setTimeout(() => {
             router.push("/forgot-password");
           }, 1500);
+        } else {
+          setResetStatus("Invalid password reset link.");
         }
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -68,7 +76,9 @@ const ResetPassword = () => {
           />
         </div>
 
-        <button onClick={handleResetPassword}>Reset Password</button>
+        <button disabled={isLoading} onClick={handleResetPassword}>
+          {isLoading ? <BouncingDotsLoader /> : <span>Reset Password</span>}
+        </button>
         {resetStatus && <p>{resetStatus}</p>}
       </div>
     </Layout>

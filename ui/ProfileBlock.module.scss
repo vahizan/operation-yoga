@@ -2,6 +2,14 @@
 @import "../styles/utils";
 
 .profileBlock {
+  opacity: 1;
+  position: inherit;
+  transition: opacity 0.5s ease-in;
+
+  &__hidden {
+    opacity: 0;
+  }
+
   margin: 20px;
   padding:20px;
   display: flex;
@@ -23,24 +31,19 @@
     align-self: center;
     border-radius: 100%;
     @include mobile() {
-      width: 200px;
-      height: 200px;
+      width: 100px;
+      height: 100px;
 
     }
     @include tablet() {
+      width: 150px;
+      height: 150px;
+    }
+
+    @include desktop-up() {
       width: 250px;
       height: 250px;
     }
-
-    @include small-desktop() {
-      width: 350px;
-      height: 350px;
-    }
-
-    @include large-desktop() {
-      width: 500px;
-    }
-
   }
 
 }

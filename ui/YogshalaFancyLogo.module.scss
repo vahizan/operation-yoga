@@ -7,13 +7,10 @@
   padding-top: 10px;
 
   &__mainLogo {
-    width: 100px;
-
-    @include tablet-up{
-      width: inherit;
-      align-self: inherit;
-    }
+    width: 150px;
+    align-self: center;
   }
+
   &__mainLogo:hover {
     @include logoLotusAnimation(infinite);
   }
@@ -29,33 +26,17 @@
     justify-content: center;
 
     &__veda {
-      display: none;
-      width: 30px;
-      @include tablet-up {
-        display: block;
-        width: 55px;
-      }
+      width: 50px;
       margin-right: 5px;
     }
     &__yogshala {
-      display: none;
-      width: 50px;
-      @include tablet-up {
-        display: block;
-        width: 100px;
-      }
+      width: 100px;
     }
   }
 
   &__companyTag {
-    display: none;
     align-self: center;
     margin-top: 5px;
-    width: 50px;
-    @include tablet-up {
-      display: block;
-      width: 150px;
-    }
-
+    width: 150px;
   }
 }
