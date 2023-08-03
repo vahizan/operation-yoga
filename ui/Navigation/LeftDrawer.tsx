@@ -2,7 +2,7 @@
 
 import styles from "./Navigation.module.scss";
 import Hamburger from "./Hamburger";
-import { NavMenuType } from "./types";
+import { NavMenuType } from "../../types/NavigationTypes";
 import { NAVIGATION_MENU_VALUES } from "../../constants/Navigation.constants";
 import VerticalNavMenu from "./VerticalNavMenu";
 import {

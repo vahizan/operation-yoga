@@ -7,10 +7,11 @@ import {
   pushpaBlock,
   vivekVisitingInstructor,
 } from "../constants/Teachers.constants";
+import Layout from "../ui/Layout";
 
 export const Teachers = () => {
   return (
-    <div className={styles.container}>
+    <Layout>
       <main className={styles.main}>
         <h1>Our Teachers</h1>
         <div>
@@ -45,7 +46,7 @@ export const Teachers = () => {
           />
         </div>
       </main>
-    </div>
+    </Layout>
   );
 };
 

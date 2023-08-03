@@ -1,9 +1,9 @@
 import styles from "./Navigation/Navigation.module.scss";
 import NavMenu from "./Navigation/NavMenu";
-import { NavMenuType } from "./Navigation/types";
+import { NavMenuType } from "../types/NavigationTypes";
 
 interface Props {
-  navItems: NavMenuType[]
+  navItems: NavMenuType[];
 }
 
 const renderNavItems = (navMenuItems: NavMenuType[]) => {
@@ -21,13 +21,11 @@ const renderNavItems = (navMenuItems: NavMenuType[]) => {
   });
 };
 
-export default function Navigation({navItems}: Props) {
+export default function Navigation({ navItems }: Props) {
   return (
     <div className={styles.navigationContainer}>
       {/*<div className={styles.logo}>LOGO HERE</div>*/}
-      <nav className={styles.navigation}>
-        {renderNavItems(navItems)}
-      </nav>
+      <nav className={styles.navigation}>{renderNavItems(navItems)}</nav>
     </div>
   );
 }

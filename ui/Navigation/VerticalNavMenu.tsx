@@ -1,5 +1,5 @@
 import styles from "./Navigation.module.scss";
-import { NavMenuType } from "./types";
+import { NavMenuType } from "../../types/NavigationTypes";
 import NavItem from "./NavItem";
 
 export default function VerticalNavMenu({ root, children, key }: NavMenuType) {
