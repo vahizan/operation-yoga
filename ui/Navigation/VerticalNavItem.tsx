@@ -1,6 +1,6 @@
 import styles from "./Navigation.module.scss";
 import { ReactNode } from "react";
-import { NavItemType } from "./types";
+import { NavItemType } from "../../types/NavigationTypes";
 
 const renderIcon = (
   icon: string | SVGElement | ReactNode,

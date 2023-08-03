@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import styles from "./ProfileBlock.module.scss";
-import { SocialMedia } from "../pages/types";
+import { SocialMedia } from "../types/SocialMediaTypes";
 import useObserver from "../hooks/observer/useObserver";
 
 interface Props {

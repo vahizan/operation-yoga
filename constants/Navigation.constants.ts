@@ -1,4 +1,4 @@
-import { NavMenuType } from "../ui/Navigation/types";
+import { NavMenuType } from "../types/NavigationTypes";
 
 export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
   { root: { title: "Home", link: "/" } },
