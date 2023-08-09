@@ -10,6 +10,7 @@ import {
   FocusEventHandler,
   SetStateAction,
   useEffect,
+  useRef,
   useState,
 } from "react";
 
@@ -39,6 +40,13 @@ const blurEvent =
 export default function LeftDrawer() {
   const [isOpen, setOpen] = useState(false);
   const [isBlurred, setBlurred] = useState(false);
+  const drawerRef = useRef<HTMLDivElement>();
+
+  useEffect(() => {
+    if (isOpen) {
+      drawerRef.current?.focus();
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     if (isBlurred) {
