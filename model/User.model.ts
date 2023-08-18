@@ -1,10 +1,17 @@
 import mongoose, { Document, Schema } from "mongoose";
 
 export const USER_MODEL_NAME = "User";
+export enum UserType {
+  ADMIN = "admin",
+  SUBSCRIBER = "subscriber",
+  NON_SUBSCRIBER = "non-subscriber",
+}
+
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
+  userType?: UserType;
   phone?: string;
   createdAt?: Date;
   verifyToken?: string;

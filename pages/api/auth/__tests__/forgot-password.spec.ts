@@ -72,7 +72,7 @@ describe("handler", () => {
       email: "test@example.com",
       subject: "You've requested to reset your password",
       body: "Click on the link to reset password",
-      html: "<p>Please click on this link to reset your password: http://example.com?verifyToken=mocked_token</p><p>Email: test@example.com</p>",
+      html: "<p>Please click on this link to reset your password: http://example.com/reset-password/mocked_token</p><p>Email: test@example.com</p>",
     });
   });
 
@@ -108,7 +108,7 @@ describe("handler", () => {
     await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
 
     expect(createMongoConnection).toHaveBeenCalledTimes(1);
-    expect(mockStatus).toHaveBeenCalledWith(500);
+    expect(mockStatus).toHaveBeenCalledWith(404);
     expect(mockJson).toHaveBeenCalledWith({ message: "user doesn't exist" });
   });
 });
