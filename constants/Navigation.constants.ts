@@ -1,7 +1,7 @@
 import { NavMenuType } from "../types/NavigationTypes";
 
 export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
-  { root: { title: "Home", link: "/" } },
+  { root: { title: "Home", link: "/" }, children: [] },
   { root: { title: "Location", link: "/location" } },
   { root: { title: "About Us", link: "/about" } },
   { root: { title: "Our Mission", link: "/our-mission" } },
@@ -15,7 +15,7 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
         root: { title: "Yoga Classes", link: "/veda-yoga-centre/yoga-classes" },
       },
       {
-        root: { title: "Yoga Retreat", link: "/veda-yoga-centre/yoga-retreat" },
+        root: { title: "Retreats", link: "/veda-yoga-centre/retreats" },
       },
       {
         root: {

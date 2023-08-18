@@ -1,9 +1,16 @@
 import Layout from "../ui/Layout";
+import Image from "next/image";
 
 export const OurMission = () => {
   return (
     <Layout>
       <h1>Our Mission</h1>
+      <Image
+        width={500}
+        height={300}
+        src={"https://d399a6wtv3gpjg.cloudfront.net/mymission-photo.jpeg"}
+        alt={"yoga instructor doing splits"}
+      />
       <div className={"content"}>
         <p>
           The Mission of Veda Yogshala is to share the eternal wisdom,
