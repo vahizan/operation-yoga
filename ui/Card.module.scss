@@ -24,7 +24,7 @@
 
 .hero {
   position: relative;
-  min-width: 100%;
+  width: 100%;
 
   &__placeholderImage {
    img {
@@ -39,10 +39,12 @@
     &__desktop{
       display: none;
       @include tablet-up{
+        width:inherit;
         display: block;
       }
     }
     &__mobile{
+      width: inherit;
       display: block;
       @include tablet-up{
         display: none;
@@ -52,7 +54,6 @@
       object-fit: cover;
       @include desktop-up {
         height: 700px;
-        min-width: 100%;
       }
     }
   }
@@ -65,9 +66,17 @@
     color: white;
     display: flex;
     flex-direction: column;
-    left:20px;
-    bottom: 50px;
     @include autoFontSize(15);
+
+    @include mobile-up {
+      @include autoFontSize(10);
+      left:0;
+      bottom: 0;
+    }
+    @include desktop-up{
+      left:20px;
+      bottom: 50px;
+    }
   }
 
   &__ctaContainer {
