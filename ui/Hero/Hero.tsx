@@ -36,7 +36,7 @@ export default function Hero({
           <video
             className={styles.hero__videoWrap__desktop}
             controls={false}
-            autoPlay={false}
+            autoPlay
             muted
             loop
           >
@@ -45,7 +45,7 @@ export default function Hero({
           <video
             className={styles.hero__videoWrap__mobile}
             controls={false}
-            autoPlay={false}
+            autoPlay
             muted
             loop
           >
