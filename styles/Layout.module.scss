@@ -81,7 +81,7 @@
       z-index: 0;
       opacity: 1;
       position:inherit;
-      @include autoFontSize(50);
+      @include autoFontSize(30);
       transition: opacity 0.2s;
       &__hidden {
         opacity: 0;

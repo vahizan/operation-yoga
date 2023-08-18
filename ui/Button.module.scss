@@ -2,7 +2,7 @@
 @import "styles/breakpoints";
 
 .navigationButton {
-  @include autoFontSize(15);
+  @include autoFontSize(20);
   &:hover {
     background-image: $glow-bg;
   }
