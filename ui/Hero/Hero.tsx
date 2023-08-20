@@ -24,7 +24,10 @@ export default function Hero({
     const networkInformation = navigator.connection as NetworkInformation & {
       effectiveType?: string;
     };
-    if (networkInformation?.effectiveType === "4g") {
+    if (
+      networkInformation?.effectiveType === "4g" ||
+      networkInformation.type === "wifi"
+    ) {
       setShouldLoadImage(false);
     }
   }, []);
