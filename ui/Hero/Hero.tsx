@@ -26,7 +26,7 @@ export default function Hero({
     };
     if (
       networkInformation?.effectiveType === "4g" ||
-      networkInformation.type === "wifi"
+      networkInformation?.type === "wifi"
     ) {
       setShouldLoadImage(false);
     }
