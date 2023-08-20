@@ -70,15 +70,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             >
               <Certification />
             </div>
-            <h1
-              className={
-                isAtTop
-                  ? styles.header__content__title
-                  : styles.header__content__title__hidden
-              }
-            >
-              {"VEDA YOGA WELLNESS CENTRE"}
-            </h1>
           </div>
           <div className={styles.header__rightContent}>
             <NavigationButton text={"enquire"} url={"/enquire"} />

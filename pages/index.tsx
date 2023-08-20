@@ -37,19 +37,19 @@ export default function Home() {
           />
         </div>
         <h1 className={styles.secondTitle}>
-          Veda <span>Yoga</span> <span>Centre</span>
+          VEDA <span>YOGA</span> <span>CENTRE</span>
         </h1>
         <div className={styles.branches}>
           <div className={styles.branches__branchLeft}>
             <ArrowBranchLeft />
             <div className={styles.branches__branchLeft__content}>
-              Veda <span> Yogshala </span>
+              VEDA <span> YOGSHALA </span>
             </div>
           </div>
           <div className={styles.branches__branchRight}>
             <ArrowBranchRight />
             <div className={styles.branches__branchRight__content}>
-              Veda <span> Spa </span>
+              VEDA <span> SPA </span>
             </div>
           </div>
         </div>
