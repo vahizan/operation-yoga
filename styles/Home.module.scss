@@ -1,4 +1,6 @@
+@import "../styles/utils.scss";
 @import "../styles/breakpoints.scss";
+@import "../styles/colours.scss";
 
 .container {
   padding: 0.5rem 1rem;
@@ -53,5 +55,53 @@
   @include tablet-up {
     flex-direction: row;
   }
+}
+.secondTitle {
+  @include autoFontSize(70);
+  color: $yoga-yellow;
+  span:first-child {
+    color: $yoga-brown;
+  }
+  span:last-child {
+    color: $yoga-red;
+  }
+}
+
+.branches {
+  @include mobile {
+   display: none;
+  }
+  @include autoFontSize(60);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  svg{
+    height: 200px;
+    padding-bottom: 20px;
+  }
+
+  &__branchLeft {
+    display: flex;
+    flex-direction: column;
+    &__content {
+      color: $yoga-yellow;
+      span {
+        color:$yoga-brown;
+      }
+    }
+  }
+
+  &__branchRight {
+    display: flex;
+    flex-direction: column;
+    &__content {
+      color: $yoga-yellow;
+      span {
+        color: $yoga-red;
+      }
+    }
+  }
+
 }
 

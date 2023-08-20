@@ -9,13 +9,13 @@ export const NAVIGATION_MENU_VALUES: NavMenuType[] = [
   { root: { title: "Contact Us", link: "/contact-us" } },
   { root: { title: "Quick Booking", link: "/quick-booking" } },
   {
-    root: { title: "Veda Yoga Centre", link: "/veda-yoga-centre" },
+    root: { title: "Veda Yogshala", link: "/veda-yogshala" },
     children: [
       {
-        root: { title: "Yoga Classes", link: "/veda-yoga-centre/yoga-classes" },
+        root: { title: "Yoga Classes", link: "/veda-yogshala/yoga-classes" },
       },
       {
-        root: { title: "Retreats", link: "/veda-yoga-centre/retreats" },
+        root: { title: "Retreats", link: "/veda-yogshala/retreats" },
       },
       {
         root: {
