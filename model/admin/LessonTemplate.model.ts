@@ -1,10 +1,10 @@
 import { Schema, model, models } from "mongoose";
-import { USER_MODEL_NAME, IUser } from "./User.model";
+import { USER_MODEL_NAME, IUser } from "../User.model";
 import { Document } from "mongoose";
 
-export const LESSON_MODEL_NAME = "Lesson";
+export const LESSON_TEMPLATE_MODEL_NAME = "LessonTemplate";
 
-export interface ILesson extends Document {
+export interface ILessonTemplate extends Document {
   availability: number;
   startTime: Date;
   endTime: Date;
@@ -14,7 +14,6 @@ export interface ILesson extends Document {
   room: string;
   location: Object;
   price: Object;
-  instructor: IUser;
 }
 
 const lessonSchema = new Schema({
@@ -32,13 +31,10 @@ const lessonSchema = new Schema({
   room: String,
   location: Object,
   price: Schema.Types.Map,
-  instructor: {
-    type: Schema.Types.ObjectId,
-    ref: USER_MODEL_NAME,
-    required: true,
-  },
 });
 
-const Lesson = models.Lesson || model<ILesson>(LESSON_MODEL_NAME, lessonSchema);
+const LessonTemplate =
+  models.LessonTemplate ||
+  model<ILessonTemplate>(LESSON_TEMPLATE_MODEL_NAME, lessonSchema);
 
-export default Lesson;
+export default LessonTemplate;

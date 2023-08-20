@@ -1,11 +1,7 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { UserType } from "../enum/UsertType";
 
 export const USER_MODEL_NAME = "User";
-export enum UserType {
-  ADMIN = "admin",
-  SUBSCRIBER = "subscriber",
-  NON_SUBSCRIBER = "non-subscriber",
-}
 
 export interface IUser extends Document {
   name: string;
@@ -25,6 +21,11 @@ const userSchema = new Schema<IUser>({
   phone: { type: String },
   verifyToken: { type: String, default: undefined },
   isVerified: { type: Boolean, default: false },
+  userType: {
+    type: String,
+    enum: Object.values(UserType),
+    default: UserType.NON_SUBSCRIBER,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

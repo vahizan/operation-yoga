@@ -1,4 +1,5 @@
-import { LESSONS } from "./Lesson.model";
+import { LESSON_MODEL_NAME } from "./admin/LessonTemplate.model";
+
 export const LESSONS_SESSION_INFO = "lessonSessionInfo";
 
 export const lessonSession = (dayOfTheWeek: string) => {
@@ -14,7 +15,7 @@ export const lessonSession = (dayOfTheWeek: string) => {
   return [
     {
       $lookup: {
-        from: LESSONS,
+        from: LESSON_MODEL_NAME,
         let: {
           sessionDay: "$dayOfTheWeek",
           sessionStart: "$startTime",
