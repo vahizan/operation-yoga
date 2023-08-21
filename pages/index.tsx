@@ -5,6 +5,8 @@ import SquareCard from "../ui/SquareCard";
 import Hero from "../ui/Hero/Hero";
 import RoundCard from "../ui/RoundCard";
 import useObserver from "../hooks/observer/useObserver";
+import ArrowBranchLeft from "public/arrow-branch-left.svg";
+import ArrowBranchRight from "public/arrow-branch-right.svg";
 
 export default function Home() {
   const observerCircleImages = useObserver<HTMLDivElement>({
@@ -33,6 +35,23 @@ export default function Home() {
             content={"Veda Yogshala and Spa"}
             cta={"/schedule"}
           />
+        </div>
+        <h1 className={styles.secondTitle}>
+          VEDA <span>YOGA</span> <span>CENTRE</span>
+        </h1>
+        <div className={styles.branches}>
+          <div className={styles.branches__branchLeft}>
+            <ArrowBranchLeft />
+            <div className={styles.branches__branchLeft__content}>
+              VEDA <span> YOGSHALA </span>
+            </div>
+          </div>
+          <div className={styles.branches__branchRight}>
+            <ArrowBranchRight />
+            <div className={styles.branches__branchRight__content}>
+              VEDA <span> SPA </span>
+            </div>
+          </div>
         </div>
         <div
           className={styles.roundCards}
