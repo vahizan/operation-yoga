@@ -1,4 +1,4 @@
-import { LESSON_MODEL_NAME } from "./admin/LessonTemplate.model";
+import { LESSON_MODEL_NAME } from "./Lesson.model";
 
 export const LESSONS_SESSION_INFO = "lessonSessionInfo";
 

@@ -16,7 +16,7 @@ export interface ILessonTemplate extends Document {
   price: Object;
 }
 
-const lessonSchema = new Schema({
+const lessonTemplateSchema = new Schema({
   name: String,
   dayOfWeek: {
     type: Number,
@@ -35,6 +35,6 @@ const lessonSchema = new Schema({
 
 const LessonTemplate =
   models.LessonTemplate ||
-  model<ILessonTemplate>(LESSON_TEMPLATE_MODEL_NAME, lessonSchema);
+  model<ILessonTemplate>(LESSON_TEMPLATE_MODEL_NAME, lessonTemplateSchema);
 
 export default LessonTemplate;

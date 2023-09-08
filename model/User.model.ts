@@ -24,7 +24,7 @@ const userSchema = new Schema<IUser>({
   userType: {
     type: String,
     enum: Object.values(UserType),
-    default: UserType.NON_SUBSCRIBER,
+    default: UserType.SUBSCRIBER,
   },
   createdAt: {
     type: Date,

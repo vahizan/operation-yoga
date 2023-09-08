@@ -1,5 +1,6 @@
 import { Connection } from "mongoose";
 import { ILesson, LESSON_MODEL_NAME } from "../../model/Lesson.model";
+import LessonAggregate from "../../model/Lesson.aggregate";
 
 interface LessonResponse {
   data: ILesson[];
@@ -7,10 +8,11 @@ interface LessonResponse {
   limit: number;
 }
 
-export const getLessons = async (
+export const getAdminLessons = async (
   connection: Connection,
   page: number,
-  limit: number
+  limit: number,
+  adminId: string
 ): Promise<LessonResponse> => {
   const offset = (page - 1) * limit;
 
@@ -21,7 +23,7 @@ export const getLessons = async (
   try {
     const results = await connection
       .model(LESSON_MODEL_NAME)
-      .find({})
+      .aggregate(LessonAggregate(adminId))
       .skip(offset)
       .limit(limit);
 
@@ -35,3 +37,11 @@ export const getLessons = async (
     throw new Error(error.message);
   }
 };
+
+export const createLesson = (instructorId: string, lesson: ILesson) => {};
+
+export const updateLesson = (
+  instructorId: string,
+  lessonId: string,
+  lesson: ILesson
+) => {};

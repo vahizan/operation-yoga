@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
-import { getLessons } from "../../../../helpers/lessons/getLessons";
+import { getAdminLessons } from "../../../../helpers/admin/lessons";
 import { ILesson } from "../../../../model/Lesson.model";
 
 export default async function handler(
@@ -28,7 +28,7 @@ export default async function handler(
     const page = q.page || 1;
     const limit = q.limit || 10;
 
-    getLessons(connection, page, limit)
+    getAdminLessons(connection, page, limit)
       .then((results) => res.status(200).json(results))
       .catch((err) => {
         res.status(500).json(err);

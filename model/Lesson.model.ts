@@ -6,15 +6,16 @@ export const LESSON_MODEL_NAME = "Lesson";
 export interface ILesson extends Document {
   availability: Number;
   startTime: Date;
-  endTime: Date;
+  duration: Number;
   instructor: String;
   info: String;
+  enrolledMembers: String[];
 }
 
 const lessonSchema = new Schema({
   availability: Number,
   startTime: Date,
-  endTime: Date,
+  duration: Number,
   instructor: {
     type: Schema.Types.ObjectId,
     ref: USER_MODEL_NAME,
@@ -24,6 +25,9 @@ const lessonSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: LESSON_MODEL_NAME,
     required: true,
+  },
+  enrolledMembers: {
+    type: [Schema.Types.ObjectId],
   },
 });
 
