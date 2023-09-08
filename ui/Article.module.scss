@@ -1,0 +1,14 @@
+@import "styles/utils";
+@import "styles/breakpoints";
+
+.container {
+  @include autoPaddingLayout();
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  &__image{
+    align-self: center;
+    width: inherit;
+  }
+}

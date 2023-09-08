@@ -6,6 +6,7 @@ export default function Shirodhara() {
     <Layout>
       <div>
         <h2>Shirodhara</h2>
+        <div>Under Construction</div>
       </div>
     </Layout>
   );

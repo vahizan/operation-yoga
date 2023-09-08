@@ -6,6 +6,7 @@ export default function SteamBath() {
     <Layout>
       <div>
         <h2>Steam Bath</h2>
+        <div>Under Construction</div>
       </div>
     </Layout>
   );

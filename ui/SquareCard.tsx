@@ -1,13 +1,16 @@
 import Image from "next/image";
 import styles from "./Card.module.scss";
+import Link from "next/link";
 
 interface Props {
-  imageSrc?: string;
+  imageSrc: string;
+  linkSrc?: string;
   content: string;
   isUnavailable?: boolean;
   unavailableReason?: string;
 }
 export default function SquareCard({
+  linkSrc,
   imageSrc,
   content,
   isUnavailable,
@@ -20,7 +23,16 @@ export default function SquareCard({
           isUnavailable && styles.card__unavailable
         }`}
       >
-        {imageSrc && (
+        {linkSrc ? (
+          <Link href={linkSrc}>
+            <Image
+              src={imageSrc}
+              width={700}
+              height={700}
+              alt={"Bunch of people doing yoga poses"}
+            />
+          </Link>
+        ) : (
           <Image
             className={styles.card__image}
             src={imageSrc}
@@ -29,6 +41,7 @@ export default function SquareCard({
             alt={"Bunch of people doing yoga poses"}
           />
         )}
+
         <div className={styles.card__content}>{content}</div>
       </div>
       {isUnavailable && unavailableReason && (
