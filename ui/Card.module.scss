@@ -244,14 +244,6 @@
     }
   }
 
-
-
-  @include desktop-up{
-    &:hover {
-      transform: translateY(-10px);
-    }
-  }
-
   &__text {
     align-self: center;
     text-align: center;

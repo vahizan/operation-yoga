@@ -6,6 +6,7 @@ export default function MassageCourse() {
     <Layout>
       <div>
         <h2>Massage Course</h2>
+        <div>Under Construction</div>
       </div>
     </Layout>
   );

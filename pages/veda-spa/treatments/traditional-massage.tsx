@@ -6,6 +6,7 @@ export default function TraditionalMassage() {
     <Layout>
       <div>
         <h2>Traditional Massage Treatment</h2>
+        <div>Under Construction</div>
       </div>
     </Layout>
   );
