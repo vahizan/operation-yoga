@@ -39,7 +39,7 @@ export const authorizeLogin = async (
     }
 
     return {
-      id: user.id,
+      id: user._id,
       email: user.email,
       name: user.name,
     };

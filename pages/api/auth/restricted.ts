@@ -4,5 +4,6 @@ import { authOptions } from "./[...nextauth]";
 
 export const hasSession = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
+
   return !!session;
 };

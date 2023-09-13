@@ -1,16 +1,14 @@
-import LoginForm from "../ui/Form/LoginForm";
+import { useRouter } from "next/router";
 import { FC } from "react";
 import Layout from "../ui/Layout";
 import { signOut } from "next-auth/react";
 
-const Login: FC = () => {
-  signOut({ callbackUrl: "/signOut", redirect: true });
+const Signout: FC = () => {
   return (
     <Layout>
-      <h1>Signed</h1>
-      <div>You've successfully signed out</div>
+      <div>You've successfully signed out.</div>
     </Layout>
   );
 };
 
-export default Login;
+export default Signout;
