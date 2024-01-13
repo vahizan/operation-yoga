@@ -38,9 +38,22 @@ export const getAdminLessons = async (
   }
 };
 
-export const createLesson = (instructorId: string, lesson: ILesson) => {};
+export const createLesson = async (
+  connection: Connection,
+  userId: string,
+  instructorId: string,
+  lesson: ILesson
+) => {
+  if (!userId) {
+    throw new Error("Invalid Admin");
+  }
+
+  try {
+  } catch (err) {}
+};
 
 export const updateLesson = (
+  connection: Connection,
   instructorId: string,
   lessonId: string,
   lesson: ILesson

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import LessonTemplate, {
+import {
   ILessonTemplate,
   LESSON_TEMPLATE_MODEL_NAME,
 } from "../../../../../model/admin/LessonTemplate.model";
@@ -7,9 +7,10 @@ import createMongoConnection from "../../../../../connector/createMongoConnectio
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ILessonTemplate[] | { error: string }>
+  res: NextApiResponse<string | { error: string }>
 ) {
-  let { method, query } = req;
+  let { method, query, body } = req;
+  const reqBody: ILessonTemplate = body;
   const q = query as unknown as { userId: string };
 
   if (method !== "POST") {
@@ -27,12 +28,12 @@ export default async function handler(
     res.status(403).json({ error: "Unauthorized" });
   } else {
     const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
-    //create lesson template
-    const template = new LessonTemplate({});
 
+    //create lesson template
     lessonTemplates
-      .create()
+      .create(reqBody)
       .then((results) => {
+        console.log(results);
         res.status(200).json(results);
       })
       .catch((err) => {

@@ -12,8 +12,8 @@
     "e2e:headless": "start-server-and-test dev http://localhost:3000 cypress:headless"
   },
   "volta": {
-    "node": "18.12.1",
-    "npm": "9.8.1"
+    "node": "20.5.0",
+    "npm": "10.2.5"
   },
   "dependencies": {
     "@mdx-js/loader": "^2.3.0",
@@ -35,6 +35,7 @@
     "nodemailer": "^6.9.3",
     "react": "18.2.0",
     "react-calendar": "^4.2.1",
+    "react-datepicker": "^4.24.0",
     "react-dom": "18.2.0",
     "react-email": "^1.9.4",
     "sass": "^1.56.2"

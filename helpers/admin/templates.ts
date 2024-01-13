@@ -8,7 +8,7 @@ interface LessonTemplateResponse {
 
 export const getLessonTemplate = async (
   connection: Connection,
-  adminId: string
+  userId: string
 ): Promise<LessonTemplateResponse> => {
   if (!connection) {
     throw new Error("Connection Invalid");
@@ -17,7 +17,7 @@ export const getLessonTemplate = async (
   try {
     const results = await connection
       .model(LESSON_TEMPLATE_MODEL_NAME)
-      .findOne({ _id: adminId });
+      .findOne({ _id: userId });
 
     return {
       data: results,
@@ -28,6 +28,6 @@ export const getLessonTemplate = async (
   }
 };
 
-export const createTemplate = (instructorId: string, lesson: ILesson) => {};
+export const createTemplate = (userId: string, lesson: ILesson) => {};
 
-export const updateTemplate = (instructorId: string, lesson: ILesson) => {};
+export const updateTemplate = (userId: string, lesson: ILesson) => {};

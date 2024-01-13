@@ -5,11 +5,8 @@ import LessonTemplateForm from "../LessonTemplateForm";
 
 describe("LessonTemplateForm", () => {
   test("renders form fields", () => {
-    render(<LessonTemplateForm onSubmit={jest.fn()} />);
-
-    expect(screen.getByLabelText("Description")).toBeInTheDocument();
-    expect(screen.getByLabelText("Start Date and Time")).toBeInTheDocument();
-    expect(screen.getByLabelText("Duration")).toBeInTheDocument();
+    const { container } = render(<LessonTemplateForm onSubmit={jest.fn()} />);
+    expect(container).toMatchSnapshot();
   });
 
   test("handles form submission", () => {
@@ -17,13 +14,10 @@ describe("LessonTemplateForm", () => {
     render(<LessonTemplateForm onSubmit={mockOnSubmit} />);
 
     // Fill out the form fields
-    userEvent.type(screen.getByLabelText("Description"), "Sample description");
-    userEvent.type(
-      screen.getByLabelText("Start Date and Time"),
-      "2023-08-22T10:00"
-    );
-    userEvent.type(screen.getByLabelText("Duration"), "1");
-    // Fill out other form fields as needed
+    const startTime = screen.getByText("Start Time");
+    userEvent.selectOptions(startTime, "13:00");
+    const endTime = screen.getByText("End Time");
+    userEvent.selectOptions(endTime, "14:00");
 
     // Submit the form
     fireEvent.click(screen.getByText("Create Lesson"));

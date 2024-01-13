@@ -4,16 +4,18 @@ import { Document } from "mongoose";
 
 export const LESSON_TEMPLATE_MODEL_NAME = "LessonTemplate";
 
-export interface ILessonTemplate extends Document {
+export interface ILessonTemplate {
   availability: number;
-  startTime: Date;
-  endTime: Date;
+  startTime: number;
+  endTime: number;
   dayOfWeek: number;
   name: string;
-  createdBy: IUser;
-  room: string;
-  location: Object;
-  price: Object;
+  createdBy: string;
+  instructor: IUser;
+  room?: string;
+  location?: string;
+  price: number;
+  currency: string;
 }
 
 const lessonTemplateSchema = new Schema({
@@ -23,9 +25,13 @@ const lessonTemplateSchema = new Schema({
     min: [1, "Must be at least 1, got {VALUE}"],
     max: [7, "Must be at most 7, got {VALUE}"],
   },
-  createdBy: {
+  instructor: {
     type: Schema.Types.ObjectId,
     ref: USER_MODEL_NAME,
+    required: true,
+  },
+  createdBy: {
+    type: String,
     required: true,
   },
   room: String,
