@@ -1,18 +1,34 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  RenderResult,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LessonTemplateForm from "../LessonTemplateForm";
+import { SessionProvider } from "next-auth/react";
 
 describe("LessonTemplateForm", () => {
+  let rendered: RenderResult = render(<div></div>);
+  const mockOnSubmit = jest.fn();
+
+  beforeEach(() => {
+    rendered = render(
+      <SessionProvider
+        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
+      >
+        <LessonTemplateForm onSubmit={mockOnSubmit} />
+      </SessionProvider>
+    );
+  });
+
   test("renders form fields", () => {
-    const { container } = render(<LessonTemplateForm onSubmit={jest.fn()} />);
+    const { container } = rendered;
     expect(container).toMatchSnapshot();
   });
 
   test("handles form submission", () => {
-    const mockOnSubmit = jest.fn();
-    render(<LessonTemplateForm onSubmit={mockOnSubmit} />);
-
     // Fill out the form fields
     const startTime = screen.getByText("Start Time");
     userEvent.selectOptions(startTime, "13:00");

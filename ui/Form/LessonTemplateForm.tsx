@@ -8,7 +8,18 @@ import { useSession } from "next-auth/react";
 interface LessonFormProps {
   instructors?: IUser[];
 }
-
+interface LessonFormDataValidation {
+  description?: string;
+  startTime?: string;
+  endTime?: string;
+  roomLocation?: string;
+  price?: string;
+  lessonName?: string;
+  instructorName?: string;
+  availability?: string;
+  dayOfWeek?: string;
+  currency?: string;
+}
 interface LessonFormData {
   description: string;
   startTime: number;
@@ -141,7 +152,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
       currency,
       instructor: selectedUser,
       name: formData?.lessonName,
-    }).then;
+    }).then(() => {});
 
     setSubmit(false);
   }, [isSubmit]);
@@ -167,7 +178,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
     availability: MIN_AVAILABILITY,
   });
 
-  const [errors, setErrors] = useState<Partial<LessonFormData>>({});
+  const [errors, setErrors] = useState<Partial<LessonFormDataValidation>>({});
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -180,42 +191,39 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    const validationErrors: Partial<LessonFormData> = {};
+    const errorValues: LessonFormDataValidation = {};
 
     if (!formData.description) {
-      validationErrors.description = "Description is required";
+      errors.description = "Description is required";
     }
 
-    // Validate start time (should not be in the past)
-    const currentTime = new Date().toISOString().split(".")[0]; // Remove milliseconds
-    if (!formData.startTime || formData.startTime < currentTime) {
-      validationErrors.startTime =
-        "Start time is required and should not be in the past";
+    if (!formData.startTime) {
+      errors.startTime = "Start time is required and should not be in the past";
     }
 
     if (Number(startTime) > Number(endTime)) {
-      validationErrors.duration =
+      errors.startTime =
         "Invalid duration, start time cannot be greater than end time";
     }
 
     if (!formData.price) {
-      validationErrors.price = "Price is required";
+      errors.price = "Price is required";
     }
 
     if (!currency) {
-      validationErrors.currency = "Currency is required";
+      errors.currency = "Currency is required";
     }
 
     if (!formData.lessonName) {
-      validationErrors.lessonName = "Lesson name is required";
+      errors.lessonName = "Lesson name is required";
     }
 
     if (!formData.instructorName) {
-      validationErrors.instructorName = "Instructor name is required";
+      errors.instructorName = "Instructor name is required";
     }
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
+    if (Object.keys(errorValues).length > 0) {
+      setErrors(errorValues);
     } else {
       setSubmit(true);
     }
@@ -236,7 +244,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
           options={timeOptions}
           onChange={setStartTime}
         />
-        {errors.duration && <span>{errors.duration}</span>}
+        {errors.startTime && <span>{errors.startTime}</span>}
       </div>
 
       <div>
@@ -245,7 +253,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
           options={timeOptions}
           onChange={setEndTime}
         />
-        {errors.duration && <span>{errors.duration}</span>}
+        {errors.endTime && <span>{errors.endTime}</span>}
       </div>
 
       <div>

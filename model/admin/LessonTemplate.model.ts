@@ -1,6 +1,5 @@
 import { Schema, model, models } from "mongoose";
 import { USER_MODEL_NAME, IUser } from "../User.model";
-import { Document } from "mongoose";
 
 export const LESSON_TEMPLATE_MODEL_NAME = "LessonTemplate";
 

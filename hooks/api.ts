@@ -1,7 +1,8 @@
-import { ISession, IUser } from "../pages/api/interfaces";
+import { ISession } from "../pages/api/interfaces";
 import Email from "./interfaces/Email";
 import axios from "axios";
 import { ILessonTemplate } from "../model/admin/LessonTemplate.model";
+import { IUser } from "../model/User.model";
 
 export const getSchedule = async (
   body?: Record<string, string>
