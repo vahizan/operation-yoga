@@ -28,7 +28,6 @@ const SelectDropdown: React.FC<SelectProps> = ({
     <>
       <label htmlFor={labelValue}>{labelValue}</label>
       <select name={labelValue} value={selectedOption} onChange={handleChange}>
-        <option value="">Select an option</option>
         {options.map((option, index) => (
           <option key={index} value={option.value}>
             {option.name}

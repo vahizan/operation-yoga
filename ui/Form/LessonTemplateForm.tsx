@@ -21,18 +21,19 @@ interface LessonFormDataValidation {
   currency?: string;
 }
 interface LessonFormData {
-  description: string;
-  startTime: number;
-  endTime: number;
+  description?: string;
+  startTime?: number;
+  endTime?: number;
   roomLocation?: string;
-  price: number;
-  lessonName: string;
-  instructorName: string;
-  availability: number;
-  dayOfWeek: number;
+  price?: number;
+  lessonName?: string;
+  instructorName?: string;
+  availability?: number;
+  dayOfWeek?: number;
 }
 
 const timeOptions = [
+  { name: "Select an option", value: -1 },
   { name: "12 AM", value: 0 },
   { name: "12:30 AM", value: 0.5 },
   { name: "1 AM", value: 1 },
@@ -105,8 +106,8 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
   const [instructorFetchError, setInstructorFetchError] = useState<string>();
   const [instructors, setInstructors] = useState<IUser[]>();
   const [selectedUser, setSelectedUser] = useState<IUser>();
-  const [startTime, setStartTime] = useState<string>();
-  const [endTime, setEndTime] = useState<string>();
+  const [startTime, setStartTime] = useState<number>();
+  const [endTime, setEndTime] = useState<number>();
   const [currency, setCurrency] = useState<string>();
   const [isSubmit, setSubmit] = useState<boolean>();
   const session = useSession();
@@ -123,7 +124,9 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
 
   useEffect(() => {
     if (
+      !formData ||
       !startTime ||
+      !formData.lessonName ||
       !endTime ||
       !currency ||
       !formData.price ||
@@ -143,9 +146,9 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
 
     const val = createLessonTemplate({
       availability: MIN_AVAILABILITY,
-      endTime: formData?.endTime,
+      endTime,
       dayOfWeek: 1,
-      startTime: formData?.startTime,
+      startTime,
       location: formData?.roomLocation,
       price: formData?.price,
       createdBy: session.data?.user?.email,
@@ -159,6 +162,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
 
   const instructorsOptions: SelectOption[] | undefined = instructors?.map(
     (instructor) => {
+      console.log("instructor", instructor.name);
       return {
         name: instructor.name,
         value: instructor,
@@ -167,14 +171,6 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
   );
 
   const [formData, setFormData] = useState<LessonFormData>({
-    description: "",
-    startTime: -1,
-    endTime: -1,
-    roomLocation: "",
-    price: -1,
-    dayOfWeek: -1,
-    lessonName: "",
-    instructorName: "",
     availability: MIN_AVAILABILITY,
   });
 
@@ -197,11 +193,15 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
       errors.description = "Description is required";
     }
 
-    if (!formData.startTime) {
+    if (!startTime) {
       errors.startTime = "Start time is required and should not be in the past";
     }
 
-    if (Number(startTime) > Number(endTime)) {
+    if (!endTime) {
+      errors.endTime = "End time is required";
+    }
+
+    if (startTime && endTime && Number(startTime) > Number(endTime)) {
       errors.startTime =
         "Invalid duration, start time cannot be greater than end time";
     }
