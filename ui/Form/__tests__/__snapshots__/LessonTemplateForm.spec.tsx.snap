@@ -27,7 +27,7 @@ exports[`LessonTemplateForm renders form fields 1`] = `
         name="Start Time"
       >
         <option
-          value=""
+          value="-1"
         >
           Select an option
         </option>
@@ -283,7 +283,7 @@ exports[`LessonTemplateForm renders form fields 1`] = `
         name="End Time"
       >
         <option
-          value=""
+          value="-1"
         >
           Select an option
         </option>
@@ -530,23 +530,88 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       </select>
     </div>
     <div>
-      <label>
-        Room/Location
+      <label
+        for="Day of the Week"
+      >
+        Day of the Week
       </label>
-      <input
-        name="roomLocation"
-        value=""
-      />
+      <select
+        name="Day of the Week"
+      >
+        <option
+          value="-1"
+        >
+          Select an option
+        </option>
+        <option
+          value="7"
+        >
+          Sunday
+        </option>
+        <option
+          value="1"
+        >
+          Monday
+        </option>
+        <option
+          value="2"
+        >
+          Tuesday
+        </option>
+        <option
+          value="3"
+        >
+          Wednesday
+        </option>
+        <option
+          value="4"
+        >
+          Thursday
+        </option>
+        <option
+          value="5"
+        >
+          Friday
+        </option>
+        <option
+          value="6"
+        >
+          Saturday
+        </option>
+      </select>
     </div>
     <div>
-      <label>
-        Price
-      </label>
-      <input
-        name="price"
-        type="number"
-        value="-1"
-      />
+      <div
+        class="inputField"
+      >
+        <label
+          for="roomLocation"
+        >
+          Room/Location
+        </label>
+        <input
+          id="roomLocation"
+          name="roomLocation"
+          value=""
+        />
+      </div>
+    </div>
+    <div>
+      <div
+        class="inputField"
+      >
+        <label
+          for="price"
+        >
+          Price
+        </label>
+        <input
+          id="price"
+          name="price"
+          type="number"
+          value=""
+        />
+      </div>
     </div>
     <div>
       <label
@@ -557,11 +622,6 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       <select
         name="Currency"
       >
-        <option
-          value=""
-        >
-          Select an option
-        </option>
         <option
           value="INR"
         >
@@ -595,13 +655,20 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       </select>
     </div>
     <div>
-      <label>
-        Lesson Name
-      </label>
-      <input
-        name="lessonName"
-        value=""
-      />
+      <div
+        class="inputField"
+      >
+        <label
+          for="lessonName"
+        >
+          Lesson Name
+        </label>
+        <input
+          id="lessonName"
+          name="lessonName"
+          value=""
+        />
+      </div>
     </div>
     <div>
       <label
@@ -611,24 +678,22 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       </label>
       <select
         name="Instructor Name"
-      >
-        <option
-          value=""
-        >
-          Select an option
-        </option>
-      </select>
+      />
     </div>
     <div>
       <div
         class="inputField"
       >
-        <label>
+        <label
+          for="availability"
+        >
           Number of available slots
         </label>
         <input
+          id="availability"
+          name="availability"
           type="number"
-          value=""
+          value="30"
         />
       </div>
     </div>

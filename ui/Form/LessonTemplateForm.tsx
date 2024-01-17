@@ -4,9 +4,13 @@ import { createLessonTemplate, getInstructors } from "../../hooks/api";
 import { IUser } from "../../model/User.model";
 import SelectDropdown, { SelectOption } from "../SelectDropdown/SelectDropdown";
 import { useSession } from "next-auth/react";
+import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
+import { Simulate } from "react-dom/test-utils";
+import submit = Simulate.submit;
 
 interface LessonFormProps {
   instructors?: IUser[];
+  onSubmit: (body: ILessonTemplate) => void;
 }
 interface LessonFormDataValidation {
   description?: string;
@@ -31,6 +35,17 @@ interface LessonFormData {
   availability?: number;
   dayOfWeek?: number;
 }
+
+const dayOfWeekOptions = [
+  { name: "Select an option", value: -1 },
+  { name: "Sunday", value: 7 },
+  { name: "Monday", value: 1 },
+  { name: "Tuesday", value: 2 },
+  { name: "Wednesday", value: 3 },
+  { name: "Thursday", value: 4 },
+  { name: "Friday", value: 5 },
+  { name: "Saturday", value: 6 },
+];
 
 const timeOptions = [
   { name: "Select an option", value: -1 },
@@ -102,12 +117,13 @@ const currencyOptions = [
   { name: "Canadian Dollar", value: CurrencyMap.CAD },
 ];
 
-const LessonTemplateForm: React.FC<LessonFormProps> = () => {
+const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
   const [instructorFetchError, setInstructorFetchError] = useState<string>();
   const [instructors, setInstructors] = useState<IUser[]>();
-  const [selectedUser, setSelectedUser] = useState<IUser>();
+  const [selectedInstructorId, setSelectedInstructorId] = useState<string>();
   const [startTime, setStartTime] = useState<number>();
   const [endTime, setEndTime] = useState<number>();
+  const [dayOfWeek, setDayOfWeek] = useState<number>();
   const [currency, setCurrency] = useState<string>();
   const [isSubmit, setSubmit] = useState<boolean>();
   const session = useSession();
@@ -124,14 +140,13 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
 
   useEffect(() => {
     if (
-      !formData ||
+      !formData?.price ||
+      !formData?.roomLocation ||
+      !formData?.lessonName ||
       !startTime ||
-      !formData.lessonName ||
       !endTime ||
       !currency ||
-      !formData.price ||
-      !formData?.roomLocation ||
-      !formData?.dayOfWeek
+      !dayOfWeek
     ) {
       return;
     }
@@ -139,13 +154,16 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
       //redirect to 404
       return;
     }
-    if (!selectedUser) {
+    if (!selectedInstructorId) {
       //getting instructors failed
       return;
     }
 
-    const val = createLessonTemplate({
-      availability: MIN_AVAILABILITY,
+    const selectedUser = instructors?.find(
+      (instructor) => instructor._id === selectedInstructorId
+    ) as IUser;
+    const lessonTemplateBody: ILessonTemplate = {
+      availability: formData?.availability || MIN_AVAILABILITY,
       endTime,
       dayOfWeek: 1,
       startTime,
@@ -155,17 +173,17 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
       currency,
       instructor: selectedUser,
       name: formData?.lessonName,
-    }).then(() => {});
+    };
+    onSubmit(lessonTemplateBody);
 
     setSubmit(false);
   }, [isSubmit]);
 
   const instructorsOptions: SelectOption[] | undefined = instructors?.map(
     (instructor) => {
-      console.log("instructor", instructor.name);
       return {
         name: instructor.name,
-        value: instructor,
+        value: instructor._id,
       };
     }
   );
@@ -177,6 +195,8 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
   const [errors, setErrors] = useState<Partial<LessonFormDataValidation>>({});
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("HANDLE", event.target.value);
+    console.log("BELLOW", event.target.name);
     const { name, value } = event.target;
     setFormData({
       ...formData,
@@ -204,6 +224,11 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
     if (startTime && endTime && Number(startTime) > Number(endTime)) {
       errors.startTime =
         "Invalid duration, start time cannot be greater than end time";
+    }
+
+    if (!dayOfWeek) {
+      errors.dayOfWeek =
+        "Please specify the day of the week the lesson will take place";
     }
 
     if (!formData.price) {
@@ -257,21 +282,32 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
       </div>
 
       <div>
-        <label>Room/Location</label>
-        <input
-          name="roomLocation"
+        <SelectDropdown
+          labelValue={"Day of the Week"}
+          options={dayOfWeekOptions}
+          onChange={setDayOfWeek}
+        />
+        {errors.dayOfWeek && <span>{errors.dayOfWeek}</span>}
+      </div>
+
+      <div>
+        <InputField
+          label={"Room/Location"}
+          name={"roomLocation"}
           value={formData.roomLocation}
           onChange={handleInputChange}
+          errorMessage={errors.roomLocation}
         />
       </div>
       <div>
-        <label>Price</label>
-        <input
-          type="number"
-          name="price"
+        <InputField
+          name={"price"}
+          label={"Price"}
+          type={"number"}
           value={formData.price}
           onChange={handleInputChange}
         />
+
         {errors.price && <span>{errors.price}</span>}
       </div>
       <div>
@@ -283,23 +319,31 @@ const LessonTemplateForm: React.FC<LessonFormProps> = () => {
         {errors.currency && <span>{errors.currency}</span>}
       </div>
       <div>
-        <label>Lesson Name</label>
-        <input
-          name="lessonName"
+        <InputField
+          label={"Lesson Name"}
+          name={"lessonName"}
           value={formData.lessonName}
           onChange={handleInputChange}
+          errorMessage={errors.lessonName}
         />
-        {errors.lessonName && <span>{errors.lessonName}</span>}
       </div>
       <div>
         <SelectDropdown
           labelValue={"Instructor Name"}
           options={instructorsOptions || []}
-          onChange={setSelectedUser}
+          onChange={setSelectedInstructorId}
         />
       </div>
       <div>
-        <InputField label={"Number of available slots"} type={"number"} />
+        <InputField
+          label={"Number of available slots"}
+          type={"number"}
+          name={"availability"}
+          value={formData.availability}
+          onChange={handleInputChange}
+          errorMessage={errors.availability}
+          defaultValue={MIN_AVAILABILITY}
+        />
       </div>
       <button onClick={() => setSubmit(true)} type="submit">
         Create Lesson

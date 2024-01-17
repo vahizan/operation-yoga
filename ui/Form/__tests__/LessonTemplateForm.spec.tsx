@@ -1,8 +1,8 @@
 import React from "react";
 import {
+  act,
   fireEvent,
   render,
-  RenderResult,
   screen,
   waitFor,
 } from "@testing-library/react";
@@ -10,7 +10,6 @@ import userEvent from "@testing-library/user-event";
 import LessonTemplateForm from "../LessonTemplateForm";
 import { SessionProvider } from "next-auth/react";
 import { getInstructors } from "../../../hooks/api";
-import { IUser } from "../../../model/User.model";
 import { UserType } from "../../../enum/UserType";
 
 jest.mock("../../../hooks/api", () => ({
@@ -19,26 +18,30 @@ jest.mock("../../../hooks/api", () => ({
 }));
 
 describe("LessonTemplateForm", () => {
-  let rendered: RenderResult = render(<div></div>);
   const mockOnSubmit = jest.fn();
-
   beforeEach(() => {
     (getInstructors as jest.Mock).mockResolvedValue(undefined);
-    rendered = render(
+  });
+
+  test("renders form fields", () => {
+    const { container } = render(
       <SessionProvider
         session={{ user: { name: undefined, email: undefined }, expires: "1" }}
       >
         <LessonTemplateForm onSubmit={mockOnSubmit} />
       </SessionProvider>
     );
-  });
-
-  test("renders form fields", () => {
-    const { container } = rendered;
     expect(container).toMatchSnapshot();
   });
 
   it("show error when start time is greater than end time on submission", async () => {
+    render(
+      <SessionProvider
+        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
+      >
+        <LessonTemplateForm onSubmit={mockOnSubmit} />
+      </SessionProvider>
+    );
     const timeSelect = screen.getAllByRole("combobox");
     await userEvent.selectOptions(timeSelect[0], "0.5");
     await userEvent.selectOptions(timeSelect[1], "0");
@@ -56,6 +59,13 @@ describe("LessonTemplateForm", () => {
   });
 
   it("show error values aren't filled before submission", async () => {
+    render(
+      <SessionProvider
+        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
+      >
+        <LessonTemplateForm onSubmit={mockOnSubmit} />
+      </SessionProvider>
+    );
     // Submit the form
     fireEvent.click(screen.getByText("Create Lesson"));
 
@@ -69,11 +79,18 @@ describe("LessonTemplateForm", () => {
   });
 
   it("should submit on successful validation", async () => {
-    (getInstructors as jest.Mock).mockResolvedValue([
-      { name: "bob", email: "bob@bob.com", type: UserType.ADMIN },
-    ] as IUser[]);
+    (getInstructors as jest.Mock).mockResolvedValue({
+      data: [
+        {
+          name: "bob",
+          email: "bob@bob.com",
+          type: UserType.ADMIN,
+          _id: "someID",
+        },
+      ],
+    });
 
-    rendered.rerender(
+    render(
       <SessionProvider
         session={{ user: { name: "ME", email: "me@me.com" }, expires: "1" }}
       >
@@ -85,16 +102,20 @@ describe("LessonTemplateForm", () => {
     //start time
     await userEvent.selectOptions(select[0], "0.5");
     //end time
-    await userEvent.selectOptions(select[1], "0");
+    await userEvent.selectOptions(select[1], "1");
+    //day of the week
+    await userEvent.selectOptions(select[2], "1");
     //currency
-    await userEvent.selectOptions(select[2], "GBP");
+    await userEvent.selectOptions(select[3], "GBP");
     //select instructor
-    await userEvent.selectOptions(select[3], "bob");
+    act(() => {
+      userEvent.selectOptions(select[4], "someID");
+    });
 
     const description = screen.getByRole("textbox", { name: "Description" });
-    const price = screen.getByRole("spinbutton", { name: "price" });
-    const lesson = screen.getByRole("textbox", { name: "lessonName" });
-    const room = screen.getByRole("textbox", { name: "roomLocation" });
+    const price = screen.getByRole("spinbutton", { name: "Price" });
+    const lesson = screen.getByRole("textbox", { name: "Lesson Name" });
+    const room = screen.getByRole("textbox", { name: "Room/Location" });
 
     await userEvent.type(lesson, "Lesson");
     await userEvent.type(price, "PRICE");
@@ -106,7 +127,23 @@ describe("LessonTemplateForm", () => {
     await userEvent.click(screen.getByText("Create Lesson"));
 
     await waitFor(() => {
-      expect(mockOnSubmit).toHaveBeenCalledWith("");
+      expect(mockOnSubmit).toHaveBeenCalledWith({
+        availability: 30,
+        createdBy: "me@me.com",
+        currency: "GBP",
+        dayOfWeek: 1,
+        endTime: "1",
+        instructor: {
+          _id: "someID",
+          email: "bob@bob.com",
+          name: "bob",
+          type: "admin",
+        },
+        location: "ROOM",
+        name: "LessonLESSON",
+        price: "123",
+        startTime: "0.5",
+      });
     });
   });
 });
