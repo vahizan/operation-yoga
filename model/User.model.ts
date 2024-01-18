@@ -7,6 +7,10 @@ export interface IUserReadOnly extends Document {
   name: string;
   type?: UserType;
   id: string;
+  email?: string;
+  phone?: string;
+  createdAt?: Date;
+  isVerified?: boolean;
 }
 export interface IUser extends Document {
   name: string;

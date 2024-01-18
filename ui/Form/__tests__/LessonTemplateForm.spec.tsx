@@ -78,6 +78,7 @@ describe("LessonTemplateForm", () => {
     expect(screen.getByText("Lesson name is required")).toBeInTheDocument();
   });
 
+  it("should redirect user on unauthorized");
   it("should submit on successful validation", async () => {
     (getInstructors as jest.Mock).mockResolvedValue({
       data: [

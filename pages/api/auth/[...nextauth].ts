@@ -7,6 +7,8 @@ import Email from "next-auth/providers/email";
 import CredentialsProvider from "next-auth/providers/credentials";
 import clientPromise from "../../../connector/clientPromise";
 import { authorizeLogin } from "../../../helpers/authenticationHelper";
+import { IUser } from "../../../model/User.model";
+import { UserType } from "../../../enum/UserType";
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -46,11 +48,12 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    session: ({ session }) => {
+    session: ({ session, _, token }) => {
       return {
         ...session,
         user: {
           ...session.user,
+          id: token.id,
         },
       };
     },

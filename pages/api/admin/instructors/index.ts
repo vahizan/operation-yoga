@@ -1,7 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth/next";
+
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import { getInstructors } from "../../../../helpers/admin/instructors";
-import { IUserReadOnly } from "../../../../model/User.model";
+import { IUser, IUserReadOnly } from "../../../../model/User.model";
+import { authOptions } from "../../auth/[...nextauth]";
+import { UserType } from "../../../../enum/UserType";
+import { getUserById } from "../../../../helpers/admin/getUserById";
 
 export default async function handler(
   req: NextApiRequest,
@@ -18,26 +23,39 @@ export default async function handler(
 
   const connection = await mongoConnector.connect();
 
-  if (!connection) {
-    res.status(403).json({ error: "Unauthorized" });
-  } else {
-    getInstructors(connection)
-      .then((results) => {
-        const data = results.data;
-        data.map((item) => ({
-          name: item.name,
-          type: item.type,
-          id: item._id,
-        }));
+  const session = await getServerSession(req, res, authOptions);
 
-        res.status(200).json(data);
-      })
-      .catch((err) => {
-        res.status(500).json(err);
-      })
-      .finally(() => {
-        connection.close();
-        res.end();
-      });
+  if (!session || !connection) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
   }
+
+  const getUserResponse: IUserReadOnly = await getUserById(
+    (session.user as any)?.id,
+    connection
+  );
+
+  if (getUserResponse.type !== UserType.ADMIN) {
+    res.status(403).json({ error: `Not Admin` });
+    return;
+  }
+
+  getInstructors(connection)
+    .then((results) => {
+      const data = results.data;
+      data.map((item) => ({
+        name: item.name,
+        type: item.type,
+        id: item._id,
+      }));
+
+      res.status(200).json(data);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    })
+    .finally(() => {
+      connection.close();
+      res.end();
+    });
 }

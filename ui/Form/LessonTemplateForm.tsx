@@ -127,7 +127,6 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
   const [currency, setCurrency] = useState<string>();
   const [isSubmit, setSubmit] = useState<boolean>();
   const session = useSession();
-  console.log("selectedUser", instructors);
 
   useEffect(() => {
     getInstructors()
@@ -156,6 +155,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
     }
     if (!selectedInstructorId) {
       //getting instructors failed
+
       return;
     }
 
