@@ -4,7 +4,7 @@ import Layout from "../../ui/Layout";
 import { Session } from "next-auth";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { InferGetServerSidePropsType } from "next";
-import { getInstructors } from "../../hooks/api";
+import { createLessonTemplate, getInstructors } from "../../hooks/api";
 import axios from "axios";
 
 export function CreateLesson() {
@@ -20,7 +20,11 @@ export function CreateLesson() {
     <Layout>
       <>
         <h1>Create Lesson {user}</h1>
-        {user ? <LessonTemplateForm /> : <div>Unauthorized</div>}
+        {user ? (
+          <LessonTemplateForm onSubmit={createLessonTemplate} />
+        ) : (
+          <div>Unauthorized</div>
+        )}
       </>
     </Layout>
   );

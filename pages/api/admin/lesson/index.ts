@@ -34,7 +34,7 @@ export default async function handler(
         res.status(500).json(err);
       })
       .finally(() => {
-        connection.close();
+        mongoConnector.disconnect();
       });
   }
 }

@@ -2,7 +2,7 @@ import { Connection } from "mongoose";
 import { IUserReadOnly, USER_MODEL_NAME } from "../../model/User.model";
 import { UserType } from "../../enum/UserType";
 
-interface InstructorsResponse {
+export interface InstructorsResponse {
   data: IUserReadOnly[];
 }
 

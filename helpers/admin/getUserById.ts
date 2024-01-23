@@ -1,11 +1,10 @@
 import { Connection } from "mongoose";
 import { IUserReadOnly, USER_MODEL_NAME } from "../../model/User.model";
-import { UserType } from "../../enum/UserType";
 
 export const getUserById = async (
   id: string,
   connection: Connection
-): Promise<IUserReadOnly> => {
+): Promise<IUserReadOnly | undefined> => {
   if (!connection) {
     throw new Error("Connection Invalid");
   }
@@ -24,7 +23,6 @@ export const getUserById = async (
         "isVerified",
       ])) as IUserReadOnly;
   } catch (err) {
-    const error = err as Error;
-    throw new Error(error.message);
+    return undefined;
   }
 };
