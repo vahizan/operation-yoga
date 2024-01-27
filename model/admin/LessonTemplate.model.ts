@@ -17,6 +17,10 @@ export interface ILessonTemplate {
   currency: string;
 }
 
+export interface ILessonTemplateWithId extends ILessonTemplate {
+  _id: string;
+}
+
 const lessonTemplateSchema = new Schema({
   name: String,
   dayOfWeek: {
