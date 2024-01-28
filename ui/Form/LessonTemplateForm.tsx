@@ -148,32 +148,41 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
   const MIN_AVAILABILITY: number = 30;
 
   useEffect(() => {
-    if (Object.keys(errors).length > 0) {
-      setSubmit(false);
-      return;
-    }
-    if (!isSubmit) {
-      setSubmit(false);
-
-      return;
-    }
-
-    if (!session?.data?.user?.email) {
-      setSubmit(false);
-
-      router.push("/404");
-      return;
-    }
     if (!selectedInstructorId && instructorFetchError === 403) {
       setSubmit(false);
 
       router.push("/403");
       return;
     }
+
     if (!selectedInstructorId && instructorFetchError === 401) {
       setSubmit(false);
 
       router.push("/login");
+      return;
+    }
+  }, [instructors]);
+
+  useEffect(() => {
+    console.log("errors", errors);
+
+    if (Object.keys(errors).length > 0) {
+      setSubmit(false);
+      return;
+    }
+    console.log("is false submit");
+
+    if (!isSubmit) {
+      setSubmit(false);
+
+      return;
+    }
+    console.log("email valid");
+
+    if (!session?.data?.user?.email) {
+      setSubmit(false);
+
+      router.push("/404");
       return;
     }
 
@@ -198,7 +207,10 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
     setSubmit(false);
   }, [isSubmit, errors]);
 
-  const instructorsOptions: SelectOption[] | undefined = instructors?.map(
+  const defaultOptions: SelectOption[] | undefined = [
+    { name: "Select an option", value: undefined },
+  ];
+  const toInstructorOptions: SelectOption[] | undefined = instructors?.map(
     (instructor) => {
       return {
         name: instructor.name,
@@ -206,10 +218,11 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       };
     }
   );
+  const instructorsOptions = toInstructorOptions
+    ? defaultOptions.concat(toInstructorOptions)
+    : defaultOptions;
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("HANDLE", event.target.value);
-    console.log("BELLOW", event.target.name);
     const { name, value } = event.target;
     setFormData({
       ...formData,
@@ -259,7 +272,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       errorValues.lessonName = "Lesson name is required";
     }
 
-    if (!formData.instructorName) {
+    if (!selectedInstructorId) {
       errorValues.instructorName = "Instructor name is required";
     }
 
@@ -267,6 +280,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       setErrors(errorValues);
       return false;
     }
+    setErrors({});
     return true;
   };
 
@@ -353,7 +367,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       <div>
         <SelectDropdown
           labelValue={"Instructor Name"}
-          options={instructorsOptions || []}
+          options={instructorsOptions || defaultOptions}
           onChange={setSelectedInstructorId}
         />
       </div>
