@@ -18,18 +18,17 @@ interface SelectProps extends SelectHTMLAttributes<any> {
 
 const SelectDropdown: React.FC<SelectProps> = (props) => {
   const [selectedOption, setSelectedOption] = useState<any>();
-  const { options, onChange, labelValue } = props;
+  const { options, onChange, labelValue, ...selectProps } = props;
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e.target.value);
     setSelectedOption(e.target.value);
   };
-
   return (
     <>
       <label htmlFor={labelValue}>{labelValue}</label>
       <select
-        {...props}
+        {...selectProps}
         name={labelValue}
         value={selectedOption}
         onChange={handleChange}

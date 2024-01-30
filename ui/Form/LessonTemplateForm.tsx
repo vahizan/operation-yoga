@@ -112,6 +112,7 @@ const CurrencyMap = {
 };
 
 const currencyOptions = [
+  { name: "Select a currency", value: undefined },
   { name: "Indian Rupee", value: CurrencyMap.INR },
   { name: "US Dollar", value: CurrencyMap.USD },
   { name: "Euro", value: CurrencyMap.EUR },
@@ -138,7 +139,10 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
   useEffect(() => {
     getInstructors()
       .then((res) => res.data)
-      .then((data) => setInstructors(data))
+      .then((data) => {
+        console.log("DATA", data);
+        setInstructors(data);
+      })
       .catch((err) => {
         setInstructorFetchError(err.status);
         console.log("err", err);
@@ -164,20 +168,16 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
   }, [instructors]);
 
   useEffect(() => {
-    console.log("errors", errors);
-
     if (Object.keys(errors).length > 0) {
       setSubmit(false);
       return;
     }
-    console.log("is false submit");
 
     if (!isSubmit) {
       setSubmit(false);
 
       return;
     }
-    console.log("email valid");
 
     if (!session?.data?.user?.email) {
       setSubmit(false);
@@ -187,8 +187,11 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
     }
 
     const selectedUser = instructors?.find(
-      (instructor) => instructor._id === selectedInstructorId
+      (instructor) => instructor.id === selectedInstructorId
     ) as IUser;
+    console.log("instructors", instructors);
+    console.log("selectedInstructorId", selectedInstructorId);
+    console.log("selectedUser", selectedUser);
     const lessonTemplateBody: ILessonTemplate = {
       availability: formData?.availability || MIN_AVAILABILITY,
       endTime: endTime || 1,
@@ -196,9 +199,9 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       startTime: startTime || 0,
       location: formData?.roomLocation,
       price: formData?.price || 0,
-      createdBy: session.data?.user?.email,
+      createdBy: session.data?.user?.id,
       currency: currency || "",
-      instructor: selectedUser,
+      instructorId: selectedUser.id || "",
       name: formData?.lessonName || "default-name",
     };
 
@@ -214,7 +217,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
     (instructor) => {
       return {
         name: instructor.name,
-        value: instructor._id,
+        value: instructor.id,
       };
     }
   );

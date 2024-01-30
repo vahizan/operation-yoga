@@ -13,6 +13,7 @@ export interface IUserReadOnly extends Document {
   isVerified?: boolean;
 }
 export interface IUser extends Document {
+  id?: string;
   name: string;
   email: string;
   password: string;

@@ -1,5 +1,6 @@
 import { Schema, model, models } from "mongoose";
-import { USER_MODEL_NAME, IUser } from "../User.model";
+import { USER_MODEL_NAME } from "../User.model";
+import { Currency } from "./enums";
 
 export const LESSON_TEMPLATE_MODEL_NAME = "LessonTemplate";
 
@@ -10,7 +11,7 @@ export interface ILessonTemplate {
   dayOfWeek: number;
   name: string;
   createdBy: string;
-  instructor: IUser;
+  instructorId: string;
   room?: string;
   location?: string;
   price: number;
@@ -23,23 +24,35 @@ export interface ILessonTemplateWithId extends ILessonTemplate {
 
 const lessonTemplateSchema = new Schema({
   name: String,
+  startTime: {
+    type: Number,
+    min: [0, "Must be at least 1, got {VALUE}"],
+    max: [24, "Must be at most 7, got {VALUE}"],
+  },
+  endTime: {
+    type: Number,
+    min: [0, "Must be at least 1, got {VALUE}"],
+    max: [24, "Must be at most 7, got {VALUE}"],
+  },
   dayOfWeek: {
     type: Number,
     min: [1, "Must be at least 1, got {VALUE}"],
     max: [7, "Must be at most 7, got {VALUE}"],
   },
-  instructor: {
+  instructorId: {
     type: Schema.Types.ObjectId,
     ref: USER_MODEL_NAME,
     required: true,
   },
   createdBy: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: USER_MODEL_NAME,
     required: true,
   },
   room: String,
-  location: Object,
-  price: Schema.Types.Map,
+  location: String,
+  price: Number,
+  currency: { type: String, enum: Currency, default: Currency.USD },
 });
 
 const LessonTemplate =
