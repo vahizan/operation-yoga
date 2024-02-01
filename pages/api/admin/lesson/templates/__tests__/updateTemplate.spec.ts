@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import handler from "../index";
-import MongoDatabaseConnection from "../../../../connector/MongoDatabaseConnection";
+import handler from "../update";
+import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
 
 jest.mock("../../../../connector/MongoDatabaseConnection");
 
@@ -21,7 +21,7 @@ const mockResponse = (): NextApiResponse => {
   return res as NextApiResponse;
 };
 
-describe("API Lesson Handler Tests", () => {
+describe("API Update Template Handler Tests", () => {
   beforeEach(() => {
     // Mock environment variables if necessary
     process.env.MONGODB_URI = "your-mock-mongodb-uri";

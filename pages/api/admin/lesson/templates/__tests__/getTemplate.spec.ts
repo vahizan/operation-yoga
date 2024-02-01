@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import handler from "../create";
-import MongooseDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
+import handler from "../index";
+import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
 
-jest.mock("../../../../../../connector/MongoDatabaseConnection");
+jest.mock("../../../../connector/MongoDatabaseConnection");
 
 const mockRequest = (): NextApiRequest =>
   <NextApiRequest>{
@@ -12,7 +12,6 @@ const mockRequest = (): NextApiRequest =>
       password: "password123",
       phone: "1234567890",
     },
-    method: "POST",
   };
 
 const mockResponse = (): NextApiResponse => {
@@ -22,7 +21,7 @@ const mockResponse = (): NextApiResponse => {
   return res as NextApiResponse;
 };
 
-describe("API Lesson Handler Tests", () => {
+describe("API Get Template Handler Tests", () => {
   beforeEach(() => {
     // Mock environment variables if necessary
     process.env.MONGODB_URI = "your-mock-mongodb-uri";
@@ -33,16 +32,6 @@ describe("API Lesson Handler Tests", () => {
     // Clear mocked environment variables
     delete process.env.MONGODB_URI;
     delete process.env.MONGO_DB_NAME;
-  });
-
-  it("should return 403 if unable to connect to MongoDB", async () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ error: "Unauthorized" });
   });
 
   it("should return 400 if required fields are missing", async () => {
@@ -56,6 +45,16 @@ describe("API Lesson Handler Tests", () => {
     expect(res.json).toHaveBeenCalledWith({
       message: "Please fill in all required fields.",
     });
+  });
+
+  it("should return 403 if unable to connect to MongoDB", async () => {
+    const req = mockRequest();
+    const res = mockResponse();
+
+    await handler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: "Unauthorized" });
   });
 
   it("should return 400 if a user with the same email already exists", async () => {
@@ -74,7 +73,7 @@ describe("API Lesson Handler Tests", () => {
       disconnect: jest.fn(),
     };
 
-    (MongooseDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
+    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
 
     await handler(req, res);
 
