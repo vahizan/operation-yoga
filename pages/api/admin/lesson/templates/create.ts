@@ -20,27 +20,31 @@ export default async function handler(
 
   const mongoConnector = createMongoConnection();
 
-  const connection = await mongoConnector.connect();
+  let connection = undefined;
+
+  try {
+    connection = await mongoConnector.connect();
+  } catch (error) {
+    res.status(500).json({ error: "DB connection error" });
+    await mongoConnector.disconnect();
+    return;
+  }
 
   if (!connection) {
     console.warn("Unauthorized");
 
     res.status(403).json({ error: "Unauthorized" });
-  } else {
-    const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
+    return;
+  }
+  const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
 
-    //create lesson template
-    lessonTemplates
-      .create(reqBody)
-      .then((results) => {
-        res.status(200).json(results);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-      })
-      .finally(() => {
-        mongoConnector.disconnect();
-      });
+  try {
+    const results = await lessonTemplates.create(reqBody);
+    res.status(200).json(results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  } finally {
+    await mongoConnector.disconnect();
   }
 }
