@@ -19,23 +19,48 @@ export default async function handler(
     return;
   }
 
+  if (!q.userId) {
+    res.status(403).json({ error: "Unauthorized" });
+    return;
+  }
+
+  if (!q.page || !q.limit) {
+    res.status(400);
+    return;
+  }
+
   const mongoConnector = createMongoConnection();
 
-  const connection = await mongoConnector.connect();
+  let connection = undefined;
+
+  try {
+    connection = await mongoConnector.connect();
+  } catch (error) {
+    res.status(500).json({ error: "DB connection error" });
+    await mongoConnector.disconnect();
+    return;
+  }
 
   if (!connection) {
     res.status(403).json({ error: "Unauthorized" });
-  } else {
-    const page = q.page || 1;
-    const limit = q.limit || 10;
+    return;
+  }
+  const page = q.page || 1;
+  const limit = q.limit || 10;
 
-    getLessonTemplatesByCreatedUserId(connection, page, limit, q.userId)
-      .then((results) => res.status(200).json(results))
-      .catch((err) => {
-        res.status(500).json(err);
-      })
-      .finally(() => {
-        mongoConnector.disconnect();
-      });
+  try {
+    const lessonTemplates = await getLessonTemplatesByCreatedUserId(
+      connection,
+      page,
+      limit,
+      q.userId
+    );
+    res.status(200).json(lessonTemplates);
+  } catch (err) {
+    const error = err as Error;
+    console.error(error.message);
+    res.status(500).json({ error: "An error occurred. Please try again." });
+  } finally {
+    await mongoConnector.disconnect();
   }
 }

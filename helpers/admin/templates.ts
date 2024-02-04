@@ -26,7 +26,7 @@ export const getLessonTemplatesByCreatedUserId = async (
       .model(LESSON_TEMPLATE_MODEL_NAME)
       .find({ createdBy: userId })
       .limit(limit)
-      .skip((page - 1) * limit)) as ILessonTemplateWithId[];
+      .skip(limit * (page - 1))) as ILessonTemplateWithId[];
   } catch (err) {
     const error = err as Error;
     throw new Error(error.message);
