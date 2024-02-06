@@ -1,47 +1,54 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  ILessonTemplate,
-  LESSON_TEMPLATE_MODEL_NAME,
-} from "../../../../../model/admin/LessonTemplate.model";
+import { ILessonTemplateWithId } from "../../../../../model/admin/LessonTemplate.model";
 import createMongoConnection from "../../../../../connector/createMongoConnection";
+import { updateTemplate } from "../../../../../helpers/admin/templates";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<string | { error: string }>
+  res: NextApiResponse<ILessonTemplateWithId | { error: string }>
 ) {
-  let { method, query, body } = req;
-  const reqBody: ILessonTemplate = body;
-  const q = query as unknown as { userId: string };
+  let { method, body } = req;
 
-  if (method !== "POST") {
+  if (method !== "PUT") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
+  const { _id, ...reqBody }: ILessonTemplateWithId = body;
 
   const mongoConnector = createMongoConnection();
 
-  const connection = await mongoConnector.connect();
+  let connection = undefined;
+
+  try {
+    connection = await mongoConnector.connect();
+  } catch (error) {
+    res.status(500).json({ error: "DB connection error" });
+    await mongoConnector.disconnect();
+    return;
+  }
 
   if (!connection) {
     console.warn("Unauthorized");
-
     res.status(403).json({ error: "Unauthorized" });
-  } else {
-    const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
+    return;
+  }
 
-    //create lesson template
-    lessonTemplates
-      .create(reqBody)
-      .then((results) => {
-        console.log(results);
-        res.status(200).json(results);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).json({ error: "Internal server error" });
-      })
-      .finally(() => {
-        mongoConnector.disconnect();
+  //update template
+  try {
+    const updatedDocument = await updateTemplate(
+      connection,
+      reqBody.createdBy,
+      _id,
+      reqBody
+    );
+    res.status(200).json(updatedDocument);
+  } catch (err) {
+    res
+      .status(500)
+      .json({
+        error: "Unable to update template. Try again later. Server error",
       });
+  } finally {
+    await mongoConnector.disconnect();
   }
 }

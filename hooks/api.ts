@@ -1,7 +1,10 @@
 import { ISession } from "../pages/api/interfaces";
 import Email from "./interfaces/Email";
 import axios from "axios";
-import { ILessonTemplate } from "../model/admin/LessonTemplate.model";
+import {
+  ILessonTemplate,
+  ILessonTemplateWithId,
+} from "../model/admin/LessonTemplate.model";
 import { IUser } from "../model/User.model";
 
 export const getSchedule = async (
@@ -23,4 +26,16 @@ export const createLessonTemplate = async (
   body?: ILessonTemplate
 ): Promise<string> => {
   return await axios.post("/api/admin/lesson/templates/create", body);
+};
+
+export const updateLessonTemplate = async (
+  body: ILessonTemplateWithId
+): Promise<string> => {
+  return await axios.post("/api/admin/lesson/templates/update", body);
+};
+
+export const getLessonTemplatesByCreatedUserId = async (
+  userId: string
+): Promise<string> => {
+  return await axios.get(`/api/admin/lesson/templates/${userId}`);
 };

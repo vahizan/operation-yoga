@@ -74,7 +74,7 @@ export const updateTemplate = async (
   userId: string,
   templateId: string,
   updatedTemplate: ILessonTemplate
-) => {
+): Promise<ILessonTemplateWithId> => {
   if (!connection) {
     throw new Error("Connection Invalid");
   }

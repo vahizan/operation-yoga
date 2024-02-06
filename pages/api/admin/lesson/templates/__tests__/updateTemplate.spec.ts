@@ -2,26 +2,36 @@ import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../update";
 import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
 
-jest.mock("../../../../connector/MongoDatabaseConnection");
-
-const mockRequest = (): NextApiRequest =>
-  <NextApiRequest>{
-    body: {
-      name: "John Doe",
-      email: "john@example.com",
-      password: "password123",
-      phone: "1234567890",
-    },
-  };
-
-const mockResponse = (): NextApiResponse => {
-  const res: Partial<NextApiResponse> = {};
-  res.status = jest.fn().mockReturnValue(res);
-  res.json = jest.fn().mockReturnValue(res);
-  return res as NextApiResponse;
-};
+jest.mock("../../../../../../connector/MongoDatabaseConnection");
 
 describe("API Update Template Handler Tests", () => {
+  const jsonMock = jest.fn();
+  const statusMock = jest.fn();
+
+  const mockRequest = (method?: string): NextApiRequest =>
+    <NextApiRequest>{
+      method: method ? method : "PUT",
+      body: {
+        _id: "1sdasdas",
+        availability: 0,
+        createdBy: "ID",
+        currency: "USD",
+        dayOfWeek: 0,
+        endTime: 0,
+        instructorId: "instructorId",
+        price: 0,
+        startTime: 0,
+        name: "some name",
+      },
+    };
+
+  const mockResponse = (): NextApiResponse => {
+    const res: Partial<NextApiResponse> = {};
+    res.status = statusMock.mockReturnValue({ json: jsonMock });
+    res.json = jest.fn();
+    return res as NextApiResponse;
+  };
+
   beforeEach(() => {
     // Mock environment variables if necessary
     process.env.MONGODB_URI = "your-mock-mongodb-uri";
@@ -32,18 +42,18 @@ describe("API Update Template Handler Tests", () => {
     // Clear mocked environment variables
     delete process.env.MONGODB_URI;
     delete process.env.MONGO_DB_NAME;
+    jest.restoreAllMocks();
   });
 
-  it("should return 400 if required fields are missing", async () => {
-    const req = mockRequest();
-    req.body.name = ""; // Set a required field to an empty string
+  it("should return 404 if method is incorrect", async () => {
+    const req = mockRequest("GET");
     const res = mockResponse();
 
     await handler(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Please fill in all required fields.",
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(jsonMock).toHaveBeenCalledWith({
+      error: "Method Invalid",
     });
   });
 
@@ -54,33 +64,7 @@ describe("API Update Template Handler Tests", () => {
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(403);
-    expect(res.json).toHaveBeenCalledWith({ message: "Unauthorized" });
-  });
-
-  it("should return 400 if a user with the same email already exists", async () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    // Mock the Mongoose findOne method to return an existing user
-    const mockUsers = {
-      findOne: jest.fn().mockResolvedValue({ email: req.body.email }),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockUsers),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "A user with this email already exists.",
-    });
+    expect(jsonMock).toHaveBeenCalledWith({ error: "Unauthorized" });
   });
 
   it("should return 200 and create a new user successfully", async () => {
@@ -89,9 +73,9 @@ describe("API Update Template Handler Tests", () => {
 
     // Mock the Mongoose create method to return a successful response
     const mockUsers = {
-      findOne: jest.fn().mockResolvedValue(null),
-      create: jest.fn().mockResolvedValue("User created"),
+      findOneAndUpdate: jest.fn().mockResolvedValue(req.body),
     };
+
     const mockConnection = {
       model: jest.fn().mockReturnValue(mockUsers),
     };
@@ -104,22 +88,19 @@ describe("API Update Template Handler Tests", () => {
 
     await handler(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "User created successfully.",
-    });
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(jsonMock).toHaveBeenCalledWith(req.body);
   });
 
-  it("should return 500 if an error occurs during user creation", async () => {
+  it("should return 500 if an error occurs during template update creation", async () => {
     const req = mockRequest();
     const res = mockResponse();
 
     // Mock the Mongoose create method to throw an error
     const mockUsers = {
-      findOne: jest.fn().mockResolvedValue(null),
-      create: jest
+      findOneAndUpdate: jest
         .fn()
-        .mockRejectedValue(() => new Error("User creation error")),
+        .mockRejectedValue(() => new Error("template update error")),
     };
     const mockConnection = {
       model: jest.fn().mockReturnValue(mockUsers),
@@ -134,8 +115,8 @@ describe("API Update Template Handler Tests", () => {
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "An error occurred. Please try again.",
+    expect(jsonMock).toHaveBeenCalledWith({
+      error: "Unable to update template. Try again later. Server error",
     });
   });
 
@@ -152,9 +133,9 @@ describe("API Update Template Handler Tests", () => {
 
     await handler(req, res);
 
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "An error occurred. Please try again.",
+    expect(statusMock).toHaveBeenCalledWith(500);
+    expect(jsonMock).toHaveBeenCalledWith({
+      error: "DB connection error",
     });
   });
 });
