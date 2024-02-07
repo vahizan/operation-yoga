@@ -4,7 +4,7 @@ import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseCo
 
 jest.mock("../../../../../../connector/MongoDatabaseConnection");
 
-describe("API Get Template Handler Tests", () => {
+describe("API Get Template By UserId Handler Tests", () => {
   const jsonMock = jest.fn();
   const statusMock = jest.fn();
 
@@ -48,7 +48,7 @@ describe("API Get Template Handler Tests", () => {
   it("should return 403 if unable to connect to MongoDB", async () => {
     const req = mockRequest();
     req.query = {
-      userId: "",
+      userId: "w",
       page: "!",
       limit: "a",
     };
@@ -119,7 +119,7 @@ describe("API Get Template Handler Tests", () => {
     });
   });
 
-  it("should return 400 for missing userId", async () => {
+  it("should return 400 for missing all Ids", async () => {
     const req = mockRequest();
     req.query = {
       page: "2",
@@ -129,8 +129,7 @@ describe("API Get Template Handler Tests", () => {
 
     await handler(req, res);
 
-    expect(statusMock).toHaveBeenCalledWith(403);
-    expect(jsonMock).toHaveBeenCalledWith({ error: "Unauthorized" });
+    expect(statusMock).toHaveBeenCalledWith(400);
   });
 
   it("should return 400 for missing page value", async () => {

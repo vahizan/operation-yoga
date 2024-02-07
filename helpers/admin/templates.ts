@@ -5,64 +5,34 @@ import {
   LESSON_TEMPLATE_MODEL_NAME,
 } from "../../model/admin/LessonTemplate.model";
 
-interface LessonTemplateResponse {
-  data: ILessonTemplateWithId[];
-  page: number;
-  limit: number;
+export interface TemplateFilters {
+  instructorId?: string;
+  createdBy?: string;
+  _id?: string;
 }
 
-export const getLessonTemplatesByCreatedUserId = async (
+export const getLessonTemplatesById = async (
   connection: Connection,
   limit: number,
   page: number,
-  userId: string
+  filters: TemplateFilters
 ): Promise<ILessonTemplateWithId[]> => {
   if (!connection) {
     throw new Error("Connection Invalid");
   }
+  const cleanedFilters: Record<string, any> = {};
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      cleanedFilters[key] = value;
+    }
+  });
 
   try {
     return (await connection
       .model(LESSON_TEMPLATE_MODEL_NAME)
-      .find({ createdBy: userId })
+      .find(cleanedFilters)
       .limit(limit)
       .skip(limit * (page - 1))) as ILessonTemplateWithId[];
-  } catch (err) {
-    const error = err as Error;
-    throw new Error(error.message);
-  }
-};
-
-export const getLessonTemplatesByInstructorId = async (
-  connection: Connection,
-  userId: string
-): Promise<ILessonTemplateWithId[]> => {
-  if (!connection) {
-    throw new Error("Connection Invalid");
-  }
-
-  try {
-    return (await connection
-      .model(LESSON_TEMPLATE_MODEL_NAME)
-      .find({ createdBy: userId })) as ILessonTemplateWithId[];
-  } catch (err) {
-    const error = err as Error;
-    throw new Error(error.message);
-  }
-};
-
-export const getLessonTemplateById = async (
-  connection: Connection,
-  templateId: string
-): Promise<ILessonTemplateWithId> => {
-  if (!connection) {
-    throw new Error("Connection Invalid");
-  }
-
-  try {
-    return (await connection
-      .model(LESSON_TEMPLATE_MODEL_NAME)
-      .findOne({ _id: templateId })) as ILessonTemplateWithId;
   } catch (err) {
     const error = err as Error;
     throw new Error(error.message);

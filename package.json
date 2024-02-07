@@ -13,7 +13,7 @@
   },
   "volta": {
     "node": "20.5.0",
-    "npm": "10.2.5"
+    "npm": "10.4.0"
   },
   "dependencies": {
     "@mdx-js/loader": "^2.3.0",

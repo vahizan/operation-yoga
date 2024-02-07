@@ -1,26 +1,24 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import createMongoConnection from "../../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../../interfaces/IPaginatedQuery";
-import { ILessonTemplate } from "../../../../../model/admin/LessonTemplate.model";
-import { getLessonTemplatesByCreatedUserId } from "../../../../../helpers/admin/templates";
+import { ILessonTemplateWithId } from "../../../../../model/admin/LessonTemplate.model";
+import { getLessonTemplatesById } from "../../../../../helpers/admin/templates";
+import GetTemplatesQuery from "../../../interfaces/GetTemplatesQuery";
 
-interface RequestQuery extends IPaginatedQuery {
-  userId: string;
-}
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ILessonTemplate[] | { error: string }>
+  res: NextApiResponse<ILessonTemplateWithId[] | { error: string }>
 ) {
   const { method, query } = req;
-  const q = query as unknown as RequestQuery;
+  const q = query as unknown as GetTemplatesQuery;
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!q.userId) {
-    res.status(403).json({ error: "Unauthorized" });
+  if (!q.userId && !q?.templateId && !q?.createdById) {
+    res.status(400);
     return;
   }
 
@@ -49,11 +47,11 @@ export default async function handler(
   const limit = q.limit || 10;
 
   try {
-    const lessonTemplates = await getLessonTemplatesByCreatedUserId(
+    const lessonTemplates = await getLessonTemplatesById(
       connection,
       page,
       limit,
-      q.userId
+      { createdBy: q?.userId, _id: q?.templateId, instructorId: q?.templateId }
     );
     res.status(200).json(lessonTemplates);
   } catch (err) {

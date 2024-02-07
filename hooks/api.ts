@@ -6,6 +6,8 @@ import {
   ILessonTemplateWithId,
 } from "../model/admin/LessonTemplate.model";
 import { IUser } from "../model/User.model";
+import TemplateFilters from "../interfaces/TemplateFilters";
+import GetTemplatesQuery from "../pages/api/interfaces/GetTemplatesQuery";
 
 export const getSchedule = async (
   body?: Record<string, string>
@@ -30,12 +32,14 @@ export const createLessonTemplate = async (
 
 export const updateLessonTemplate = async (
   body: ILessonTemplateWithId
-): Promise<string> => {
+): Promise<ILessonTemplateWithId> => {
   return await axios.post("/api/admin/lesson/templates/update", body);
 };
 
-export const getLessonTemplatesByCreatedUserId = async (
-  userId: string
-): Promise<string> => {
-  return await axios.get(`/api/admin/lesson/templates/${userId}`);
+export const getLessonTemplates = async (
+  filters: GetTemplatesQuery
+): Promise<ILessonTemplateWithId[]> => {
+  return await axios.get(
+    `/api/admin/lesson/templates?userId=${filters?.userId}&templateId=${filters?.templateId}&createdById=${filters?.createdById}`
+  );
 };
