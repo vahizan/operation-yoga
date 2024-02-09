@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../create";
-import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
+import MongoDatabaseConnection from "../../../../../connector/MongoDatabaseConnection";
 import { AxiosError } from "axios";
 
 jest.mock("../../../../../../connector/MongoDatabaseConnection");

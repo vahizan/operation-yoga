@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../update";
-import MongoDatabaseConnection from "../../../../../../connector/MongoDatabaseConnection";
+import MongoDatabaseConnection from "../../../../../connector/MongoDatabaseConnection";
 
 jest.mock("../../../../../../connector/MongoDatabaseConnection");
 

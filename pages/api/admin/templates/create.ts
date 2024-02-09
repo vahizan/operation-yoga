@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import {
   ILessonTemplate,
   LESSON_TEMPLATE_MODEL_NAME,
-} from "../../../../../model/admin/LessonTemplate.model";
-import createMongoConnection from "../../../../../connector/createMongoConnection";
+} from "../../../../model/admin/LessonTemplate.model";
+import createMongoConnection from "../../../../connector/createMongoConnection";
 
 export default async function handler(
   req: NextApiRequest,

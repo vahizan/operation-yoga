@@ -2,20 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { getLessonTemplates } from "../../hooks/api";
-import { IUser } from "../../model/User.model";
 import { useSession } from "next-auth/react";
-import {
-  ILessonTemplate,
-  ILessonTemplateWithId,
-} from "../../model/admin/LessonTemplate.model";
+import { ILessonTemplateWithId } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
 
-interface LessonFormProps {
-  instructors?: IUser[];
-  onSubmit: (body: ILessonTemplate) => void;
-}
-
-const Templates: React.FC<LessonFormProps> = ({ onSubmit }) => {
+const Templates: React.FC = () => {
+  const [limits, setLimits] = useState<number>(10);
   const [templates, setTemplates] = useState<ILessonTemplateWithId[]>();
   const [templatesFetchError, setTemplatesFetchError] = useState<string>();
 
@@ -28,11 +20,9 @@ const Templates: React.FC<LessonFormProps> = ({ onSubmit }) => {
     }
 
     getLessonTemplates({
-      limit: 0,
+      limit: 10,
       page: 0,
-      templateId: "",
-      createdById: "",
-      userId: "",
+      userId: session.data?.user?.id,
     })
       .then((data) => {
         console.log("DATA", data);
@@ -43,10 +33,24 @@ const Templates: React.FC<LessonFormProps> = ({ onSubmit }) => {
       });
   }, [session.status]);
 
+  //need to do an aggregation to get createdBy data and instructor data
   return (
     <div>
       <div>Title</div>
       <div>Templates</div>
+      <div>
+        {templates?.map((template) => {
+          return (
+            <div>
+              <div>id: {template._id}</div>
+              <div>name: {template.name}</div>
+              <div>price: {template.price}</div>
+              <div>currency: {template.currency}</div>
+              <div>createdBy: {template.createdBy}</div>
+            </div>
+          );
+        })}
+      </div>
       <div>Pagination</div>
     </div>
   );

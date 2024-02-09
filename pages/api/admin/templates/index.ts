@@ -1,15 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import createMongoConnection from "../../../../../connector/createMongoConnection";
-import { IPaginatedQuery } from "../../../interfaces/IPaginatedQuery";
-import { ILessonTemplateWithId } from "../../../../../model/admin/LessonTemplate.model";
-import { getLessonTemplatesById } from "../../../../../helpers/admin/templates";
-import GetTemplatesQuery from "../../../interfaces/GetTemplatesQuery";
+import createMongoConnection from "../../../../connector/createMongoConnection";
+import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
+import { ILessonTemplateWithId } from "../../../../model/admin/LessonTemplate.model";
+import { getLessonTemplatesById } from "../../../../helpers/admin/templates";
+import GetTemplatesQuery from "../../interfaces/GetTemplatesQuery";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<ILessonTemplateWithId[] | { error: string }>
 ) {
   const { method, query } = req;
+  console.log("query", query);
   const q = query as unknown as GetTemplatesQuery;
 
   if (method !== "GET") {
@@ -17,7 +18,7 @@ export default async function handler(
     return;
   }
 
-  if (!q.userId && !q?.templateId && !q?.createdById) {
+  if (!q?.userId && !q?.templateId && !q?.createdById) {
     res.status(400);
     return;
   }
@@ -43,9 +44,9 @@ export default async function handler(
     res.status(403).json({ error: "Unauthorized" });
     return;
   }
-  const page = q.page || 1;
-  const limit = q.limit || 10;
-
+  const page = q?.page || 1;
+  const limit = q?.limit || 10;
+  console.log("page", page);
   try {
     const lessonTemplates = await getLessonTemplatesById(
       connection,

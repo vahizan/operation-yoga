@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ILessonTemplateWithId } from "../../../../../model/admin/LessonTemplate.model";
-import createMongoConnection from "../../../../../connector/createMongoConnection";
-import { updateTemplate } from "../../../../../helpers/admin/templates";
+import { ILessonTemplateWithId } from "../../../../model/admin/LessonTemplate.model";
+import createMongoConnection from "../../../../connector/createMongoConnection";
+import { updateTemplate } from "../../../../helpers/admin/templates";
 
 export default async function handler(
   req: NextApiRequest,
@@ -43,11 +43,9 @@ export default async function handler(
     );
     res.status(200).json(updatedDocument);
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        error: "Unable to update template. Try again later. Server error",
-      });
+    res.status(500).json({
+      error: "Unable to update template. Try again later. Server error",
+    });
   } finally {
     await mongoConnector.disconnect();
   }
