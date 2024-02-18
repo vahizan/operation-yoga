@@ -46,7 +46,6 @@ export default async function handler(
   }
   const page = q?.page || 1;
   const limit = q?.limit || 10;
-  console.log("page", page);
   try {
     const lessonTemplates = await getLessonTemplatesById(
       connection,

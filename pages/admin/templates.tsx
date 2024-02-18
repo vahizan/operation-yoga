@@ -24,9 +24,8 @@ const Templates: React.FC = () => {
       page: 0,
       userId: session.data?.user?.id,
     })
-      .then((data) => {
-        console.log("DATA", data);
-        setTemplates(data);
+      .then((result) => {
+        setTemplates(result?.data);
       })
       .catch((err) => {
         setTemplatesFetchError(err.message);

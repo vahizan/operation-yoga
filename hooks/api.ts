@@ -38,8 +38,21 @@ export const updateLessonTemplate = async (
 
 export const getLessonTemplates = async (
   filters: GetTemplatesQuery
-): Promise<ILessonTemplateWithId[]> => {
+): Promise<{ data: ILessonTemplateWithId[] }> => {
+  let query = "";
+  if (filters.userId) {
+    query += `userId=${filters.userId}`;
+  }
+  if (filters.templateId) {
+    query += `&templateId=${filters.templateId}`;
+  }
+  if (filters.createdById) {
+    query += `createdById=${filters.createdById}`;
+  }
+
   return await axios.get(
-    `/api/admin/lesson/templates?userId=${filters?.userId}&templateId=${filters?.templateId}&createdById=${filters?.createdById}`
+    `/api/admin/templates?${query}&limit=${filters.limit || 10}&page=${
+      filters.page
+    }`
   );
 };
