@@ -4,6 +4,8 @@ import {
   LESSON_TEMPLATE_MODEL_NAME,
 } from "../../../../model/admin/LessonTemplate.model";
 import createMongoConnection from "../../../../connector/createMongoConnection";
+import { getUserById } from "../../../../helpers/admin/getUserById";
+import { getUser } from "../../../../helpers/admin/getUser";
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,6 +38,9 @@ export default async function handler(
     res.status(403).json({ error: "Unauthorized" });
     return;
   }
+
+  const createdByUser = await getUser(reqBody?.createdBy, connection);
+  const instructorUser = await getUser(reqBody?.createdBy, connection);
   const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
 
   try {
