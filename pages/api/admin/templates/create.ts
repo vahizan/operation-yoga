@@ -39,8 +39,6 @@ export default async function handler(
     return;
   }
 
-  const createdByUser = await getUser(reqBody?.createdBy, connection);
-  const instructorUser = await getUser(reqBody?.createdBy, connection);
   const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
 
   try {

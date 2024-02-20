@@ -3,6 +3,11 @@ import { UserType } from "../enum/UserType";
 
 export const USER_MODEL_NAME = "User";
 
+export interface IUserEssential extends Document {
+  name: string;
+  id: string;
+  email?: string;
+}
 export interface IUserReadOnly extends Document {
   name: string;
   type?: UserType;

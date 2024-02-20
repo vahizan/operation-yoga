@@ -1,5 +1,5 @@
 import { Schema, model, models } from "mongoose";
-import { USER_MODEL_NAME } from "../User.model";
+import { IUserEssential, IUserReadOnly, USER_MODEL_NAME } from "../User.model";
 import { Currency } from "./enums";
 
 export const LESSON_TEMPLATE_MODEL_NAME = "LessonTemplate";
@@ -10,8 +10,8 @@ export interface ILessonTemplate {
   endTime: number;
   dayOfWeek: number;
   name: string;
-  createdBy: string;
-  instructorId: string;
+  createdBy: IUserEssential;
+  instructor: IUserReadOnly;
   room?: string;
   location?: string;
   price: number;

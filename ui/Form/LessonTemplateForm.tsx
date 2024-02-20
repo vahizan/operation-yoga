@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { InputField } from "../Field/InputField";
 import { createLessonTemplate, getInstructors } from "../../hooks/api";
-import { IUser } from "../../model/User.model";
+import { IUser, IUserEssential, IUserReadOnly } from "../../model/User.model";
 import SelectDropdown, { SelectOption } from "../SelectDropdown/SelectDropdown";
 import { useSession } from "next-auth/react";
 import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
@@ -188,10 +188,8 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
 
     const selectedUser = instructors?.find(
       (instructor) => instructor.id === selectedInstructorId
-    ) as IUser;
-    console.log("instructors", instructors);
-    console.log("selectedInstructorId", selectedInstructorId);
-    console.log("selectedUser", selectedUser);
+    ) as IUserReadOnly;
+
     const lessonTemplateBody: ILessonTemplate = {
       availability: formData?.availability || MIN_AVAILABILITY,
       endTime: endTime || 1,
@@ -199,9 +197,13 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       startTime: startTime || 0,
       location: formData?.roomLocation,
       price: formData?.price || 0,
-      createdBy: session.data?.user?.id,
+      createdBy: {
+        id: session.data?.user?.id,
+        name: session?.data?.user?.name,
+        email: session?.data?.user?.email,
+      } as IUserEssential,
       currency: currency || "",
-      instructorId: selectedUser.id || "",
+      instructor: selectedUser,
       name: formData?.lessonName || "default-name",
     };
 
