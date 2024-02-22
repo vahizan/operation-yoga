@@ -2,13 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { InputField } from "../Field/InputField";
-import { createLessonTemplate, getInstructors } from "../../hooks/api";
+import { getInstructors } from "../../hooks/api";
 import { IUser, IUserEssential, IUserReadOnly } from "../../model/User.model";
 import SelectDropdown, { SelectOption } from "../SelectDropdown/SelectDropdown";
 import { useSession } from "next-auth/react";
 import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
-import { Simulate } from "react-dom/test-utils";
-import submit = Simulate.submit;
 import { useRouter } from "next/navigation";
 
 interface LessonFormProps {

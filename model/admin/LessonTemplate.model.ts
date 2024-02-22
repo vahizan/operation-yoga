@@ -23,36 +23,40 @@ export interface ILessonTemplateWithId extends ILessonTemplate {
 }
 
 const lessonTemplateSchema = new Schema({
-  name: String,
+  name: Schema.Types.String,
   startTime: {
-    type: Number,
+    type: Schema.Types.Number,
     min: [0, "Must be at least 1, got {VALUE}"],
     max: [24, "Must be at most 7, got {VALUE}"],
   },
   endTime: {
-    type: Number,
+    type: Schema.Types.Number,
     min: [0, "Must be at least 1, got {VALUE}"],
     max: [24, "Must be at most 7, got {VALUE}"],
   },
   dayOfWeek: {
-    type: Number,
+    type: Schema.Types.Number,
     min: [1, "Must be at least 1, got {VALUE}"],
     max: [7, "Must be at most 7, got {VALUE}"],
   },
-  instructorId: {
-    type: Schema.Types.ObjectId,
+  instructor: {
+    type: Schema.Types.Map,
     ref: USER_MODEL_NAME,
     required: true,
   },
   createdBy: {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.Map,
     ref: USER_MODEL_NAME,
     required: true,
   },
-  room: String,
-  location: String,
-  price: Number,
-  currency: { type: String, enum: Currency, default: Currency.USD },
+  room: Schema.Types.String,
+  location: Schema.Types.String,
+  price: Schema.Types.Number,
+  currency: {
+    type: Schema.Types.String,
+    enum: Currency,
+    default: Currency.USD,
+  },
 });
 
 const LessonTemplate =

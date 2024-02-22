@@ -27,7 +27,7 @@ export const sendEmail = async (body?: Email): Promise<string> => {
 export const createLessonTemplate = async (
   body?: ILessonTemplate
 ): Promise<string> => {
-  return await axios.post("/api/admin/lesson/templates/create", body);
+  return await axios.post("/api/admin/templates/create", body);
 };
 
 export const updateLessonTemplate = async (

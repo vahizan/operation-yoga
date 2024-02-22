@@ -3,11 +3,9 @@ import { getSession } from "next-auth/react";
 import Layout from "../../ui/Layout";
 import { Session } from "next-auth";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
-import { InferGetServerSidePropsType } from "next";
-import { createLessonTemplate, getInstructors } from "../../hooks/api";
-import axios from "axios";
+import { createLessonTemplate } from "../../hooks/api";
 
-export function CreateLesson() {
+export function CreateLessonTemplate() {
   const sessionPromise: Promise<Session | null> = getSession();
 
   const [user, setUser] = useState<string | null>();
@@ -30,4 +28,4 @@ export function CreateLesson() {
   );
 }
 
-export default CreateLesson;
+export default CreateLessonTemplate;
