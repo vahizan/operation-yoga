@@ -34,24 +34,38 @@ const Templates: React.FC = () => {
 
   //need to do an aggregation to get createdBy data and instructor data
   return (
-    <div>
+    <>
       <div>Title</div>
       <div>Templates</div>
       <div>
         {templates?.map((template) => {
           return (
-            <div>
+            <>
               <div>id: {template._id}</div>
               <div>name: {template.name}</div>
-              <div>price: {template.price}</div>
-              <div>currency: {template.currency}</div>
-              <div>createdBy: {template.createdBy}</div>
-            </div>
+              <div> price: {template.price}</div>
+              <div> currency: {template.currency}</div>
+              <div> createdBy: {template.createdBy}</div>
+              <button
+                onClick={() => {
+                  console.log("edit");
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  console.log("delete");
+                }}
+              >
+                Delete
+              </button>
+            </>
           );
         })}
       </div>
       <div>Pagination</div>
-    </div>
+    </>
   );
 };
 
