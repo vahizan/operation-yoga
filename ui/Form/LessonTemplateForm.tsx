@@ -196,7 +196,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
       location: formData?.roomLocation,
       price: formData?.price || 0,
       createdBy: {
-        id: session.data?.user?.id,
+        _id: session.data?.user?.id,
         name: session?.data?.user?.name,
         email: session?.data?.user?.email,
       } as IUserEssential,
