@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Document } from "mongoose";
 import { IUserEssential, IUserReadOnly, USER_MODEL_NAME } from "../User.model";
 import { Currency } from "./enums";
 
@@ -18,9 +18,7 @@ export interface ILessonTemplate {
   currency: string;
 }
 
-export interface ILessonTemplateWithId extends ILessonTemplate {
-  _id: string;
-}
+export interface ILessonTemplateWithId extends ILessonTemplate, Document {}
 
 const lessonTemplateSchema = new Schema({
   name: Schema.Types.String,

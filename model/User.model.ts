@@ -5,20 +5,17 @@ export const USER_MODEL_NAME = "User";
 
 export interface IUserEssential extends Document {
   name: string;
-  id: string;
   email?: string;
 }
 export interface IUserReadOnly extends Document {
   name: string;
   type?: UserType;
-  id: string;
   email?: string;
   phone?: string;
   createdAt?: Date;
   isVerified?: boolean;
 }
 export interface IUser extends Document {
-  id?: string;
   name: string;
   email: string;
   password: string;
