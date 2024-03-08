@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { ILessonTemplateWithId } from "../../../model/admin/LessonTemplate.model";
+import { timeOptions } from "../../../ui/Form/constants";
 
 const convertToDayOfWeek: Record<number, string> = {
   0: "Sunday",
@@ -11,10 +12,11 @@ const convertToDayOfWeek: Record<number, string> = {
   6: "Saturday",
 };
 
-const toTime: Record<string, string> = {
-  "0": "12:00 AM",
-  "0.5": "12:30 AM",
+const getTime = (time: number): { name: string; value: number } | undefined => {
+  const found = timeOptions.filter((option) => option.value === time);
+  return found ? found[0] : undefined;
 };
+
 export const Template: FC<ILessonTemplateWithId> = ({
   id,
   instructor,
@@ -30,19 +32,17 @@ export const Template: FC<ILessonTemplateWithId> = ({
 }) => {
   return (
     <div>
-      <div>
-        Id <span>{id}</span>
-        Name <span>{name}</span>
-        Instructor <span>{instructor.name}</span>
-        Template Created By <span>{createdBy.name}</span>
-        Start time <span>{startTime}</span>
-        End time <span>{endTime}</span>
-        Price <span>{price}</span>
-        Location <span>{location}</span>
-        Currency <span>{currency}</span>
-        Availability <span>{availability}</span>
-        Day of the week <span>{convertToDayOfWeek[dayOfWeek]}</span>
-      </div>
+      Id <span>{id}</span>
+      Name <span>{name}</span>
+      Instructor <span>{instructor.name}</span>
+      Template Created By <span>{createdBy.name}</span>
+      Start time <span>{getTime(startTime)?.name}</span>
+      End time <span>{getTime(endTime)?.name}</span>
+      Price <span>{price}</span>
+      Location <span>{location}</span>
+      Currency <span>{currency}</span>
+      Availability <span>{availability}</span>
+      Day of the week <span>{convertToDayOfWeek[dayOfWeek]}</span>
     </div>
   );
 };
