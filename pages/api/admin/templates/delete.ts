@@ -1,19 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { ILessonTemplateWithId } from "../../../../model/admin/LessonTemplate.model";
 import createMongoConnection from "../../../../connector/createMongoConnection";
-import { updateTemplate } from "../../../../helpers/admin/templatesHelper";
+import { deleteTemplate } from "../../../../helpers/admin/templatesHelper";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ILessonTemplateWithId | { error: string }>
+  res: NextApiResponse<void | { error: string }>
 ) {
   let { method, body } = req;
 
-  if (method !== "PUT") {
+  if (method !== "DELETE") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
-  const { _id, ...reqBody }: ILessonTemplateWithId = body;
+  const { userId, templateId }: { templateId: string; userId: string } = body;
 
   const mongoConnector = createMongoConnection();
 
@@ -35,16 +34,12 @@ export default async function handler(
 
   //update template
   try {
-    const updatedDocument = await updateTemplate(
-      connection,
-      reqBody.createdBy,
-      _id,
-      reqBody
-    );
-    res.status(200).json(updatedDocument);
+    await deleteTemplate(connection, userId, templateId);
+    res.status(200);
   } catch (err) {
-    res.status(500).json({
-      error: "Unable to update template. Try again later. Server error",
+    res.status(403).json({
+      error:
+        "Unable to delete template. Cannot delete templates created by others",
     });
   } finally {
     await mongoConnector.disconnect();

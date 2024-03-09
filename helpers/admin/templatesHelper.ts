@@ -17,9 +17,8 @@ export const getLessonTemplatesById = async (
   page: number,
   filters: TemplateFilters
 ): Promise<ILessonTemplateWithId[]> => {
-  if (!connection) {
-    throw new Error("Connection Invalid");
-  }
+  validateConnection(connection);
+
   const cleanedFilters: Record<string, any> = {};
   Object.entries(filters).forEach(([key, value]) => {
     if (value) {
@@ -45,9 +44,7 @@ export const updateTemplate = async (
   templateId: string,
   updatedTemplate: ILessonTemplate
 ): Promise<ILessonTemplateWithId> => {
-  if (!connection) {
-    throw new Error("Connection Invalid");
-  }
+  validateConnection(connection);
 
   try {
     return (await connection.model(LESSON_TEMPLATE_MODEL_NAME).findOneAndUpdate(
@@ -60,5 +57,29 @@ export const updateTemplate = async (
   } catch (err) {
     const error = err as Error;
     throw new Error(error.message);
+  }
+};
+
+export const deleteTemplate = async (
+  connection: Connection,
+  userId: string,
+  templateId: string
+) => {
+  validateConnection(connection);
+
+  try {
+    return await connection.model(LESSON_TEMPLATE_MODEL_NAME).deleteOne({
+      _id: templateId,
+      createdBy: userId,
+    });
+  } catch (err) {
+    const error = err as Error;
+    throw new Error(error.message);
+  }
+};
+
+export const validateConnection = (connection: Connection) => {
+  if (!connection) {
+    throw new Error("Connection Invalid");
   }
 };

@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
 import { ILessonTemplateWithId } from "../../../../model/admin/LessonTemplate.model";
-import { getLessonTemplatesById } from "../../../../helpers/admin/templates";
+import { getLessonTemplatesById } from "../../../../helpers/admin/templatesHelper";
 import GetTemplatesQuery from "../../interfaces/GetTemplatesQuery";
 
 export default async function handler(

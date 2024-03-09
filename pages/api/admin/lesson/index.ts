@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
-import { getAdminLessons } from "../../../../helpers/admin/lessons";
+import { getAdminLessons } from "../../../../helpers/admin/lessonsHelper";
 import { ILesson } from "../../../../model/Lesson.model";
 
 export default async function handler(

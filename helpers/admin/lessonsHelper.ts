@@ -47,9 +47,12 @@ export const createLesson = async (
   if (!userId) {
     throw new Error("Invalid Admin");
   }
-
   try {
-  } catch (err) {}
+    return await connection.model(LESSON_MODEL_NAME).create(lesson);
+  } catch (err) {
+    const error = err as Error;
+    throw new Error(error.message);
+  }
 };
 
 export const updateLesson = (
