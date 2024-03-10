@@ -30,7 +30,7 @@ export function CreateLesson() {
             <div>Lesson Name</div>
           </>
         ) : (
-          <div>Unauthorized</div>
+          <div>Unauthorized User</div>
         )}
       </>
     </Layout>
