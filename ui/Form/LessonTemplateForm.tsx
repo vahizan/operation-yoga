@@ -9,6 +9,9 @@ import { useSession } from "next-auth/react";
 import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
 import { timeOptions } from "./constants";
+import { DefaultSession, Session } from "next-auth";
+import { ISODateString } from "next-auth/src/core/types";
+import { SessionWithId } from "../../types/SessionWithId";
 
 interface LessonFormProps {
   instructors?: IUser[];
@@ -80,7 +83,7 @@ const LessonTemplateForm: React.FC<LessonFormProps> = ({ onSubmit }) => {
 
   const [errors, setErrors] = useState<Partial<LessonFormDataValidation>>({});
 
-  const session = useSession();
+  const session = useSession() as unknown as { data: SessionWithId };
   const router = useRouter();
 
   useEffect(() => {

@@ -13,6 +13,7 @@ const Lessons: React.FC = () => {
   const [templatesFetchError, setTemplatesFetchError] = useState<string>();
 
   const session = useSession();
+
   const router = useRouter();
 
   useEffect(() => {
