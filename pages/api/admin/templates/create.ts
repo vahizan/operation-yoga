@@ -4,16 +4,13 @@ import {
   LESSON_TEMPLATE_MODEL_NAME,
 } from "../../../../model/admin/LessonTemplate.model";
 import createMongoConnection from "../../../../connector/createMongoConnection";
-import { getUserById } from "../../../../helpers/admin/getUserById";
-import { getUser } from "../../../../helpers/admin/getUser";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<string | { error: string }>
 ) {
-  let { method, query, body } = req;
+  let { method, body } = req;
   const reqBody: ILessonTemplate = body;
-  const q = query as unknown as { userId: string };
 
   if (method !== "POST") {
     res.status(404).json({ error: "Method Invalid" });

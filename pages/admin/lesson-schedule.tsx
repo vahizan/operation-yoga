@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getLessonTemplates } from "../../hooks/api";
+import { getInstructorLessonSchedule } from "../../hooks/api";
 import { useSession } from "next-auth/react";
-import { ILessonTemplateWithId } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
 import { ILesson } from "../api/interfaces";
 
-const Lessons: React.FC = () => {
+const LessonSchedule: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
-  const [lessons, setLessons] = useState<ILesson[]>();
-  const [templatesFetchError, setTemplatesFetchError] = useState<string>();
+  const [instructorLessons, setInstructorLessons] = useState<ILesson[]>();
+  const [instructorLessonsError, setInstructorLessonsError] =
+    useState<string>();
 
   const session = useSession();
 
@@ -21,17 +21,16 @@ const Lessons: React.FC = () => {
       router.push("/404");
     }
 
-    // getLessons({
-    //   limit: 10,
-    //   page: 0,
-    //   userId: session.data?.user?.id,
-    // })
-    //   .then((result) => {
-    //     setLessons(result?.data);
-    //   })
-    //   .catch((err) => {
-    //     setLessonsError(err.message);
-    //   });
+    getInstructorLessonSchedule({
+      limit: 10,
+      page: 0,
+    })
+      .then((result) => {
+        setInstructorLessons(result?.data);
+      })
+      .catch((err) => {
+        setInstructorLessonsError(err.message);
+      });
   }, [session.status]);
 
   //need to do an aggregation to get createdBy data and instructor data
@@ -39,7 +38,7 @@ const Lessons: React.FC = () => {
     <>
       <div>Lessons</div>
       <div>
-        {lessons?.map((lesson) => {
+        {instructorLessons?.map((lesson) => {
           return (
             <>
               <div>name: {lesson.title}</div>
@@ -52,4 +51,4 @@ const Lessons: React.FC = () => {
   );
 };
 
-export default Lessons;
+export default LessonSchedule;

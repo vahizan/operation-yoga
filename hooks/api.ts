@@ -1,4 +1,4 @@
-import { ISession } from "../pages/api/interfaces";
+import { ILesson, ISession } from "../pages/api/interfaces";
 import Email from "./interfaces/Email";
 import axios from "axios";
 import {
@@ -6,8 +6,8 @@ import {
   ILessonTemplateWithId,
 } from "../model/admin/LessonTemplate.model";
 import { IUser } from "../model/User.model";
-import TemplateFilters from "../interfaces/TemplateFilters";
 import GetTemplatesQuery from "../pages/api/interfaces/GetTemplatesQuery";
+import { IPaginatedQuery } from "../pages/api/interfaces/IPaginatedQuery";
 
 export const getSchedule = async (
   body?: Record<string, string>
@@ -54,5 +54,13 @@ export const getLessonTemplates = async (
     `/api/admin/templates?${query}&limit=${filters.limit || 10}&page=${
       filters.page
     }`
+  );
+};
+
+export const getInstructorLessonSchedule = async (
+  filters: IPaginatedQuery
+): Promise<{ data: ILesson[] }> => {
+  return await axios.get(
+    `/api/admin/lessons?limit=${filters.limit}&page=${filters.page}`
   );
 };

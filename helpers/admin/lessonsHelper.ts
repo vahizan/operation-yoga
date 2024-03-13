@@ -8,11 +8,11 @@ interface LessonResponse {
   limit: number;
 }
 
-export const getAdminLessons = async (
+export const getInstructorLessons = async (
   connection: Connection,
   page: number,
   limit: number,
-  adminId: string
+  instructorId: string
 ): Promise<LessonResponse> => {
   const offset = (page - 1) * limit;
 
@@ -23,7 +23,7 @@ export const getAdminLessons = async (
   try {
     const results = await connection
       .model(LESSON_MODEL_NAME)
-      .aggregate(LessonAggregate(adminId))
+      .find({ instructorId })
       .skip(offset)
       .limit(limit);
 
