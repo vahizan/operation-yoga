@@ -14,6 +14,7 @@ export interface ILessonTemplate {
   instructor: IUserReadOnly;
   room?: string;
   location?: string;
+  templateName?: string;
   price: number;
   currency: string;
 }
@@ -45,6 +46,10 @@ const lessonTemplateSchema = new Schema({
   createdBy: {
     type: Schema.Types.Map,
     ref: USER_MODEL_NAME,
+    required: true,
+  },
+  templateName: {
+    type: Schema.Types.String,
     required: true,
   },
   room: Schema.Types.String,
