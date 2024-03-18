@@ -11,16 +11,23 @@ import LessonTemplateForm from "../LessonTemplateForm";
 import { SessionProvider } from "next-auth/react";
 import { getInstructors } from "../../../hooks/api";
 import { UserType } from "../../../enum/UserType";
+import { useRouter } from "next/navigation";
 
 jest.mock("../../../hooks/api", () => ({
   ...jest.requireActual("../../../hooks/api"),
   getInstructors: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  ...jest.requireActual("next/navigation"),
+  useRouter: jest.fn(),
+}));
+
 describe("LessonTemplateForm", () => {
   const mockOnSubmit = jest.fn();
   beforeEach(() => {
     (getInstructors as jest.Mock).mockResolvedValue(undefined);
+    (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() });
   });
 
   test("renders form fields", () => {
@@ -78,7 +85,6 @@ describe("LessonTemplateForm", () => {
     expect(screen.getByText("Lesson name is required")).toBeInTheDocument();
   });
 
-  it("should redirect user on unauthorized");
   it("should submit on successful validation", async () => {
     (getInstructors as jest.Mock).mockResolvedValue({
       data: [
@@ -86,7 +92,7 @@ describe("LessonTemplateForm", () => {
           name: "bob",
           email: "bob@bob.com",
           type: UserType.ADMIN,
-          _id: "someID",
+          id: "someID",
         },
       ],
     });
@@ -130,12 +136,16 @@ describe("LessonTemplateForm", () => {
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
         availability: 30,
-        createdBy: "me@me.com",
+        createdBy: {
+          _id: undefined,
+          email: "me@me.com",
+          name: "ME",
+        },
         currency: "GBP",
-        dayOfWeek: 1,
+        dayOfWeek: "1",
         endTime: "1",
         instructor: {
-          _id: "someID",
+          id: "someID",
           email: "bob@bob.com",
           name: "bob",
           type: "admin",

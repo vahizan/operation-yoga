@@ -4,11 +4,14 @@ import Layout from "../../ui/Layout";
 import { Session } from "next-auth";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { createLessonTemplate } from "../../hooks/api";
+import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
 
 export function CreateLessonTemplate() {
   const sessionPromise: Promise<Session | null> = getSession();
 
   const [user, setUser] = useState<string | null>();
+  const [lessonTemplateData, setLessonTemplateData] =
+    useState<ILessonTemplate>();
 
   sessionPromise.then((session) => {
     setUser(session?.user?.name);

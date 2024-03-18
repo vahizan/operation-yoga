@@ -622,6 +622,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       <select
         name="Currency"
       >
+        <option>
+          Select a currency
+        </option>
         <option
           value="INR"
         >
@@ -678,7 +681,11 @@ exports[`LessonTemplateForm renders form fields 1`] = `
       </label>
       <select
         name="Instructor Name"
-      />
+      >
+        <option>
+          Select an option
+        </option>
+      </select>
     </div>
     <div>
       <div
