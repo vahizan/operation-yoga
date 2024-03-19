@@ -16,6 +16,11 @@ exports[`LessonTemplateForm renders form fields 1`] = `
         name="description"
         value=""
       />
+      <span
+        class="errorMessage"
+      >
+        Description is required
+      </span>
     </div>
     <div>
       <label
@@ -272,6 +277,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           11:30 PM
         </option>
       </select>
+      <span>
+        Start time is required and should not be in the past
+      </span>
     </div>
     <div>
       <label
@@ -528,6 +536,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           11:30 PM
         </option>
       </select>
+      <span>
+        End time is required
+      </span>
     </div>
     <div>
       <label
@@ -579,6 +590,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           Saturday
         </option>
       </select>
+      <span>
+        Please specify the day of the week the lesson will take place
+      </span>
     </div>
     <div>
       <div
@@ -612,6 +626,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           value=""
         />
       </div>
+      <span>
+        Price is required
+      </span>
     </div>
     <div>
       <label
@@ -656,6 +673,9 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           Canadian Dollar
         </option>
       </select>
+      <span>
+        Currency is required
+      </span>
     </div>
     <div>
       <div
@@ -671,6 +691,11 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           name="lessonName"
           value=""
         />
+        <span
+          class="errorMessage"
+        >
+          Lesson name is required
+        </span>
       </div>
     </div>
     <div>
@@ -704,11 +729,6 @@ exports[`LessonTemplateForm renders form fields 1`] = `
         />
       </div>
     </div>
-    <button
-      type="submit"
-    >
-      Create Lesson
-    </button>
   </form>
 </div>
 `;

@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LessonTemplateForm from "../LessonTemplateForm";
 import { SessionProvider } from "next-auth/react";
@@ -25,36 +19,60 @@ jest.mock("next/navigation", () => ({
 
 describe("LessonTemplateForm", () => {
   const mockOnSubmit = jest.fn();
+  const setSubmit = jest.fn();
   beforeEach(() => {
     (getInstructors as jest.Mock).mockResolvedValue(undefined);
     (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() });
   });
-
+  afterEach(jest.resetAllMocks);
   test("renders form fields", () => {
     const { container } = render(
       <SessionProvider
         session={{ user: { name: undefined, email: undefined }, expires: "1" }}
       >
-        <LessonTemplateForm onSubmit={mockOnSubmit} />
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={true}
+        />
       </SessionProvider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("show error when start time is greater than end time on submission", async () => {
-    render(
+    const { rerender } = render(
       <SessionProvider
-        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
+        session={{
+          user: { name: undefined, email: "something@email.com" },
+          expires: "1",
+        }}
       >
-        <LessonTemplateForm onSubmit={mockOnSubmit} />
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={false}
+        />
       </SessionProvider>
     );
     const timeSelect = screen.getAllByRole("combobox");
-    await userEvent.selectOptions(timeSelect[0], "0.5");
+    await userEvent.selectOptions(timeSelect[0], "1");
     await userEvent.selectOptions(timeSelect[1], "0");
 
-    // Submit the form
-    fireEvent.click(screen.getByText("Create Lesson"));
+    rerender(
+      <SessionProvider
+        session={{
+          user: { name: undefined, email: "something@email.com" },
+          expires: "1",
+        }}
+      >
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={true}
+        />
+      </SessionProvider>
+    );
 
     await waitFor(() => {
       expect(
@@ -68,13 +86,18 @@ describe("LessonTemplateForm", () => {
   it("show error values aren't filled before submission", async () => {
     render(
       <SessionProvider
-        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
+        session={{
+          user: { name: undefined, email: "something@email.com" },
+          expires: "1",
+        }}
       >
-        <LessonTemplateForm onSubmit={mockOnSubmit} />
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={true}
+        />
       </SessionProvider>
     );
-    // Submit the form
-    fireEvent.click(screen.getByText("Create Lesson"));
 
     expect(
       screen.getByText("Start time is required and should not be in the past")
@@ -97,11 +120,15 @@ describe("LessonTemplateForm", () => {
       ],
     });
 
-    render(
+    const { rerender } = render(
       <SessionProvider
         session={{ user: { name: "ME", email: "me@me.com" }, expires: "1" }}
       >
-        <LessonTemplateForm onSubmit={mockOnSubmit} />
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={false}
+        />
       </SessionProvider>
     );
 
@@ -131,8 +158,17 @@ describe("LessonTemplateForm", () => {
     await userEvent.type(lesson, "LESSON");
     await userEvent.type(room, "ROOM");
 
-    await userEvent.click(screen.getByText("Create Lesson"));
-
+    rerender(
+      <SessionProvider
+        session={{ user: { name: "ME", email: "me@me.com" }, expires: "1" }}
+      >
+        <LessonTemplateForm
+          onSubmit={mockOnSubmit}
+          setSubmit={setSubmit}
+          isSubmit={true}
+        />
+      </SessionProvider>
+    );
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
         availability: 30,
