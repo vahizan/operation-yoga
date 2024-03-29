@@ -9,8 +9,7 @@ import YogshalaFancyLogo from "./YogshalaFancyLogo";
 import Certification from "./Certfication";
 import AccountIcon from "public/account-icon.svg";
 import MainLogo from "../public/logo-only.svg";
-
-const AUTHENTICATED = "authenticated";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isAtTop, setIsAtTop] = useState<boolean>(true);
@@ -27,6 +26,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     };
   }, []);
 
+  const { user } = useUser();
   return (
     <>
       <Head>
@@ -71,33 +71,33 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
           <div className={styles.header__rightContent}>
             <NavigationButton text={"enquire"} url={"/enquire"} />
-            {/*{status === AUTHENTICATED ? (*/}
-            {/*  <>*/}
-            {/*    <div className={styles.header__rightContent__accountContainer}>*/}
-            {/*      <div*/}
-            {/*        className={*/}
-            {/*          styles.header__rightContent__accountContainer__button*/}
-            {/*        }*/}
-            {/*      >*/}
-            {/*        <NavigationButton text={"Account"} url={"/account"} />*/}
-            {/*      </div>*/}
+            {user ? (
+              <>
+                <div className={styles.header__rightContent__accountContainer}>
+                  <div
+                    className={
+                      styles.header__rightContent__accountContainer__button
+                    }
+                  >
+                    <NavigationButton text={"Account"} url={"/account"} />
+                  </div>
 
-            {/*      <button*/}
-            {/*        className={*/}
-            {/*          styles.header__rightContent__accountContainer__iconButton*/}
-            {/*        }*/}
-            {/*      >*/}
-            {/*        <Link href={"/account"}>*/}
-            {/*          <AccountIcon />*/}
-            {/*        </Link>*/}
-            {/*      </button>*/}
-            {/*    </div>*/}
-            {/*  </>*/}
-            {/*) : (*/}
-            <div className={styles.header__rightContent__loginContainer}>
-              <NavigationButton text={"Login"} url={"/login"} />
-            </div>
-            {/*)}*/}
+                  <button
+                    className={
+                      styles.header__rightContent__accountContainer__iconButton
+                    }
+                  >
+                    <Link href={"/account"}>
+                      <AccountIcon />
+                    </Link>
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className={styles.header__rightContent__loginContainer}>
+                <NavigationButton text={"Login"} url={"/api/auth/login"} />
+              </div>
+            )}
           </div>
         </div>
 
