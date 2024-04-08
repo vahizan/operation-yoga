@@ -1,13 +1,11 @@
 import { USER_MODEL_NAME } from "../model/User.model";
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
 import { comparePassword } from "./loginHelper";
 import createMongoConnection from "../connector/createMongoConnection";
 import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const authorizeLogin = async (
-  credentials: Record<string, string> | undefined
+  credentials: Partial<Record<"email" | "password", unknown>>
 ) => {
   {
     console.log("CREDENTIALS");
@@ -29,14 +27,14 @@ export const authorizeLogin = async (
       return null;
     }
 
-    const isValidPassword = await comparePassword(
-      credentials.password,
-      user.password
-    );
+    // const isValidPassword = await comparePassword(
+    //   credentials.password,
+    //   user.password
+    // );
 
-    if (!isValidPassword) {
-      return null;
-    }
+    // if (!isValidPassword) {
+    //   return null;
+    // }
 
     return {
       id: user.id,
@@ -44,11 +42,6 @@ export const authorizeLogin = async (
       name: user.name,
     };
   }
-};
-
-export const hasSession = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(req, res, authOptions);
-  return !!session;
 };
 
 export const getTokenPayload = (

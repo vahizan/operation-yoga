@@ -1,11 +1,4 @@
-import {
-  authorizeLogin,
-  getTokenPayload,
-  hasSession,
-} from "../authenticationHelper";
-import { getServerSession } from "next-auth";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from "../../pages/api/auth/[...nextauth]";
+import { authorizeLogin, getTokenPayload } from "../authenticationHelper";
 import { comparePassword } from "../loginHelper";
 import { verify } from "jsonwebtoken";
 import createMongoConnection from "../../connector/createMongoConnection";
@@ -120,36 +113,6 @@ describe("authenticationHelper", () => {
         name: "Test User",
       });
       expect(mockConnector.connect).toHaveBeenCalled();
-    });
-  });
-
-  describe("hasSession", () => {
-    it("should return true if session exists", async () => {
-      const mockGetServerSession = jest.fn(() => ({ sessionId: "123" }));
-      (getServerSession as jest.Mock).mockImplementationOnce(
-        mockGetServerSession
-      );
-
-      const req = {} as NextApiRequest;
-      const res = {} as NextApiResponse;
-
-      const result = await hasSession(req, res);
-      expect(result).toBe(true);
-      expect(mockGetServerSession).toHaveBeenCalledWith(req, res, authOptions);
-    });
-
-    it("should return false if session does not exist", async () => {
-      const mockGetServerSession = jest.fn(() => null);
-      (getServerSession as jest.Mock).mockImplementationOnce(
-        mockGetServerSession
-      );
-
-      const req = {} as NextApiRequest;
-      const res = {} as NextApiResponse;
-
-      const result = await hasSession(req, res);
-      expect(result).toBe(false);
-      expect(mockGetServerSession).toHaveBeenCalledWith(req, res, authOptions);
     });
   });
 
