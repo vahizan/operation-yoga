@@ -1,4 +1,12 @@
 export type SocialMedia = {
-  platform: string;
+  platform: Platform;
   url: string;
 };
+
+export enum Platform {
+  YOUTUBE = "YouTube",
+  INSTAGRAM = "Instagram",
+  TWITTER = "Twitter",
+  PINTEREST = "Pinterest",
+  FACEBOOK = "Facebook",
+}

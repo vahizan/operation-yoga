@@ -6,6 +6,7 @@ export default function ThaiYogaMassage() {
     <Layout>
       <div>
         <h2>Thai Yoga Massage</h2>
+        <div>Under Construction</div>
       </div>
     </Layout>
   );

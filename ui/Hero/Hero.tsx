@@ -17,66 +17,28 @@ export default function Hero({
   cta,
   ctaText,
 }: Props) {
-  const [shouldLoadImage, setShouldLoadImage] = useState(true);
-
-  useEffect(() => {
-    const networkInformation = navigator.connection as NetworkInformation & {
-      effectiveType?: string;
-    };
-    if (
-      networkInformation?.effectiveType === "4g" ||
-      networkInformation?.type === "wifi"
-    ) {
-      setShouldLoadImage(false);
-    }
-  }, []);
-
   return (
     <div className={styles.hero}>
-      {!shouldLoadImage && (
-        <div className={styles.hero__videoWrap}>
-          <video
-            className={styles.hero__videoWrap__desktop}
-            controls={false}
-            autoPlay
-            muted
-            loop
-          >
-            <source src={desktopVideoUrl} type="video/mp4" />
-          </video>
-          <video
-            className={styles.hero__videoWrap__mobile}
-            controls={false}
-            autoPlay
-            muted
-            loop
-          >
-            <source src={mobileVideoUrl} type="video/mp4" />
-          </video>
-        </div>
-      )}
-      {shouldLoadImage && (
-        <>
-          <video
-            className={styles.hero__videoWrap__desktop}
-            controls={true}
-            autoPlay={false}
-            muted
-            loop
-          >
-            <source src={desktopVideoUrl} type="video/mp4" />
-          </video>
-          <video
-            className={styles.hero__videoWrap__mobile}
-            autoPlay={false}
-            controls
-            muted
-            loop
-          >
-            <source src={mobileVideoUrl} type="video/mp4" />
-          </video>
-        </>
-      )}
+      <div className={styles.hero__videoWrap}>
+        <video
+          className={styles.hero__videoWrap__desktop}
+          controls={false}
+          autoPlay
+          muted
+          loop
+        >
+          <source src={desktopVideoUrl} type="video/mp4" />
+        </video>
+        <video
+          className={styles.hero__videoWrap__mobile}
+          controls={false}
+          autoPlay
+          muted
+          loop
+        >
+          <source src={mobileVideoUrl} type="video/mp4" />
+        </video>
+      </div>
       <header className={styles.hero__content}>
         <h1>{content}</h1>
         {cta && ctaText && (

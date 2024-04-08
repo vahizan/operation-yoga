@@ -8,9 +8,8 @@ export default function Footer() {
   return (
     <footer className={styles.footer}>
       <div className={styles.footer__links}>
-        <div>FAQs</div>
-        <div>About Us</div>
-        <div>Contact Us</div>
+        <Link href={"/about"}>About Us</Link>
+        <Link href={"/contact-us"}>Contact Us</Link>
       </div>
       <div className={styles.footer__socialMediaLinks}>
         <Link href={""}>

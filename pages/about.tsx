@@ -1,20 +1,15 @@
-import Image from "next/image";
 import styles from "./about.module.scss";
 import Layout from "../ui/Layout";
+import Article from "../ui/Article";
 
 export default function About() {
   return (
     <Layout>
-      <h1>About Us</h1>
-      <main className={styles.container}>
-        <div className={styles.container__image}>
-          <Image
-            width={500}
-            height={500}
-            alt={"Two yoga instructors welcoming you"}
-            src={"https://d399a6wtv3gpjg.cloudfront.net/Vedashala2.jpeg"}
-          />
-        </div>
+      <Article
+        title={"About Us"}
+        heroImageSrc={"https://d399a6wtv3gpjg.cloudfront.net/Vedashala2.jpeg"}
+        heroImageAlt={"Two yoga instructors welcoming you"}
+      >
         <p className={styles.description}>
           Veda Yogashala started as a venture initiated by the current
           proprietors, Jay Bhatt and Pushpa together with family members and
@@ -39,7 +34,7 @@ export default function About() {
           we ensure that everyone finds the activities challenging physically
           and mentally, but with the maximum amount of care and assistance.
         </p>
-      </main>
+      </Article>
     </Layout>
   );
 }

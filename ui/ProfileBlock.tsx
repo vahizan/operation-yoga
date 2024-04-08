@@ -1,8 +1,13 @@
 import { FC, useState } from "react";
 import Image from "next/image";
 import styles from "./ProfileBlock.module.scss";
-import { SocialMedia } from "../types/SocialMediaTypes";
+import { Platform, SocialMedia } from "../types/SocialMediaTypes";
 import useObserver from "../hooks/observer/useObserver";
+import FacebookIcon from "../public/facebook-icon.svg";
+import InstagramIcon from "../public/instagram-icon.svg";
+import YoutubeIcon from "../public/youtube-icon.svg";
+import Twitter from "../public/twitter-icon.svg";
+import Link from "next/link";
 
 interface Props {
   title: string;
@@ -11,6 +16,20 @@ interface Props {
   paragraphs: string[];
   socialMedia?: SocialMedia[];
 }
+const socialMediaIcon = (socialMedia: Platform) => {
+  switch (socialMedia) {
+    case Platform.FACEBOOK:
+      return <FacebookIcon />;
+    case Platform.INSTAGRAM:
+      return <InstagramIcon />;
+    case Platform.YOUTUBE:
+      return <YoutubeIcon />;
+    case Platform.TWITTER:
+      return <div>𝕏</div>;
+    default:
+      return <div>?</div>;
+  }
+};
 
 const ProfileBlock: FC<Props> = ({
   title,
@@ -47,6 +66,20 @@ const ProfileBlock: FC<Props> = ({
             alt={imageAlt || ""}
             src={imageUrl}
           />
+        )}
+        {socialMedia && (
+          <div className={styles.profileBlock__socialMediaLinks}>
+            {socialMedia.map((social) => {
+              return (
+                <Link
+                  className={styles.profileBlock__socialMediaLinks__link}
+                  href={social.url}
+                >
+                  {socialMediaIcon(social.platform)}
+                </Link>
+              );
+            })}
+          </div>
         )}
       </div>
       <div className={styles.profileBlock__paragraphs}>

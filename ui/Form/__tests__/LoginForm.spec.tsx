@@ -1,9 +1,6 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import LoginForm from "../LoginForm";
-import { signIn } from "next-auth/react";
-
-jest.mock("next-auth/react");
 
 describe("LoginForm", () => {
   it("should display error message when form is submitted with empty fields", async () => {
@@ -18,7 +15,6 @@ describe("LoginForm", () => {
 
   it("should display error message when login fails", async () => {
     const signInMock = jest.fn(() => ({ error: "Invalid credentials" }));
-    (signIn as jest.Mock).mockImplementationOnce(signInMock);
 
     const { getByText, getByLabelText } = render(<LoginForm />);
 
@@ -41,7 +37,6 @@ describe("LoginForm", () => {
 
   it("should not display error message when login succeeds", async () => {
     const signInMock = jest.fn(() => ({ error: null }));
-    (signIn as jest.Mock).mockImplementationOnce(signInMock);
 
     const { getByText, getByLabelText, queryByText } = render(<LoginForm />);
 

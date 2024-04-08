@@ -1,4 +1,4 @@
-import styles from "../styles/Home.module.scss";
+import styles from "../styles/teachers.module.scss";
 import ProfileBlock from "../ui/ProfileBlock";
 import {
   baldevVisitingInstructor,
@@ -8,17 +8,28 @@ import {
   vivekVisitingInstructor,
 } from "../constants/Teachers.constants";
 import Layout from "../ui/Layout";
+import { Platform } from "../types/SocialMediaTypes";
 
 export const Teachers = () => {
   return (
     <Layout>
-      <main className={styles.main}>
+      <main>
         <h1>Our Teachers</h1>
         <div>
           <ProfileBlock
             title={"Pushpa Ji – Proprietor, Teacher of Culture and Meditation"}
             imageAlt={"Picture of Pushpa Ji"}
             imageUrl={"https://d399a6wtv3gpjg.cloudfront.net/pushpa.png"}
+            socialMedia={[
+              {
+                platform: Platform.INSTAGRAM,
+                url: "https://instagram.com/pushpa_hindi_language_school?igshid=Y2IzZGU1MTFhOQ==",
+              },
+              {
+                platform: Platform.FACEBOOK,
+                url: "https://www.facebook.com/pushpa.bhatt.39?mibextid=LQQJ4d",
+              },
+            ]}
             paragraphs={pushpaBlock}
           />
           <ProfileBlock
@@ -27,15 +38,30 @@ export const Teachers = () => {
             }
             imageAlt={"Picture of Jay Ji"}
             imageUrl={"https://d399a6wtv3gpjg.cloudfront.net/jayji.png"}
+            socialMedia={[
+              {
+                platform: Platform.INSTAGRAM,
+                url: "https://instagram.com/rishikeshyoga_jay?igshid=NTc4MTIwNjQ2YQ==",
+              },
+              {
+                platform: Platform.FACEBOOK,
+                url: "https://www.facebook.com/jayprakash.bhatt.794?mibextid=LQQJ4d",
+              },
+            ]}
             paragraphs={jayBlock}
           />
           <ProfileBlock
             title={"Jyoti Ji – Teacher of Culture"}
             imageAlt={"Picture of Jyoti Ji"}
             imageUrl={"https://d399a6wtv3gpjg.cloudfront.net/jyotiji.png"}
+            socialMedia={[
+              {
+                platform: Platform.INSTAGRAM,
+                url: "https://instagram.com/jyotibhatt144?igshid=Y2IzZGU1MTFhOQ==",
+              },
+            ]}
             paragraphs={jyotiBlock}
           />
-          <h3>Visiting Teachers</h3>
           <ProfileBlock
             title={"Vivek Bijlawan Ji – Yoga Instructor"}
             paragraphs={vivekVisitingInstructor}
