@@ -37,7 +37,7 @@ export default async function handler(
   try {
     const updatedDocument = await updateTemplate(
       connection,
-      reqBody.createdBy,
+      reqBody.createdBy.id,
       _id,
       reqBody
     );
