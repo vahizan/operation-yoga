@@ -3,9 +3,7 @@ import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
 import { getInstructorLessons } from "../../../../helpers/admin/lessonsHelper";
 import { ILesson } from "../../../../model/Lesson.model";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "../../auth/[...nextauth]";
-import { SessionWithId } from "../../../../types/SessionWithId";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,11 +18,7 @@ export default async function handler(
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
-  const session = (await getServerSession(
-    req,
-    res,
-    authOptions
-  )) as unknown as SessionWithId;
+  const { user } = useUser();
 
   const mongoConnector = createMongoConnection();
 
@@ -36,7 +30,7 @@ export default async function handler(
     const page = q.page || 1;
     const limit = q.limit || 10;
 
-    getInstructorLessons(connection, page, limit, session?.user?.id as string)
+    getInstructorLessons(connection, page, limit, user?.id as string)
       .then((results) => res.status(200).json(results))
       .catch((err) => {
         res.status(500).json(err);

@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect";
-import { SessionProvider } from "next-auth/react";
 import { createLessonTemplate } from "../../../hooks/api";
 import CreateLessonTemplate from "../create-lesson-template";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 jest.mock("public/account-icon.svg", () => () => <div>Account Logo</div>);
 jest.mock("public/ogo-only.svg", () => () => <div> Logo Only</div>);
@@ -23,30 +23,30 @@ jest.mock("next/navigation", () => ({
 describe("CreateLessonTemplate", () => {
   test("renders Unauthorized when user is not logged in", async () => {
     render(
-      <SessionProvider
-        session={{ user: { name: undefined, email: undefined }, expires: "1" }}
-      >
+      <UserProvider user={{ name: undefined, email: undefined }}>
         <CreateLessonTemplate />
-      </SessionProvider>
+      </UserProvider>
     );
     expect(await screen.findByText("Unauthorized")).toBeInTheDocument();
   });
 
   test("renders form when user is logged in", async () => {
     render(
-      <SessionProvider
-        session={{
-          user: { name: "Test User", email: undefined },
-          expires: "1",
+      <UserProvider
+        user={{
+          name: "Test User",
+          email: "undefined@undefined",
+          user_id: "ID",
+          email_verified: true,
         }}
       >
         <CreateLessonTemplate />
-      </SessionProvider>
+      </UserProvider>
     );
-    expect(
-      await screen.findByText("Create Lesson Test User")
-    ).toBeInTheDocument();
-    expect(screen.getByText("Create Lesson Template")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.findByText("Create Lesson Test User")).toBeInTheDocument();
+      expect(screen.getByText("Create Lesson Template")).toBeInTheDocument();
+    });
   });
 
   test("submits lesson template data on button click", async () => {
@@ -55,14 +55,16 @@ describe("CreateLessonTemplate", () => {
       name: "lesson template",
     };
     render(
-      <SessionProvider
-        session={{
-          user: { name: "Test User", email: undefined },
-          expires: "1",
+      <UserProvider
+        user={{
+          name: "Test User",
+          email: "undefined@undefined",
+          user_id: "ID",
+          email_verified: true,
         }}
       >
         <CreateLessonTemplate />
-      </SessionProvider>
+      </UserProvider>
     );
     fireEvent.click(screen.getByText("Create Lesson Template"));
 
@@ -79,14 +81,9 @@ describe("CreateLessonTemplate", () => {
     );
 
     render(
-      <SessionProvider
-        session={{
-          user: { name: "test user", email: undefined },
-          expires: "1",
-        }}
-      >
+      <UserProvider user={{ name: "Test User", email: undefined }}>
         <CreateLessonTemplate />
-      </SessionProvider>
+      </UserProvider>
     );
     fireEvent.click(screen.getByText("Create Lesson Template"));
 

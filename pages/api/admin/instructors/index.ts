@@ -1,15 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth/next";
 
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import {
   getInstructors,
   InstructorsResponse,
 } from "../../../../helpers/admin/instructors";
-import { IUser, IUserReadOnly } from "../../../../model/User.model";
-import { authOptions } from "../../auth/[...nextauth]";
+import { IUserReadOnly } from "../../../../model/User.model";
 import { UserType } from "../../../../enum/UserType";
 import { getUserById } from "../../../../helpers/admin/getUserById";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export default async function handler(
   req: NextApiRequest,
@@ -22,9 +21,9 @@ export default async function handler(
     return;
   }
 
-  const session = await getServerSession(req, res, authOptions);
+  const { user: userProfile, error } = await useUser();
 
-  if (!session) {
+  if (!userProfile || error) {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
@@ -36,7 +35,7 @@ export default async function handler(
     return res.status(403).json({ error: "Unauthorized" });
   }
   const user: IUserReadOnly | undefined = await getUserById(
-    (session.user as any)?.id,
+    userProfile?.user_id as string,
     connection
   );
 

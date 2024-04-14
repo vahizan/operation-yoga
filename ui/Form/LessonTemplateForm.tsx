@@ -5,20 +5,19 @@ import { InputField } from "../Field/InputField";
 import { getInstructors } from "../../hooks/api";
 import { IUser, IUserEssential, IUserReadOnly } from "../../model/User.model";
 import SelectDropdown, { SelectOption } from "../SelectDropdown/SelectDropdown";
-import { useSession } from "next-auth/react";
 import {
   ILessonTemplate,
   ILessonTemplateWithId,
 } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
 import { timeOptions } from "./constants";
-import { SessionWithId } from "../../types/SessionWithId";
 import {
   LessonTemplateFormData,
   LessonTemplateFormDataValidation,
 } from "./types";
 import { validateInput } from "./helpers";
 import { Currency } from "../../model/admin/enums";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 interface LessonTemplateFormProps {
   instructors?: IUser[];
@@ -77,7 +76,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
     Partial<LessonTemplateFormDataValidation>
   >({});
 
-  const session = useSession() as unknown as { data: SessionWithId };
+  const { user, error } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -121,7 +120,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       return;
     }
 
-    if (!session?.data?.user?.email) {
+    if (!user?.email || error) {
       router.push("/404");
       return;
     }
@@ -138,9 +137,9 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       location: formData?.roomLocation,
       price: formData?.price || 0,
       createdBy: {
-        _id: session.data?.user?.id,
-        name: session?.data?.user?.name,
-        email: session?.data?.user?.email,
+        _id: user?.user_id,
+        name: user?.name,
+        email: user?.email,
       } as IUserEssential,
       currency: currency || "",
       instructor: selectedUser,

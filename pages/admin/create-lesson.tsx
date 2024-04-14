@@ -1,25 +1,18 @@
 import React, { FC, useEffect, useState } from "react";
-import { getSession } from "next-auth/react";
 import Layout from "../../ui/Layout";
-import { Session } from "next-auth";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 export function CreateLesson() {
-  const sessionPromise: Promise<Session | null> = getSession();
-
-  const [user, setUser] = useState<string | null>();
+  const { user } = useUser();
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
     useState<LessonTemplateFormData>();
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
-
-  sessionPromise.then((session) => {
-    setUser(session?.user?.name);
-  });
 
   useEffect(() => {
     if (lessonTemplateData) {
@@ -29,7 +22,7 @@ export function CreateLesson() {
   return (
     <Layout>
       <>
-        <h1>Create Lesson {user}</h1>
+        <h1>Create Lesson {user?.name}</h1>
         {user ? (
           <>
             <LessonTemplateForm

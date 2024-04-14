@@ -1,19 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import Layout from "../../ui/Layout";
+import { useUser } from "@auth0/nextjs-auth0/client";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { createLessonTemplate } from "../../hooks/api";
 import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
-import { SessionWithId } from "../../types/SessionWithId";
 
 export const CreateLessonTemplate = () => {
-  const [user, setUser] = useState<string | null>();
   const [lessonTemplateData, setLessonTemplateData] =
     useState<ILessonTemplate>();
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
-  const session = useSession() as unknown as { data: SessionWithId };
+  const { user: userProfile } = useUser();
 
   useEffect(() => {
     if (lessonTemplateData) {
@@ -23,17 +21,12 @@ export const CreateLessonTemplate = () => {
     }
   }, [lessonTemplateData]);
 
-  useEffect(() => {
-    if (!session?.data?.user?.email) {
-      setUser(session?.data?.user?.name);
-      return;
-    }
-  }, [session]);
+  console.log("userProfile", userProfile);
   return (
     <Layout>
       <>
-        <h1>Create Lesson {user}</h1>
-        {user ? (
+        <h1>Create Lesson {userProfile?.name}</h1>
+        {userProfile?.email && userProfile?.email_verified ? (
           <>
             <LessonTemplateForm
               onSubmit={setLessonTemplateData}

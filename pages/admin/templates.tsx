@@ -2,27 +2,27 @@
 
 import React, { useEffect, useState } from "react";
 import { getLessonTemplates } from "../../hooks/api";
-import { useSession } from "next-auth/react";
 import { ILessonTemplateWithId } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
+import { useUser } from "@auth0/nextjs-auth0/client";
 
 const Templates: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
   const [templates, setTemplates] = useState<ILessonTemplateWithId[]>();
   const [templatesFetchError, setTemplatesFetchError] = useState<string>();
 
-  const session = useSession();
+  const { user, error } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (session.status === "unauthenticated") {
+    if (error) {
       router.push("/404");
     }
 
     getLessonTemplates({
       limit: 10,
       page: 0,
-      userId: session.data?.user?.id,
+      userId: user?.id as string,
     })
       .then((result) => {
         setTemplates(result?.data);
@@ -30,7 +30,7 @@ const Templates: React.FC = () => {
       .catch((err) => {
         setTemplatesFetchError(err.message);
       });
-  }, [session.status]);
+  }, [user, error]);
 
   //need to do an aggregation to get createdBy data and instructor data
   return (
