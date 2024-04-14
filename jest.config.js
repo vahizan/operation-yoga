@@ -7,7 +7,14 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
+  testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
+
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  transform: {
+    "^.+\\.svg$": "jest-svg-transformer",
+  },
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you soon)
     "^@/components/(.*)$": "<rootDir>/components/$1",

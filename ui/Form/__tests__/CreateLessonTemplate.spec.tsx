@@ -1,9 +1,8 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import "@testing-library/jest-dom/extend-expect";
-import { createLessonTemplate } from "../../../hooks/api";
-import CreateLessonTemplate from "../create-lesson-template";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { createLessonTemplate } from "../../../hooks/api";
+import CreateLessonTemplate from "../../../pages/admin/create-lesson-template";
 
 jest.mock("public/account-icon.svg", () => () => <div>Account Logo</div>);
 jest.mock("public/ogo-only.svg", () => () => <div> Logo Only</div>);
