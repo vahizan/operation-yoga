@@ -45,10 +45,10 @@ const Templates: React.FC = () => {
               <div>name: {template.name}</div>
               <div> price: {template.price}</div>
               <div> currency: {template.currency}</div>
-              <div>
+              <>
                 <span>createdBy:</span>
                 {template.createdBy}
-              </div>
+              </>
               <button
                 onClick={() => {
                   console.log("edit");
