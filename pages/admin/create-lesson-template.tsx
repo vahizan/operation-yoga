@@ -21,7 +21,6 @@ export const CreateLessonTemplate = () => {
     }
   }, [lessonTemplateData]);
 
-  console.log("userProfile", userProfile);
   return (
     <Layout>
       <>

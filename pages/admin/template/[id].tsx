@@ -34,8 +34,8 @@ export const Template: FC<ILessonTemplateWithId> = ({
     <div>
       Id <span>{id}</span>
       Name <span>{name}</span>
-      Instructor <span>{instructor.name}</span>
-      Template Created By <span>{createdBy.name}</span>
+      Instructor <span>{instructor?.name}</span>
+      Template Created By <span>{createdBy?.name}</span>
       Start time <span>{getTime(startTime)?.name}</span>
       End time <span>{getTime(endTime)?.name}</span>
       Price <span>{price}</span>
