@@ -19,7 +19,6 @@ export default async function handler(
 
   try {
     const { accessToken } = await getAccessToken(req, res);
-    console.log("access token", accessToken);
     const options = {
       method: "GET",
       url: `${process.env.AUTH0_MANAGEMENT_URL}roles/${query?.id}`,
