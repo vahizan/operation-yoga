@@ -16,7 +16,6 @@ export default async function handler(
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
-
   try {
     const { accessToken } = await getAccessToken(req, res);
     const options = {
@@ -24,7 +23,6 @@ export default async function handler(
       url: `${process.env.AUTH0_MANAGEMENT_URL}roles/${query?.id}`,
       headers: { authorization: `Bearer ${accessToken}` },
     };
-
     const response = await axios(options);
     res.status(200).json(response.data);
   } catch (error) {
