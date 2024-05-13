@@ -1,4 +1,5 @@
 import { getAccessToken, getSession } from "@auth0/nextjs-auth0";
+import { ManagementClient } from "auth0";
 import { NextApiRequest, NextApiResponse } from "next";
 import axios from "axios";
 
@@ -8,7 +9,7 @@ interface UserMetadata {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<UserMetadata | { error: string }>
+  res: NextApiResponse<any | { error: string }>
 ) {
   const { method } = req;
 
@@ -17,18 +18,14 @@ export default async function handler(
     return;
   }
   try {
-    const { accessToken } = await getAccessToken(req, res);
     const session = await getSession(req, res);
-    const response = await axios.get(
-      `${process.env.AUTH0_MANAGEMENT_URL}/users/${session?.user.sub}`,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          accept: "application/json",
-        },
-      }
-    );
-    res.status(200).json(response.data);
+    const management = new ManagementClient({
+      domain: `${process.env.AUTH0_MANAGEMENT_HOST}`,
+      clientId: `${process.env.AUTH0_CLIENT_ID}`,
+      clientSecret: `${process.env.AUTH0_CLIENT_SECRET}`,
+    });
+    const role = await management.users.get({ id: session?.user?.sub });
+    res.status(200).json(role);
   } catch (error) {
     console.error("Email sending error:", error);
     res.status(500).end();
