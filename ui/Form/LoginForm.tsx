@@ -1,4 +1,5 @@
 import { FC, FormEvent, useState } from "react";
+import { signIn } from "next-auth/react";
 import styles from "./loginForm.module.scss";
 import Link from "next/link";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
@@ -19,19 +20,19 @@ const LoginForm: FC = () => {
       return;
     }
 
-    // await signIn("credentials", {
-    //   redirect: true,
-    //   callbackUrl: "/",
-    //   email,
-    //   password,
-    // })
-    //   .catch((err) => {
-    //     console.log("err", err);
-    //     setError("Invalid username or password. Please try again");
-    //   })
-    //   .finally(() => {
-    //     setLoggingIn(false);
-    //   });
+    await signIn("credentials", {
+      redirect: true,
+      callbackUrl: "/",
+      email,
+      password,
+    })
+      .catch((err) => {
+        console.log("err", err);
+        setError("Invalid username or password. Please try again");
+      })
+      .finally(() => {
+        setLoggingIn(false);
+      });
   };
 
   return (
