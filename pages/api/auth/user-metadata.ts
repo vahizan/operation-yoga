@@ -24,6 +24,9 @@ export default async function handler(
       clientId: `${process.env.AUTH0_CLIENT_ID}`,
       clientSecret: `${process.env.AUTH0_CLIENT_SECRET}`,
     });
+    if (!session) {
+      res.status(401).json("user required to sign in");
+    }
     const role = await management.users.get({ id: session?.user?.sub });
     res.status(200).json(role);
   } catch (error) {

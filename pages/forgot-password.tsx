@@ -1,4 +1,5 @@
 import { FC, MouseEvent, useState } from "react";
+import { signIn } from "next-auth/react";
 import axios, { AxiosError } from "axios";
 import styles from "./forgotPassword.module.scss";
 import Layout from "../ui/Layout";

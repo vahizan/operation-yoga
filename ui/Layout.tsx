@@ -7,9 +7,12 @@ import NavigationButton from "./Button/NavigationButton";
 import Link from "next/link";
 import YogshalaFancyLogo from "./YogshalaFancyLogo";
 import Certification from "./Certfication";
+import { useSession } from "next-auth/react";
 import AccountIcon from "public/account-icon.svg";
-import MainLogo from "public/logo-only.svg";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import MainLogo from "../public/logo-only.svg";
+
+const AUTHENTICATED = "authenticated";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isAtTop, setIsAtTop] = useState<boolean>(true);
@@ -26,7 +29,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const { user } = useUser();
+  const { status, data } = useSession();
   return (
     <>
       <Head>
@@ -71,7 +74,7 @@ export default function Layout({ children }: { children: ReactNode }) {
           </div>
           <div className={styles.header__rightContent}>
             <NavigationButton text={"enquire"} url={"/enquire"} />
-            {user ? (
+            {status === AUTHENTICATED ? (
               <>
                 <div className={styles.header__rightContent__accountContainer}>
                   <div
@@ -95,7 +98,7 @@ export default function Layout({ children }: { children: ReactNode }) {
               </>
             ) : (
               <div className={styles.header__rightContent__loginContainer}>
-                <NavigationButton text={"Login"} url={"/api/auth/login"} />
+                <NavigationButton text={"Login"} url={"/login"} />
               </div>
             )}
           </div>
