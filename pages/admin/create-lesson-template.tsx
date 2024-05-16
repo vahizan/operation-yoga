@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../ui/Layout";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { createLessonTemplate } from "../../hooks/api";
 import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
+import { useSession } from "next-auth/react";
 
 export const CreateLessonTemplate = () => {
   const [lessonTemplateData, setLessonTemplateData] =
@@ -11,7 +11,7 @@ export const CreateLessonTemplate = () => {
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 
-  const { user: userProfile } = useUser();
+  const session = useSession();
 
   useEffect(() => {
     if (lessonTemplateData) {
@@ -24,8 +24,8 @@ export const CreateLessonTemplate = () => {
   return (
     <Layout>
       <>
-        <h1>Create Lesson {userProfile?.name}</h1>
-        {userProfile?.email && userProfile?.email_verified ? (
+        <h1>Create Lesson {session?.data?.user?.name}</h1>
+        {session?.data?.user?.email ? (
           <>
             <LessonTemplateForm
               onSubmit={setLessonTemplateData}

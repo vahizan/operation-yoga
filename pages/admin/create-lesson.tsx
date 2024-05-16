@@ -4,10 +4,10 @@ import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSession } from "next-auth/react";
 
 export function CreateLesson() {
-  const { user } = useUser();
+  const session = useSession();
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
     useState<LessonTemplateFormData>();
@@ -22,8 +22,8 @@ export function CreateLesson() {
   return (
     <Layout>
       <>
-        <h1>Create Lesson {user?.name}</h1>
-        {user ? (
+        <h1>Create Lesson {session?.data?.user?.name}</h1>
+        {session?.data?.user ? (
           <>
             <LessonTemplateForm
               onSubmit={setLessonTemplateData}

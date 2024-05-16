@@ -9,7 +9,6 @@ import YogshalaFancyLogo from "./YogshalaFancyLogo";
 import Certification from "./Certfication";
 import { useSession } from "next-auth/react";
 import AccountIcon from "public/account-icon.svg";
-import { useUser } from "@auth0/nextjs-auth0/client";
 import MainLogo from "../public/logo-only.svg";
 
 const AUTHENTICATED = "authenticated";

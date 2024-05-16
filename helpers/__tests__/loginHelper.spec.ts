@@ -1,8 +1,8 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import * as loginHelper from "../loginHelper";
 import { waitFor } from "@testing-library/dom";
 
-jest.mock("bcrypt");
+jest.mock("bcryptjs");
 
 describe("loginHelper", () => {
   afterEach(jest.restoreAllMocks);

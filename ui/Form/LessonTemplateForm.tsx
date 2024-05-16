@@ -17,7 +17,7 @@ import {
 } from "./types";
 import { validateInput } from "./helpers";
 import { Currency } from "../../model/admin/enums";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSession } from "next-auth/react";
 
 interface LessonTemplateFormProps {
   instructors?: IUser[];
@@ -76,7 +76,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
     Partial<LessonTemplateFormDataValidation>
   >({});
 
-  const { user, error } = useUser();
+  const session = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -120,7 +120,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       return;
     }
 
-    if (!user?.email || error) {
+    if (!session?.data?.user?.email) {
       router.push("/404");
       return;
     }

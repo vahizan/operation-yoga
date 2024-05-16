@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { getInstructorLessonSchedule } from "../../hooks/api";
 import { useRouter } from "next/navigation";
 import { ILesson } from "../api/interfaces";
-import { useUser } from "@auth0/nextjs-auth0/client";
+import { useSession } from "next-auth/react";
 
 const LessonSchedule: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
@@ -12,12 +12,12 @@ const LessonSchedule: React.FC = () => {
   const [instructorLessonsError, setInstructorLessonsError] =
     useState<string>();
 
-  const { error } = useUser();
+  const session = useSession();
 
   const router = useRouter();
 
   useEffect(() => {
-    if (error) {
+    if (session?.data?.user) {
       router.push("/404");
     }
 
@@ -31,7 +31,7 @@ const LessonSchedule: React.FC = () => {
       .catch((err) => {
         setInstructorLessonsError(err.message);
       });
-  }, [error]);
+  }, [session]);
 
   //need to do an aggregation to get createdBy data and instructor data
   return (

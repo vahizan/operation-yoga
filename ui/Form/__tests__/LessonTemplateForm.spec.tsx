@@ -5,7 +5,7 @@ import LessonTemplateForm from "../LessonTemplateForm";
 import { getInstructors } from "../../../hooks/api";
 import { UserType } from "../../../enum/UserType";
 import { useRouter } from "next/navigation";
-import { UserProvider } from "@auth0/nextjs-auth0/client";
+import { SessionProvider } from "next-auth/react";
 
 jest.mock("../../../hooks/api", () => ({
   ...jest.requireActual("../../../hooks/api"),
@@ -27,39 +27,45 @@ describe("LessonTemplateForm", () => {
   afterEach(jest.resetAllMocks);
   test("renders form fields", () => {
     const { container } = render(
-      <UserProvider user={{ name: undefined, email: undefined }}>
+      <SessionProvider
+        session={{ user: { name: undefined, email: undefined }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={true}
         />
-      </UserProvider>
+      </SessionProvider>
     );
     expect(container).toMatchSnapshot();
   });
 
   it("show error when start time is greater than end time on submission", async () => {
     const { rerender } = render(
-      <UserProvider user={{ name: undefined, email: "me@me.com" }}>
+      <SessionProvider
+        session={{ user: { name: undefined, email: "me@me.com" }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={false}
         />
-      </UserProvider>
+      </SessionProvider>
     );
     const timeSelect = screen.getAllByRole("combobox");
     await userEvent.selectOptions(timeSelect[0], "1");
     await userEvent.selectOptions(timeSelect[1], "0");
 
     rerender(
-      <UserProvider user={{ name: undefined, email: "me@me.com" }}>
+      <SessionProvider
+        session={{ user: { name: undefined, email: "me@me.com" }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={true}
         />
-      </UserProvider>
+      </SessionProvider>
     );
 
     await waitFor(() => {
@@ -73,13 +79,15 @@ describe("LessonTemplateForm", () => {
 
   it("show error values aren't filled before submission", async () => {
     render(
-      <UserProvider user={{ name: undefined, email: "me@me.com" }}>
+      <SessionProvider
+        session={{ user: { name: undefined, email: "me@me.com" }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={true}
         />
-      </UserProvider>
+      </SessionProvider>
     );
 
     expect(
@@ -104,13 +112,15 @@ describe("LessonTemplateForm", () => {
     });
 
     const { rerender } = render(
-      <UserProvider user={{ name: "ME", email: "me@me.com" }}>
+      <SessionProvider
+        session={{ user: { name: "ME", email: "me@me.com" }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={false}
         />
-      </UserProvider>
+      </SessionProvider>
     );
 
     const select = screen.getAllByRole("combobox");
@@ -140,13 +150,15 @@ describe("LessonTemplateForm", () => {
     await userEvent.type(room, "ROOM");
 
     rerender(
-      <UserProvider user={{ name: "ME", email: "me@me.com" }}>
+      <SessionProvider
+        session={{ user: { name: "ME", email: "me@me.com" }, expires: "" }}
+      >
         <LessonTemplateForm
           onSubmit={mockOnSubmit}
           setSubmit={setSubmit}
           isSubmit={true}
         />
-      </UserProvider>
+      </SessionProvider>
     );
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalledWith({
