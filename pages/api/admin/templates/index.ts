@@ -1,13 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import createMongoConnection from "../../../../connector/createMongoConnection";
-import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
-import { ILessonTemplateWithId } from "../../../../model/admin/LessonTemplate.model";
 import { getLessonTemplatesById } from "../../../../helpers/admin/templatesHelper";
 import GetTemplatesQuery from "../../interfaces/GetTemplatesQuery";
+import PrismaClient from "../../../../connector/Prisma/prismaClient";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ILessonTemplateWithId[] | { error: string }>
+  res: NextApiResponse<any[] | { error: string }>
 ) {
   const { method, query } = req;
   console.log("query", query);
@@ -28,17 +26,7 @@ export default async function handler(
     return;
   }
 
-  const mongoConnector = createMongoConnection();
-
-  let connection = undefined;
-
-  try {
-    connection = await mongoConnector.connect();
-  } catch (error) {
-    res.status(500).json({ error: "DB connection error" });
-    await mongoConnector.disconnect();
-    return;
-  }
+  const connection = PrismaClient;
 
   if (!connection) {
     res.status(403).json({ error: "Unauthorized" });
@@ -47,18 +35,15 @@ export default async function handler(
   const page = q?.page || 1;
   const limit = q?.limit || 10;
   try {
-    const lessonTemplates = await getLessonTemplatesById(
-      connection,
-      page,
-      limit,
-      { createdBy: q?.userId, _id: q?.templateId, instructorId: q?.templateId }
-    );
+    const lessonTemplates = await getLessonTemplatesById(page, limit, {
+      createdBy: q?.userId,
+      _id: q?.templateId,
+      instructorId: q?.templateId,
+    });
     res.status(200).json(lessonTemplates);
   } catch (err) {
     const error = err as Error;
     console.error(error.message);
     res.status(500).json({ error: "An error occurred. Please try again." });
-  } finally {
-    await mongoConnector.disconnect();
   }
 }

@@ -3,12 +3,8 @@
 import React, { SetStateAction, useEffect, useState } from "react";
 import { InputField } from "../Field/InputField";
 import { getInstructors } from "../../hooks/api";
-import { IUser, IUserEssential, IUserReadOnly } from "../../model/User.model";
 import SelectDropdown, { SelectOption } from "../SelectDropdown/SelectDropdown";
-import {
-  ILessonTemplate,
-  ILessonTemplateWithId,
-} from "../../model/admin/LessonTemplate.model";
+
 import { useRouter } from "next/navigation";
 import { timeOptions } from "./constants";
 import {
@@ -20,10 +16,10 @@ import { Currency } from "../../model/admin/enums";
 import { useSession } from "next-auth/react";
 
 interface LessonTemplateFormProps {
-  instructors?: IUser[];
+  instructors?: any[];
   isSubmit: boolean;
   setSubmit: React.Dispatch<SetStateAction<boolean>>;
-  onSubmit: (body: ILessonTemplate | ILessonTemplateWithId) => void;
+  onSubmit: (body: any) => void;
   isReadOnly?: boolean;
   className?: string;
 }
@@ -65,7 +61,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   setSubmit,
 }) => {
   const [instructorFetchError, setInstructorFetchError] = useState<number>();
-  const [instructors, setInstructors] = useState<IUser[]>();
+  const [instructors, setInstructors] = useState<any[]>();
   const [selectedInstructorId, setSelectedInstructorId] = useState<string>();
   const [startTime, setStartTime] = useState<number>();
   const [endTime, setEndTime] = useState<number>();
@@ -120,6 +116,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       return;
     }
 
+    const user = session?.data?.user;
     if (!session?.data?.user?.email) {
       router.push("/404");
       return;
@@ -127,9 +124,9 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
 
     const selectedUser = instructors?.find(
       (instructor) => instructor.id === selectedInstructorId
-    ) as IUserReadOnly;
+    );
 
-    const lessonTemplateBody: ILessonTemplate = {
+    const lessonTemplateBody: any = {
       availability: formData?.availability || MIN_AVAILABILITY,
       endTime: endTime || 1,
       dayOfWeek: dayOfWeek || 1,
@@ -137,10 +134,10 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       location: formData?.roomLocation,
       price: formData?.price || 0,
       createdBy: {
-        _id: user?.user_id,
+        _id: user?.id,
         name: user?.name,
         email: user?.email,
-      } as IUserEssential,
+      },
       currency: currency || "",
       instructor: selectedUser,
       name: formData?.lessonName || "default-name",

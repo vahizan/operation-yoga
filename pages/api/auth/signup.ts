@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { User, USER_MODEL_NAME } from "../../../model/User.model";
-import MongooseDatabaseConnection from "../../../connector/MongoDatabaseConnection";
 import { hashPassword } from "../../../helpers/loginHelper";
-import createMongoConnection from "../../../connector/createMongoConnection";
+import prismaClient from "../../../connector/Prisma/prismaClient";
+import { UserType } from "../../../enum/UserType";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,16 +15,13 @@ export default async function handler(
       return;
     }
 
-    const mongoConnector = createMongoConnection();
+    const mongoPrisma = prismaClient;
 
-    const connection = await mongoConnector.connect();
-
-    if (!connection) {
+    if (!mongoPrisma) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const users = connection.model(USER_MODEL_NAME);
-    const existingUser = await users.findOne({ email });
+    const existingUser = await mongoPrisma.user.findFirst({ where: email });
 
     if (existingUser) {
       return res
@@ -39,11 +35,12 @@ export default async function handler(
 
     const userProps = { name, email, password: hashedPass };
     const newUser = req.body?.phone
-      ? new User({ ...userProps, phone: req.body.phone })
-      : new User(userProps);
+      ? { ...userProps, phone: req.body.phone }
+      : userProps;
 
-    await users.create(newUser);
-    await mongoConnector.disconnect();
+    await mongoPrisma.user.create({
+      data: { ...newUser, type: UserType.CUSTOMER },
+    });
 
     return res.status(201).json({ message: "User created successfully." });
   } catch (error) {

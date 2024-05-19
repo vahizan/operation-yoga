@@ -1,6 +1,4 @@
 import { authorizeLogin, getTokenPayload } from "../authenticationHelper";
-import { NextApiRequest, NextApiResponse } from "next";
-import { authOptions } from "../../pages/api/auth/[...nextauth]";
 import { comparePassword } from "../loginHelper";
 import { verify } from "jsonwebtoken";
 import createMongoConnection from "../../connector/createMongoConnection";

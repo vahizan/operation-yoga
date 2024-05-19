@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { getLessonTemplates } from "../../hooks/api";
-import { ILessonTemplateWithId } from "../../model/admin/LessonTemplate.model";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const Templates: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
-  const [templates, setTemplates] = useState<ILessonTemplateWithId[]>();
+  const [templates, setTemplates] = useState<any[]>();
   const [templatesFetchError, setTemplatesFetchError] = useState<string>();
 
   const session = useSession();

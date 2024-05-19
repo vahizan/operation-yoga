@@ -1,5 +1,5 @@
 export enum UserType {
-  ADMIN = "admin",
-  SUBSCRIBER = "subscriber",
-  BANNED = "banned",
+  ADMIN = "ADMIN",
+  CUSTOMER = "CUSTOMER",
+  BANNED = "BANNED",
 }

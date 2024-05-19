@@ -1,23 +1,16 @@
-import { Connection } from "mongoose";
-import { IUserReadOnly, USER_MODEL_NAME } from "../../model/User.model";
 import { UserType } from "../../enum/UserType";
+import PrismaClient from "../../connector/Prisma/prismaClient";
 
-export interface InstructorsResponse {
-  data: IUserReadOnly[];
-}
-
-export const getInstructors = async (
-  connection: Connection
-): Promise<InstructorsResponse> => {
-  if (!connection) {
+export const getInstructors = async (): Promise<any | undefined> => {
+  const mongoPrismaClient = PrismaClient;
+  if (!mongoPrismaClient) {
     throw new Error("Connection Invalid");
   }
 
   try {
-    const results = await connection
-      .model(USER_MODEL_NAME)
-      .find({ type: UserType.ADMIN })
-      .select(["name", "email", "_id"]);
+    const results = await mongoPrismaClient.user.findMany({
+      where: { type: UserType.ADMIN },
+    });
 
     return {
       data: results,

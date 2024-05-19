@@ -2,12 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
 import { getInstructorLessons } from "../../../../helpers/admin/lessonsHelper";
-import { ILesson } from "../../../../model/Lesson.model";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<
-    { page: number; limit: number; data: ILesson[] } | { error: string }
+    { page: number; limit: number; data: any[] } | { error: string }
   >
 ) {
   const { method, query } = req;
@@ -28,7 +27,7 @@ export default async function handler(
     const page = q.page || 1;
     const limit = q.limit || 10;
 
-    getInstructorLessons(connection, page, limit, query?.id as string)
+    getInstructorLessons(page, limit, query?.id as string)
       .then((results) => res.status(200).json(results))
       .catch((err) => {
         res.status(500).json(err);

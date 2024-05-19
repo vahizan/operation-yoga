@@ -1,10 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import AuthenticationStatusCode from "../../../helpers/AuthenticationStatusCode";
-import { USER_MODEL_NAME } from "../../../model/User.model";
 import { sendPasswordResetEmail } from "../../../helpers/passwordResetEmail";
-import createMongoConnection from "../../../connector/createMongoConnection";
 import EnquireTemplate from "../enquire/email-templates/EnquireTemplate";
+import PrismaClient from "../../../connector/Prisma/prismaClient";
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,16 +11,13 @@ export default async function handler(
 ) {
   const { email } = req.body;
   try {
-    const mongoConnector = createMongoConnection();
-    const connection = await mongoConnector.connect();
+    const mongoPrismaClient = PrismaClient;
 
-    if (!connection) {
+    if (!mongoPrismaClient) {
       return res.status(500).json({ message: "connection error" });
     }
 
-    const user = await connection.model(USER_MODEL_NAME).findOne({
-      email: email,
-    });
+    const user = await mongoPrismaClient.user.findUnique({ where: email });
 
     if (!user) {
       return res.status(404).json({ message: "user doesn't exist" });
@@ -35,16 +31,20 @@ export default async function handler(
     const token = jwt.sign({ id: user?.id }, secret, {
       expiresIn: "1d",
     });
-    connection
-      .model(USER_MODEL_NAME)
-      .updateOne(
-        {
-          email,
+
+    const currentDate = new Date();
+    const oneDayAhead = new Date(currentDate);
+    oneDayAhead.setDate(currentDate.getDate() + 1);
+
+    mongoPrismaClient.verificationToken
+      .create({
+        data: {
+          userId: user?.id,
+          token,
+          expires: oneDayAhead,
         },
-        {
-          verifyToken: token,
-        }
-      )
+      })
+
       .catch(() => {
         return res.status(500).json({ message: "unable to update user" });
       });
