@@ -2,8 +2,9 @@ import bcrypt from "bcryptjs";
 
 export const hashPassword = async (password: string, saltRounds = 10) => {
   try {
-    const salt = await bcrypt.genSalt(saltRounds);
-    return await bcrypt.hash(password, salt);
+    const pepper = process.env.PEPPER;
+    const saltedPassword = password + pepper;
+    return await bcrypt.hash(saltedPassword, saltRounds);
   } catch (error) {
     return null;
   }
@@ -17,7 +18,9 @@ export const comparePassword = async (
     return false;
   }
   try {
-    return await bcrypt.compare(password, hash);
+    const pepper = process.env.PEPPER;
+    const saltedInput = password + pepper;
+    return await bcrypt.compare(saltedInput, hash);
   } catch (error) {
     return false;
   }

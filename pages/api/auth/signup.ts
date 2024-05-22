@@ -1,12 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { hashPassword } from "../../../helpers/loginHelper";
-import prismaClient from "../../../connector/Prisma/prismaClient";
 import { UserType } from "../../../enum/UserType";
+import { CUSTOMER_SCOPE } from "./scopes";
+import { ProviderType } from "../../../enum/ProviderType";
+import PrismaClient from "../../../connector/Prisma/prismaClient";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
+  if (req.method !== "POST") {
+    return res.status(404).json({ message: "Method Invalid" });
+  }
+
   const { name, email, password } = req.body;
 
   try {
@@ -15,13 +21,13 @@ export default async function handler(
       return;
     }
 
-    const mongoPrisma = prismaClient;
+    const mongoPrisma = PrismaClient;
 
     if (!mongoPrisma) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const existingUser = await mongoPrisma.user.findFirst({ where: email });
+    const existingUser = await mongoPrisma.user.findFirst({ where: { email } });
 
     if (existingUser) {
       return res
@@ -33,17 +39,29 @@ export default async function handler(
       res.status(500).json({ message: "An error occurred. Please try again." });
     }
 
-    const userProps = { name, email, password: hashedPass };
+    const userProps = { name, email };
     const newUser = req.body?.phone
       ? { ...userProps, phone: req.body.phone }
       : userProps;
 
-    await mongoPrisma.user.create({
+    const user = await mongoPrisma.user.create({
       data: { ...newUser, type: UserType.CUSTOMER },
+    });
+
+    await mongoPrisma.account.create({
+      data: {
+        userId: user.id,
+        type: ProviderType.CREDENTIALS,
+        provider: ProviderType.CREDENTIALS,
+        providerAccountId: "0",
+        passwordHash: hashedPass,
+        scope: CUSTOMER_SCOPE,
+      },
     });
 
     return res.status(201).json({ message: "User created successfully." });
   } catch (error) {
+    console.log("error", error);
     res.status(500).json({ message: "An error occurred. Please try again." });
   }
 }

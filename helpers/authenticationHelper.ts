@@ -1,47 +1,61 @@
 import { comparePassword } from "./loginHelper";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import PrismaClient from "../connector/Prisma/prismaClient";
+import { ProviderType } from "../enum/ProviderType";
 
 export const authorizeLogin = async (
   credentials: Partial<Record<"email" | "password", unknown>>
 ) => {
-  return {};
-  // {
-  //   if (!credentials?.email || !credentials.password) {
-  //     return null;
-  //   }
-  //
-  //   const mongoConnector = PrismaClient;
-  //
-  //   if (!mongoConnector) {
-  //     return null;
-  //   }
-  //   const user = await mongoConnector.user.findUnique({
-  //     where: {
-  //       email: credentials?.email,
-  //     },
-  //   });
-  //
-  //   if (!user) {
-  //     return null;
-  //   }
-  //
-  //   const isValidPassword = await comparePassword(
-  //     credentials?.password as string,
-  //     user?.password
-  //   );
-  //
-  //   if (!isValidPassword) {
-  //     return null;
-  //   }
-  //
-  //   return {
-  //     id: user._id,
-  //     email: user.email,
-  //     name: user.name,
-  //     userType: user.type,
-  //   };
-  // }
+  {
+    if (!credentials?.email || !credentials.password) {
+      return null;
+    }
+
+    const mongoConnector = PrismaClient;
+
+    if (!mongoConnector) {
+      return null;
+    }
+    const user = await mongoConnector.user.findFirst({
+      where: {
+        email: credentials?.email as string,
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    const account = await mongoConnector.account.findFirst({
+      where: {
+        userId: user?.id,
+        provider: ProviderType.CREDENTIALS,
+      },
+    });
+
+    console.log("ACCOUNT", account);
+
+    if (!account) {
+      return null;
+    }
+
+    const isValidPassword = await comparePassword(
+      credentials?.password as string,
+      account.passwordHash || ""
+    );
+
+    if (!isValidPassword) {
+      return null;
+    }
+
+    return {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      userType: account.type,
+      scope: account?.scope,
+    };
+  }
 };
 
 export const getTokenPayload = (

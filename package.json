@@ -3,6 +3,7 @@
   "scripts": {
     "postinstall": "npm run push:mongodb",
     "dev": "next dev",
+    "dev:debug": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",
     "dev:email": "email dev",
