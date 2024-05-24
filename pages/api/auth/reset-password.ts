@@ -3,6 +3,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { getTokenPayload } from "../../../helpers/authenticationHelper";
 import { hashPassword } from "../../../helpers/loginHelper";
 import PrismaClient from "../../../connector/Prisma/prismaClient";
+import { ProviderType } from "../../../enum/ProviderType";
 
 export default async function handler(
   req: NextApiRequest,
@@ -56,9 +57,9 @@ export default async function handler(
       },
     });
 
-    // const verificationToken = await connection.verificationToken.findUnique({
+    // const verificationToken = await connection.verificationToken.findFirst({
     //   where: {
-    //     userId: user.id,
+    //     userId: user.id || "",
     //   },
     // });
     //
@@ -66,12 +67,20 @@ export default async function handler(
     //   return res.status(500).json({ message: "user doesn't exist" });
     // }
     //
-    // if (verifyToken !== user?.verifyToken) {
+    // if (verifyToken !== verificationToken?.token) {
     //   return res.status(403).json({ message: "Link expired" });
     // }
     //
-    // user.password = await hashPassword(password);
-    // await user.save();
+    // const account = await connection.account.update({
+    //   where: {
+    //     userId: user?.id,
+    //     type: ProviderType.CREDENTIALS,
+    //     provider: ProviderType.CREDENTIALS,
+    //   },
+    //   data: {
+    //     passwordHash: hashPassword(password),
+    //   },
+    // });
 
     return res
       .status(200)

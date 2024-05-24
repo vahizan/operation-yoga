@@ -17,7 +17,9 @@ export default async function handler(
       return res.status(500).json({ message: "connection error" });
     }
 
-    const user = await mongoPrismaClient.user.findUnique({ where: email });
+    const user = await mongoPrismaClient.user.findFirstOrThrow({
+      where: { email },
+    });
 
     if (!user) {
       return res.status(404).json({ message: "user doesn't exist" });
