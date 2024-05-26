@@ -4,6 +4,7 @@ import { getTokenPayload } from "../../../helpers/authenticationHelper";
 import { hashPassword } from "../../../helpers/loginHelper";
 import PrismaClient from "../../../connector/Prisma/prismaClient";
 import { ProviderType } from "../../../enum/ProviderType";
+import { ProviderAccountId } from "../../../enum/ProviderAccountId";
 
 export default async function handler(
   req: NextApiRequest,
@@ -57,30 +58,51 @@ export default async function handler(
       },
     });
 
-    // const verificationToken = await connection.verificationToken.findFirst({
-    //   where: {
-    //     userId: user.id || "",
-    //   },
-    // });
-    //
-    // if (!user) {
-    //   return res.status(500).json({ message: "user doesn't exist" });
-    // }
-    //
-    // if (verifyToken !== verificationToken?.token) {
-    //   return res.status(403).json({ message: "Link expired" });
-    // }
-    //
-    // const account = await connection.account.update({
-    //   where: {
-    //     userId: user?.id,
-    //     type: ProviderType.CREDENTIALS,
-    //     provider: ProviderType.CREDENTIALS,
-    //   },
-    //   data: {
-    //     passwordHash: hashPassword(password),
-    //   },
-    // });
+    const verificationToken =
+      await connection.verificationToken.findFirstOrThrow({
+        where: {
+          userId: user?.id || "",
+        },
+      });
+
+    if (!user) {
+      return res.status(403).json({ message: "user doesn't exist" });
+    }
+
+    if (verifyToken !== verificationToken?.token) {
+      return res.status(403).json({ message: "Link expired" });
+    }
+    const passwordHash = await hashPassword(password);
+
+    if (!passwordHash) {
+      return res.status(403).json({ message: "Password couldn't be changed" });
+    }
+
+    await connection.account.update({
+      where: {
+        userId: user?.id,
+        provider_providerAccountId: {
+          provider: ProviderType.CREDENTIALS,
+          providerAccountId: ProviderAccountId.CREDENTIALS,
+        },
+      },
+      data: {
+        passwordHash,
+      },
+    });
+
+    await connection.verificationToken.update({
+      where: {
+        identifier_token: {
+          identifier: ProviderType.CREDENTIALS,
+          token: verificationToken?.token,
+        },
+        userId: user?.id || "",
+      },
+      data: {
+        expires: undefined,
+      },
+    });
 
     return res
       .status(200)

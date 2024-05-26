@@ -4,6 +4,7 @@ import { UserType } from "../../../enum/UserType";
 import { CUSTOMER_SCOPE } from "./scopes";
 import { ProviderType } from "../../../enum/ProviderType";
 import PrismaClient from "../../../connector/Prisma/prismaClient";
+import { ProviderAccountId } from "../../../enum/ProviderAccountId";
 
 export default async function handler(
   req: NextApiRequest,
@@ -53,7 +54,7 @@ export default async function handler(
         userId: user.id,
         type: ProviderType.CREDENTIALS,
         provider: ProviderType.CREDENTIALS,
-        providerAccountId: "0",
+        providerAccountId: ProviderAccountId.CREDENTIALS,
         passwordHash: hashedPass,
         scope: CUSTOMER_SCOPE,
       },
