@@ -8,7 +8,7 @@ import { ProviderAccountId } from "../../../enum/ProviderAccountId";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ message: string }>
+  res: NextApiResponse<{ message: string; data?: any }>
 ) {
   try {
     // Check if the request method is POST
@@ -47,7 +47,8 @@ export default async function handler(
     const expirationDate = new Date((tokenPayload?.exp || 0) * 1000);
 
     // Check if the token has expired
-    if (expirationDate <= new Date(Date.now())) {
+    const currentDate = new Date(Date.now());
+    if (expirationDate <= currentDate) {
       return res.status(403).json({ message: "This link has expired" });
     }
 
@@ -62,7 +63,11 @@ export default async function handler(
       await connection.verificationToken.findFirstOrThrow({
         where: {
           userId: user?.id || "",
+          expires: {
+            gte: currentDate,
+          },
         },
+        orderBy: { expires: "desc" },
       });
 
     if (!user) {
@@ -70,7 +75,9 @@ export default async function handler(
     }
 
     if (verifyToken !== verificationToken?.token) {
-      return res.status(403).json({ message: "Link expired" });
+      return res
+        .status(403)
+        .json({ message: "Link expired", data: tokenPayload });
     }
     const passwordHash = await hashPassword(password);
 
@@ -91,16 +98,13 @@ export default async function handler(
       },
     });
 
-    await connection.verificationToken.update({
+    await connection.verificationToken.delete({
       where: {
         identifier_token: {
           identifier: ProviderType.CREDENTIALS,
           token: verificationToken?.token,
         },
         userId: user?.id || "",
-      },
-      data: {
-        expires: undefined,
       },
     });
 

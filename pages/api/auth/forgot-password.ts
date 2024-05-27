@@ -83,10 +83,15 @@ export default async function handler(
       ),
     });
 
-    if (result !== AuthenticationStatusCode.SUCCESS) {
+    if (result === AuthenticationStatusCode.EMAIL_FAILED) {
       return res.status(500).json({
         message: "Internal server error.",
         code: AuthenticationStatusCode.EMAIL_FAILED,
+      });
+    } else if (result == AuthenticationStatusCode.USER_NOT_EXIST) {
+      return res.status(200).json({
+        message: "User doesn't exist",
+        code: AuthenticationStatusCode.USER_NOT_EXIST,
       });
     }
     return res.status(200).json({
