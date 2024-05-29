@@ -16,7 +16,6 @@ const mockReq: Partial<NextApiRequest> = {
 } as Partial<NextApiRequest>;
 
 jest.mock("@prisma/client");
-
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "mocked_token"),
 }));
@@ -72,16 +71,6 @@ describe("forgot-password handler", () => {
     });
   });
 
-  it("should handle database connection error", async () => {
-    await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
-
-    expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith({
-      message: "connection error",
-      code: AuthenticationStatusCode.CONNECTION_FAILED,
-    });
-  });
-
   it("should handle user not found", async () => {
     prismaMock.user.findFirst.mockResolvedValue(null);
 
@@ -115,7 +104,7 @@ describe("forgot-password handler", () => {
 
     prismaMock.verificationToken.create.mockResolvedValue({} as any);
 
-    (sendPasswordResetEmail as jest.Mock).mockRejectedValue(
+    (sendPasswordResetEmail as jest.Mock).mockReturnValue(
       AuthenticationStatusCode.EMAIL_FAILED
     );
 

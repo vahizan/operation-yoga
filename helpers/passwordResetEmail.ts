@@ -21,7 +21,7 @@ export const sendPasswordResetEmail = async (
     if (!mongoConnector) {
       return AuthenticationStatusCode.CONNECTION_FAILED;
     }
-    const user = await mongoConnector.user.findFirstOrThrow({
+    const user = await mongoConnector.user.findFirst({
       where: {
         email: emailInfo.email,
       },
