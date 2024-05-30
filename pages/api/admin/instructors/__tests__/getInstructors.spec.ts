@@ -2,8 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../index";
 import MongoDatabaseConnection from "../../../../../connector/MongoDatabaseConnection";
 
-jest.mock("../../../../../connector/MongoDatabaseConnection");
-
 const mockRequest = (): NextApiRequest =>
   <NextApiRequest>{
     body: {

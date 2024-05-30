@@ -3,8 +3,6 @@ import { sendEmail } from "../sendEmail";
 import { prismaMock } from "../../prismaMockSingleton";
 import AuthenticationStatusCode from "../AuthenticationStatusCode";
 
-jest.mock("../../connector/createMongoConnection");
-
 jest.mock("@prisma/client");
 
 jest.mock("../sendEmail", () => {

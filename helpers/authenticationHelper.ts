@@ -33,8 +33,6 @@ export const authorizeLogin = async (
       },
     });
 
-    console.log("ACCOUNT", account);
-
     if (!account) {
       return null;
     }
