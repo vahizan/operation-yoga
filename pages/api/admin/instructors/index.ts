@@ -1,21 +1,23 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getInstructors } from "../../../../helpers/admin/instructors";
+import { getInstructors } from "../../../../helpers/admin/getInstructors";
 import { UserType } from "../../../../enum/UserType";
 import { getUserById } from "../../../../helpers/admin/getUserById";
 import PrismaClient from "../../../../connector/Prisma/prismaClient";
+import { auth } from "../../../../auth";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any | { error: string }>
 ) {
-  const { method, query } = req;
+  const { method } = req;
+  const session = await auth();
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!query?.user_id) {
+  if (!session) {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
@@ -24,7 +26,7 @@ export default async function handler(
   if (!mongoClient) {
     return res.status(403).json({ error: "Unauthorized" });
   }
-  const user = await getUserById(query?.user_id as string);
+  const user = await getUserById(session?.user?.id as string);
 
   if (!user) {
     res.status(404).json({ error: `Not Found` });
