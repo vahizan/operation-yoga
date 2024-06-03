@@ -4,7 +4,7 @@ export const getInstructorLessons = async (
   page: number,
   limit: number,
   instructorId: string
-): Promise<any> => {
+): Promise<{ page: number; limit: number; data: any }> => {
   const offset = (page - 1) * limit;
   const mongoPrismaClient = PrismaClient;
 
@@ -14,6 +14,8 @@ export const getInstructorLessons = async (
 
   try {
     const instructorBookings = await mongoPrismaClient.lesson.findMany({
+      skip: offset,
+      take: limit,
       where: {
         instructorId,
       },

@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import createMongoConnection from "../../../../connector/createMongoConnection";
 import { IPaginatedQuery } from "../../interfaces/IPaginatedQuery";
-import { getInstructorLessons } from "../../../../helpers/admin/lessonsHelper";
+import { getInstructorLessons } from "../../../../helpers/admin/instructorLessonsHelper";
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,23 +16,14 @@ export default async function handler(
     return;
   }
 
-  const mongoConnector = createMongoConnection();
+  const page = q.page || 1;
+  const limit = q.limit || 10;
 
-  const connection = await mongoConnector.connect();
-
-  if (!connection) {
-    res.status(403).json({ error: "Unauthorized" });
-  } else {
-    const page = q.page || 1;
-    const limit = q.limit || 10;
-
-    getInstructorLessons(page, limit, query?.id as string)
-      .then((results) => res.status(200).json(results))
-      .catch((err) => {
-        res.status(500).json(err);
-      })
-      .finally(() => {
-        mongoConnector.disconnect();
-      });
+  try {
+    const result = await getInstructorLessons(page, limit, query?.id as string);
+    res.status(200).json(result);
+  } catch (err) {
+    const error = err as Error;
+    res.status(500).json({ error: error.message });
   }
 }
