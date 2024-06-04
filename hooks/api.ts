@@ -27,18 +27,18 @@ export const updateLessonTemplate = async (body: any): Promise<any> => {
   return await axios.post("/api/admin/lesson/templates/update", body);
 };
 
-export const getLessonTemplates = async (
+export const getAdminLessons = async (
   filters: AdminLessonQuery
 ): Promise<{ data: any[] }> => {
   let query = "";
   if (filters.userId) {
     query += `userId=${filters.userId}`;
   }
-  if (filters.templateId) {
-    query += `&templateId=${filters.templateId}`;
+  if (filters.id) {
+    query += `&templateId=${filters.id}`;
   }
-  if (filters.createdById) {
-    query += `createdById=${filters.createdById}`;
+  if (filters.lessonCreatorId) {
+    query += `createdById=${filters.lessonCreatorId}`;
   }
 
   return await axios.get(
