@@ -1,9 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../create";
-import MongoDatabaseConnection from "../../../../../connector/MongoDatabaseConnection";
-import { AxiosError } from "axios";
-
-jest.mock("../../../../../../connector/MongoDatabaseConnection");
+import { prismaMock } from "../../../../../prismaMockSingleton";
 
 describe("API Create Template Handler Tests", () => {
   const jsonMock = jest.fn();
@@ -51,79 +48,35 @@ describe("API Create Template Handler Tests", () => {
     await expect(jsonMock).toHaveBeenCalledWith({ error: "Method Invalid" });
   });
 
-  it("should return 403 if unable to connect to MongoDB", async () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(403);
-    await expect(jsonMock).toHaveBeenCalledWith({ error: "Unauthorized" });
-  });
-
   it("should return 500 if create fails", async () => {
     const req = mockRequest();
-
     const res = mockResponse();
 
-    const mockCreate = {
-      create: jest.fn().mockRejectedValue(new Error()),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockCreate),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
+    prismaMock.adminLesson.create.mockRejectedValue(new Error("Create failed"));
 
     await handler(req, res);
 
-    await expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(jsonMock).toHaveBeenCalledWith({
+      error: "Internal server error",
+    });
   });
 
   it("should return 200 and create a new template successfully", async () => {
     const req = mockRequest();
     const res = mockResponse();
 
-    // Mock the Mongoose create method to return a successful response
-    const mockUsers = {
-      create: jest.fn().mockResolvedValue("Template created"),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockUsers),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
+    prismaMock.adminLesson.create.mockResolvedValue({
+      id: "1",
+      name: "Lesson 1",
+    } as any);
 
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    expect(jsonMock).toHaveBeenCalledWith("Template created");
-  });
-
-  it("should return 500 if an error occurs during database connection", async () => {
-    const req = mockRequest();
-    const res = mockResponse();
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue({
-      connect: jest.fn().mockRejectedValue(() => {
-        throw new Error("Database connection error");
-      }),
-      disconnect: jest.fn(),
-    });
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(jsonMock).toHaveBeenCalledWith({
-      error: "DB connection error",
+    await expect(jsonMock).toHaveBeenCalledWith({
+      id: "1",
+      name: "Lesson 1",
     });
   });
 });

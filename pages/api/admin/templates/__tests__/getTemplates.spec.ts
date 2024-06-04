@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../index";
-import MongoDatabaseConnection from "../../../../../connector/MongoDatabaseConnection";
-
-jest.mock("../../../../../../connector/MongoDatabaseConnection");
+import { prismaMock } from "../../../../../prismaMockSingleton";
 
 describe("API Get Template By UserId Handler Tests", () => {
   const jsonMock = jest.fn();
@@ -36,66 +34,15 @@ describe("API Get Template By UserId Handler Tests", () => {
 
   it("should return 404 if request method is incorrect", async () => {
     const req = mockRequest("POST");
-
     const res = mockResponse();
 
     await handler(req, res);
 
-    await expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.status).toHaveBeenCalledWith(404);
     await expect(jsonMock).toHaveBeenCalledWith({ error: "Method Invalid" });
   });
 
-  it("should return 403 if unable to connect to MongoDB", async () => {
-    const req = mockRequest();
-    req.query = {
-      userId: "w",
-      page: "!",
-      limit: "a",
-    };
-    const res = mockResponse();
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(403);
-    await expect(jsonMock).toHaveBeenCalledWith({ error: "Unauthorized" });
-  });
-
   it("should return 500 if an error occurs when getting templates", async () => {
-    const req = mockRequest();
-    req.query = {
-      page: "2",
-      limit: "10",
-      userId: "@12312321",
-    };
-    const res = mockResponse();
-
-    const findMock = jest.fn().mockReturnValue({
-      limit: jest
-        .fn()
-        .mockResolvedValue({ skip: jest.fn().mockRejectedValue("") }),
-    });
-    const mockGetTemplates = {
-      find: findMock,
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockGetTemplates),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
-
-    await handler(req, res);
-
-    expect(statusMock).toHaveBeenCalledWith(500);
-    expect(jsonMock).toHaveBeenCalledWith({
-      error: "An error occurred. Please try again.",
-    });
-  });
-
-  it("should return 500 if an error occurs during database connection", async () => {
     const req = mockRequest();
     req.query = {
       userId: "543",
@@ -104,18 +51,15 @@ describe("API Get Template By UserId Handler Tests", () => {
     };
     const res = mockResponse();
 
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue({
-      connect: () => {
-        throw new Error("Database connection error");
-      },
-      disconnect: jest.fn(),
-    });
+    prismaMock.adminLesson.findMany.mockRejectedValue(
+      new Error("Connection Invalid")
+    );
 
     await handler(req, res);
 
-    expect(statusMock).toHaveBeenCalledWith(500);
-    expect(jsonMock).toHaveBeenCalledWith({
-      error: "DB connection error",
+    expect(res.status).toHaveBeenCalledWith(500);
+    await expect(jsonMock).toHaveBeenCalledWith({
+      error: "An error occurred. Please try again.",
     });
   });
 
@@ -135,8 +79,8 @@ describe("API Get Template By UserId Handler Tests", () => {
   it("should return 400 for missing page value", async () => {
     const req = mockRequest();
     req.query = {
-      userId: "2",
       limit: "10",
+      userId: "10",
     };
     const res = mockResponse();
 
@@ -158,36 +102,32 @@ describe("API Get Template By UserId Handler Tests", () => {
     expect(statusMock).toHaveBeenCalledWith(400);
   });
 
-  it("should return 200 and create a new user successfully", async () => {
+  it("should return 200 when admin lessons are received successfully", async () => {
     const req = mockRequest();
     req.query = {
       page: "2",
       limit: "10",
-      userId: "@12312321",
+      userId: "10",
     };
     const res = mockResponse();
 
-    // Mock the Mongoose create method to return a successful response
-    const mockUsers = {
-      find: jest.fn().mockReturnValue({
-        limit: jest
-          .fn()
-          .mockReturnValue({ skip: jest.fn().mockReturnValue("results") }),
-      }),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockUsers),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
-
-    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
+    prismaMock.adminLesson.findMany.mockResolvedValue([
+      {
+        id: "1",
+        instructorId: "10",
+        lessonCreatorId: "10",
+      } as any,
+    ]);
 
     await handler(req, res);
 
-    expect(statusMock).toHaveBeenCalledWith(200);
-    expect(jsonMock).toHaveBeenCalledWith("results");
+    expect(res.status).toHaveBeenCalledWith(200);
+    await expect(jsonMock).toHaveBeenCalledWith([
+      {
+        id: "1",
+        instructorId: "10",
+        lessonCreatorId: "10",
+      },
+    ]);
   });
 });

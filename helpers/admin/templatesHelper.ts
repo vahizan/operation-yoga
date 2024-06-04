@@ -2,8 +2,8 @@ import PrismaClient from "../../connector/Prisma/prismaClient";
 
 export interface TemplateFilters {
   instructorId?: string;
-  createdBy?: string;
-  _id?: string;
+  lessonCreatorId?: string;
+  id?: string;
 }
 
 export const getLessonTemplatesById = async (

@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getLessonTemplatesById } from "../../../../helpers/admin/templatesHelper";
-import GetTemplatesQuery from "../../interfaces/GetTemplatesQuery";
+import AdminLessonQuery from "../../interfaces/AdminLessonQuery";
 import PrismaClient from "../../../../connector/Prisma/prismaClient";
 
 export default async function handler(
@@ -8,15 +8,14 @@ export default async function handler(
   res: NextApiResponse<any[] | { error: string }>
 ) {
   const { method, query } = req;
-  console.log("query", query);
-  const q = query as unknown as GetTemplatesQuery;
+  const q = query as unknown as AdminLessonQuery;
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!q?.userId && !q?.templateId && !q?.createdById) {
+  if (!q?.userId && !q?.id && !q?.lessonCreatorId) {
     res.status(400);
     return;
   }
@@ -36,9 +35,9 @@ export default async function handler(
   const limit = q?.limit || 10;
   try {
     const lessonTemplates = await getLessonTemplatesById(page, limit, {
-      createdBy: q?.userId,
-      _id: q?.templateId,
-      instructorId: q?.templateId,
+      lessonCreatorId: q?.lessonCreatorId,
+      id: q?.id,
+      instructorId: q?.userId,
     });
     res.status(200).json(lessonTemplates);
   } catch (err) {

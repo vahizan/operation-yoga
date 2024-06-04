@@ -1,7 +1,7 @@
 import { ILesson, ISession } from "../pages/api/interfaces";
 import Email from "./interfaces/Email";
 import axios from "axios";
-import GetTemplatesQuery from "../pages/api/interfaces/GetTemplatesQuery";
+import AdminLessonQuery from "../pages/api/interfaces/AdminLessonQuery";
 import { IPaginatedQuery } from "../pages/api/interfaces/IPaginatedQuery";
 
 export const getSchedule = async (
@@ -28,7 +28,7 @@ export const updateLessonTemplate = async (body: any): Promise<any> => {
 };
 
 export const getLessonTemplates = async (
-  filters: GetTemplatesQuery
+  filters: AdminLessonQuery
 ): Promise<{ data: any[] }> => {
   let query = "";
   if (filters.userId) {

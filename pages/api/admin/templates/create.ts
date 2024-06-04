@@ -16,7 +16,7 @@ export default async function handler(
   const mongoPrismaClient = PrismaClient;
 
   if (!mongoPrismaClient) {
-    res.status(500).json({ error: "connection error" });
+    res.status(500).json({ error: "Connection Error" });
     return;
   }
 
@@ -24,7 +24,6 @@ export default async function handler(
     const results = await mongoPrismaClient.adminLesson.create(reqBody);
     res.status(200).json(results);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 }
