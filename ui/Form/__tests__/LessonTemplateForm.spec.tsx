@@ -1,11 +1,11 @@
 import React from "react";
+import { SessionProvider } from "next-auth/react";
 import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import LessonTemplateForm from "../LessonTemplateForm";
 import { getInstructors } from "../../../hooks/api";
 import { UserType } from "../../../enum/UserType";
 import { useRouter } from "next/navigation";
-import { SessionProvider } from "next-auth/react";
 
 jest.mock("../../../hooks/api", () => ({
   ...jest.requireActual("../../../hooks/api"),

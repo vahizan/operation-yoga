@@ -3,8 +3,8 @@ import bcrypt from "bcryptjs";
 export const hashPassword = async (password: string, saltRounds = 10) => {
   try {
     const pepper = process.env.PEPPER;
-    const saltedPassword = password + pepper;
-    return await bcrypt.hash(saltedPassword, saltRounds);
+    const pepperedPassword = password + pepper;
+    return await bcrypt.hash(pepperedPassword, saltRounds);
   } catch (error) {
     return null;
   }

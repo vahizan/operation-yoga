@@ -39,7 +39,7 @@ describe("InputField component", () => {
   it("renders error message when errors prop is provided", () => {
     const errorProps = {
       ...defaultProps,
-      errors: "This is an error message",
+      errorMessage: "This is an error message",
     };
     render(<InputField {...errorProps} />);
     const errorMessage = screen.getByText("This is an error message");

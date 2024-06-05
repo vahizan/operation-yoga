@@ -4,7 +4,6 @@ import { verify } from "jsonwebtoken";
 import { prismaMock } from "../../prismaMockSingleton";
 
 jest.mock("bcryptjs");
-jest.mock("mongoose");
 jest.mock("../loginHelper");
 
 jest.mock("jsonwebtoken", () => ({
