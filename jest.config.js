@@ -24,6 +24,11 @@ const customJestConfig = {
     "^@/ui/(.*)$": "<rootDir>/ui/$1",
 
     "^@/hooks/(.*)$": "<rootDir>/hooks/$1",
+
+    "@/auth": "<rootDir>/authMocks/auth.ts",
+    "next-auth/providers/credentials":
+      "<rootDir>/authMocks/next-auth-providers-credentials.ts",
+    "next-auth": "<rootDir>/authMocks/next-auth.ts",
   },
   testEnvironment: "jest-environment-jsdom",
 };

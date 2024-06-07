@@ -28,8 +28,7 @@ const LoginForm: FC = () => {
       email,
       password,
     })
-      .catch((err) => {
-        console.log("err", err);
+      .catch(() => {
         setError("Invalid username or password. Please try again");
       })
       .finally(() => {

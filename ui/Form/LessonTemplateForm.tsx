@@ -101,6 +101,10 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   }, [instructors]);
 
   useEffect(() => {
+    if (!isSubmit) {
+      return;
+    }
+
     const validationErrors = validateInput(
       { ...formData, startTime, endTime, dayOfWeek },
       currency as Currency,
@@ -112,12 +116,8 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       return;
     }
 
-    if (!isSubmit) {
-      return;
-    }
-
     const user = session?.data?.user;
-    if (!session?.data?.user?.email) {
+    if (!user?.email) {
       router.push("/404");
       return;
     }
