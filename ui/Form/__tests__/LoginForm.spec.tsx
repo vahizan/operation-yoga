@@ -3,7 +3,10 @@ import { render, fireEvent, waitFor } from "@testing-library/react";
 import LoginForm from "../LoginForm";
 import { signIn } from "next-auth/react";
 
-jest.mock("next-auth/react");
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  signIn: jest.fn(),
+}));
 
 describe("LoginForm", () => {
   it("should display error message when form is submitted with empty fields", async () => {
@@ -17,8 +20,7 @@ describe("LoginForm", () => {
   });
 
   it("should display error message when login fails", async () => {
-    const signInMock = jest.fn(() => ({ error: "Invalid credentials" }));
-    (signIn as jest.Mock).mockImplementationOnce(signInMock);
+    (signIn as jest.Mock).mockRejectedValue({ error: "Invalid credentials" });
 
     const { getByText, getByLabelText } = render(<LoginForm />);
 
@@ -30,18 +32,20 @@ describe("LoginForm", () => {
     fireEvent.submit(getByText("Login"));
 
     await waitFor(() => {
-      expect(signInMock).toHaveBeenCalledWith("credentials", {
-        redirect: false,
+      expect(signIn).toHaveBeenCalledWith("credentials", {
+        redirect: true,
+        callbackUrl: "/",
         email: "test@example.com",
         password: "password",
       });
-      expect(getByText("Invalid credentials")).toBeInTheDocument();
+      expect(
+        getByText("Invalid username or password. Please try again")
+      ).toBeInTheDocument();
     });
   });
 
   it("should not display error message when login succeeds", async () => {
-    const signInMock = jest.fn(() => ({ error: null }));
-    (signIn as jest.Mock).mockImplementationOnce(signInMock);
+    (signIn as jest.Mock).mockResolvedValue({ error: null });
 
     const { getByText, getByLabelText, queryByText } = render(<LoginForm />);
 
@@ -53,12 +57,15 @@ describe("LoginForm", () => {
     fireEvent.submit(getByText("Login"));
 
     await waitFor(() => {
-      expect(signInMock).toHaveBeenCalledWith("credentials", {
-        redirect: false,
+      expect(signIn).toHaveBeenCalledWith("credentials", {
+        redirect: true,
+        callbackUrl: "/",
         email: "test@example.com",
         password: "password",
       });
-      expect(queryByText("Invalid credentials")).toBeNull();
+      expect(
+        queryByText("Invalid username or password. Please try again")
+      ).toBeNull();
     });
   });
 });

@@ -1,5 +1,4 @@
 import styles from "../Card.module.scss";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {

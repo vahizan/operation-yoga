@@ -33,6 +33,7 @@ const ResetPassword = () => {
       })
       .catch((err) => {
         if (err.response.status === 403) {
+          console.log("message", err);
           setResetStatus(
             "Password reset link expired. Redirecting you to forgot password page..."
           );

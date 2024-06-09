@@ -1,13 +1,19 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { User, USER_MODEL_NAME } from "../../../model/User.model";
-import MongooseDatabaseConnection from "../../../connector/MongoDatabaseConnection";
 import { hashPassword } from "../../../helpers/loginHelper";
-import createMongoConnection from "../../../connector/createMongoConnection";
+import { UserType } from "../../../enum/UserType";
+import { CUSTOMER_SCOPE } from "./scopes";
+import { ProviderType } from "../../../enum/ProviderType";
+import PrismaClient from "../../../connector/Prisma/prismaClient";
+import { ProviderAccountId } from "../../../enum/ProviderAccountId";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<{ message: string }>
 ) {
+  if (req.method !== "POST") {
+    return res.status(404).json({ message: "Method Invalid" });
+  }
+
   const { name, email, password } = req.body;
 
   try {
@@ -16,16 +22,13 @@ export default async function handler(
       return;
     }
 
-    const mongoConnector = createMongoConnection();
+    const mongoPrisma = PrismaClient;
 
-    const connection = await mongoConnector.connect();
-
-    if (!connection) {
+    if (!mongoPrisma) {
       return res.status(403).json({ message: "Unauthorized" });
     }
 
-    const users = connection.model(USER_MODEL_NAME);
-    const existingUser = await users.findOne({ email });
+    const existingUser = await mongoPrisma.user.findFirst({ where: { email } });
 
     if (existingUser) {
       return res
@@ -37,13 +40,25 @@ export default async function handler(
       res.status(500).json({ message: "An error occurred. Please try again." });
     }
 
-    const userProps = { name, email, password: hashedPass };
+    const userProps = { name, email };
     const newUser = req.body?.phone
-      ? new User({ ...userProps, phone: req.body.phone })
-      : new User(userProps);
+      ? { ...userProps, phone: req.body.phone }
+      : userProps;
 
-    await users.create(newUser);
-    await mongoConnector.disconnect();
+    const user = await mongoPrisma.user.create({
+      data: { ...newUser, type: UserType.CUSTOMER },
+    });
+
+    await mongoPrisma.account.create({
+      data: {
+        userId: user.id,
+        type: ProviderType.CREDENTIALS,
+        provider: ProviderType.CREDENTIALS,
+        providerAccountId: ProviderAccountId.CREDENTIALS,
+        passwordHash: hashedPass,
+        scope: CUSTOMER_SCOPE,
+      },
+    });
 
     return res.status(201).json({ message: "User created successfully." });
   } catch (error) {

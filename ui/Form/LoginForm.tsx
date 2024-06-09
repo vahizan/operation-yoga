@@ -1,8 +1,10 @@
+"use client";
+
 import { FC, FormEvent, useState } from "react";
-import { signIn } from "next-auth/react";
 import styles from "./loginForm.module.scss";
 import Link from "next/link";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
+import { signIn } from "next-auth/react";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
@@ -26,8 +28,7 @@ const LoginForm: FC = () => {
       email,
       password,
     })
-      .catch((err) => {
-        console.log("err", err);
+      .catch(() => {
         setError("Invalid username or password. Please try again");
       })
       .finally(() => {
@@ -55,9 +56,18 @@ const LoginForm: FC = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <Link className={styles.forgotLink} href={"/forgot-password"}>
-        Forgot?
-      </Link>
+      <div className={styles.additionalLinks}>
+        <Link className={styles.additionalLinks__signupLink} href={"/signup"}>
+          Signup
+        </Link>
+        <Link
+          className={styles.additionalLinks__forgotLink}
+          href={"/forgot-password"}
+        >
+          Forgot?
+        </Link>
+      </div>
+
       <button disabled={isLoggingIn} type="submit">
         {isLoggingIn ? <BouncingDotsLoader /> : <span>Login</span>}
       </button>

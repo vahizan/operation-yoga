@@ -1,14 +1,9 @@
 import { sendPasswordResetEmail } from "../passwordResetEmail";
-import createMongoConnection from "../../connector/createMongoConnection";
 import { sendEmail } from "../sendEmail";
+import { prismaMock } from "../../prismaMockSingleton";
+import AuthenticationStatusCode from "../AuthenticationStatusCode";
 
-jest.mock("../../connector/createMongoConnection");
-
-jest.mock("../../model/User.model", () => {
-  return {
-    USER_MODEL_NAME: "User",
-  };
-});
+jest.mock("@prisma/client");
 
 jest.mock("../sendEmail", () => {
   return {
@@ -33,59 +28,35 @@ describe("sendPasswordResetEmail", () => {
       html: "<p>Please reset your password.</p>",
     };
     const result = await sendPasswordResetEmail(invalidEmailInfo);
-    expect(result).toBe(3); // AuthenticationStatusCode.INVALID_CREDENTIALS
-  });
-
-  it("should return CONNECTION_FAILED when database connection fails", async () => {
-    (createMongoConnection as jest.Mock).mockReturnValue({
-      connect: () => undefined,
-    });
-
-    const result = await sendPasswordResetEmail(emailInfo);
-    expect(result).toBe(1); // AuthenticationStatusCode.CONNECTION_FAILED
+    expect(result).toBe(AuthenticationStatusCode.INVALID_CREDENTIALS);
   });
 
   it("should return USER_NOT_EXIST when user does not exist", async () => {
-    (createMongoConnection as jest.Mock).mockReturnValue({
-      connect: () => {
-        return { model: jest.fn().mockReturnValue({ findOne: () => null }) };
-      },
-    });
+    prismaMock.user.findFirst.mockResolvedValue(null);
 
     const result = await sendPasswordResetEmail(emailInfo);
-    expect(result).toBe(0); // AuthenticationStatusCode.USER_NOT_EXIST
+    expect(result).toBe(AuthenticationStatusCode.USER_NOT_EXIST);
   });
 
   it("should return SUCCESS when email is sent successfully", async () => {
-    (createMongoConnection as jest.Mock).mockReturnValue({
-      connect: () => {
-        return {
-          model: jest.fn().mockReturnValue({
-            findOne: () => Promise.resolve(true),
-          }),
-        };
-      },
-      disconnect: jest.fn(),
-    });
+    prismaMock.user.findFirst.mockResolvedValue({
+      email: "email@email.com",
+      id: "id",
+    } as any);
+
     const result = await sendPasswordResetEmail(emailInfo);
-    expect(result).toBe(4); // AuthenticationStatusCode.SUCCESS
+    expect(result).toBe(AuthenticationStatusCode.SUCCESS);
   });
 
   it("should return EMAIL_FAILED when email sending fails", async () => {
-    (createMongoConnection as jest.Mock).mockReturnValue({
-      connect: () => {
-        return {
-          model: jest.fn().mockReturnValue({
-            findOne: () => Promise.resolve(true),
-          }),
-        };
-      },
-      disconnect: jest.fn(),
-    });
+    prismaMock.user.findFirst.mockResolvedValue({
+      email: "email@email.com",
+      id: "id",
+    } as any);
 
-    (sendEmail as jest.Mock).mockReturnValue(Promise.reject("ERROR"));
+    (sendEmail as jest.Mock).mockRejectedValue("ERROR");
 
     const result = await sendPasswordResetEmail(emailInfo);
-    expect(result).toBe(5); // AuthenticationStatusCode.EMAIL_FAILED
+    expect(result).toBe(AuthenticationStatusCode.EMAIL_FAILED);
   });
 });

@@ -17,9 +17,8 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           <div
             class="navItem navItem__root"
           >
-             
             <a
-              class="navItem__link"
+              class="navItem__button"
               href="/"
             >
               Home
@@ -27,40 +26,69 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           </div>
           <ul
             class="navMenu__root__children"
-          >
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/location"
-              >
-                Location
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/booking"
-              >
-                Booking
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/contact-us"
-              >
-                Contact Us
-              </a>
-            </li>
-          </ul>
+          />
         </div>
       </div>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/location"
+        >
+          Location
+        </a>
+      </li>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/about"
+        >
+          About Us
+        </a>
+      </li>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/our-mission"
+        >
+          Our Mission
+        </a>
+      </li>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/teachers"
+        >
+          Our Teachers
+        </a>
+      </li>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/contact-us"
+        >
+          Contact Us
+        </a>
+      </li>
+      <li
+        class="navItem"
+      >
+        <a
+          class="navItem__button"
+          href="/quick-booking"
+        >
+          Quick Booking
+        </a>
+      </li>
       <div
         class="navMenu"
       >
@@ -70,52 +98,8 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           <div
             class="navItem navItem__root"
           >
-             
             <a
-              class="navItem__link"
-              href="/about-us"
-            >
-              About Us
-            </a>
-          </div>
-          <ul
-            class="navMenu__root__children"
-          >
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/mission"
-              >
-                Our Mission
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/teachers"
-              >
-                Our Teachers
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <div
-        class="navMenu"
-      >
-        <div
-          class="navMenu__root"
-        >
-          <div
-            class="navItem navItem__root"
-          >
-             
-            <a
-              class="navItem__link"
+              class="navItem__button"
               href="/veda-yogshala"
             >
               Veda Yogshala
@@ -128,7 +112,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-yogshala/yoga-classes"
               >
                 Yoga Classes
@@ -138,17 +122,17 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
-                href="/veda-yogshala/yoga-retreat"
+                class="navItem__button"
+                href="/veda-yogshala/retreats"
               >
-                Yoga Retreat
+                Retreats
               </a>
             </li>
             <li
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-yogshala/teacher-training-courses"
               >
                 Teachers' Training Courses
@@ -158,7 +142,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-yogshala/language-courses"
               >
                 Language Courses
@@ -168,7 +152,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-yogshala/indian-cooking-classes"
               >
                 Indian Cooking Classes
@@ -178,40 +162,10 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-yogshala/pranayama-meditation"
               >
                 Pranayama & Meditation
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/veda-yogshala/mantra-chanting"
-              >
-                Mantra Chanting
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/veda-yogshala/sound-healing"
-              >
-                Sound Healing
-              </a>
-            </li>
-            <li
-              class="navItem"
-            >
-              <a
-                class="navItem__link"
-                href="/veda-yogshala/reiki-healing"
-              >
-                Reiki Healing
               </a>
             </li>
           </ul>
@@ -226,9 +180,8 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           <div
             class="navItem navItem__root"
           >
-             
             <a
-              class="navItem__link"
+              class="navItem__button"
               href="/veda-spa"
             >
               Veda Spa
@@ -241,7 +194,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/veda-spa/spa-treatments"
               >
                 Spa Treatments
@@ -259,9 +212,8 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           <div
             class="navItem navItem__root"
           >
-             
             <a
-              class="navItem__link"
+              class="navItem__button"
               href="/blog"
             >
               Blog
@@ -274,7 +226,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/blog/what-is-hatha-yoga"
               >
                 What is Hatha Yoga
@@ -284,7 +236,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/blog/more-about-ashtanga"
               >
                 More about Ashtanga
@@ -294,7 +246,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/blog/mountain-pose-vs-downward-dog"
               >
                 Mountain Pose vs Downward Dog
@@ -312,9 +264,8 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
           <div
             class="navItem navItem__root"
           >
-             
             <a
-              class="navItem__link"
+              class="navItem__button"
               href="/gallery"
             >
               Gallery
@@ -327,7 +278,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/gallery/photo"
               >
                 Photo
@@ -337,7 +288,7 @@ exports[`Navigation generate nav links should create nav links from config 1`] =
               class="navItem"
             >
               <a
-                class="navItem__link"
+                class="navItem__button"
                 href="/gallery/video"
               >
                 Video
