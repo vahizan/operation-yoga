@@ -5,7 +5,7 @@ import { createLessonTemplate, getInstructors } from "../../../hooks/api";
 import { UserType } from "../../../enum/UserType";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import CreateLessonTemplate from "../create-lesson-template";
+import CreateLessonTemplate from "../../../pages/admin/create-lesson-template";
 
 jest.mock(
   "../../../ui/Layout",
