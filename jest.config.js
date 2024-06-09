@@ -7,14 +7,14 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$",
+  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|tsx)$",
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   testPathIgnorePatterns: ["<rootDir>/.next/", "<rootDir>/node_modules/"],
 
-  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
-  transform: {
-    "^.+\\.svg$": "jest-svg-transformer",
-  },
+  setupFilesAfterEnv: [
+    "<rootDir>/jest.setup.js",
+    "<rootDir>/prismaMockSingleton.ts",
+  ],
   moduleNameMapper: {
     // Handle module aliases (this will be automatically configured for you soon)
     "^@/components/(.*)$": "<rootDir>/components/$1",
@@ -24,6 +24,11 @@ const customJestConfig = {
     "^@/ui/(.*)$": "<rootDir>/ui/$1",
 
     "^@/hooks/(.*)$": "<rootDir>/hooks/$1",
+
+    "@/auth": "<rootDir>/authMocks/auth.ts",
+    "next-auth/providers/credentials":
+      "<rootDir>/authMocks/next-auth-providers-credentials.ts",
+    "next-auth": "<rootDir>/authMocks/next-auth.ts",
   },
   testEnvironment: "jest-environment-jsdom",
 };

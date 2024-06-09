@@ -1,12 +1,17 @@
 import NextAuth from "next-auth";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import clientPromise from "./lib/mongodb";
 import authConfig from "./auth.config";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import PrismaClient from "./connector/Prisma/prismaClient";
+
+const prisma = PrismaClient;
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
-  adapter: MongoDBAdapter(clientPromise),
-  session: { strategy: "jwt" },
+  adapter: PrismaAdapter(prisma),
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60,
+  },
   callbacks: {
     jwt: ({ token, user }) => {
       if (user) {

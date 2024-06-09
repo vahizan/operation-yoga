@@ -1,50 +1,29 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  ILessonTemplate,
-  LESSON_TEMPLATE_MODEL_NAME,
-} from "../../../../model/admin/LessonTemplate.model";
-import createMongoConnection from "../../../../connector/createMongoConnection";
+import PrismaClient from "../../../../connector/Prisma/prismaClient";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<string | { error: string }>
+  res: NextApiResponse<any | { error: string }>
 ) {
   let { method, body } = req;
-  const reqBody: ILessonTemplate = body;
+  const reqBody = body;
 
   if (method !== "POST") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  const mongoConnector = createMongoConnection();
+  const mongoPrismaClient = PrismaClient;
 
-  let connection = undefined;
-
-  try {
-    connection = await mongoConnector.connect();
-  } catch (error) {
-    res.status(500).json({ error: "DB connection error" });
-    await mongoConnector.disconnect();
+  if (!mongoPrismaClient) {
+    res.status(500).json({ error: "Connection Error" });
     return;
   }
 
-  if (!connection) {
-    console.warn("Unauthorized");
-
-    res.status(403).json({ error: "Unauthorized" });
-    return;
-  }
-
-  const lessonTemplates = connection.model(LESSON_TEMPLATE_MODEL_NAME);
-
   try {
-    const results = await lessonTemplates.create(reqBody);
+    const results = await mongoPrismaClient.adminLesson.create(reqBody);
     res.status(200).json(results);
   } catch (error) {
-    console.error(error);
     res.status(500).json({ error: "Internal server error" });
-  } finally {
-    await mongoConnector.disconnect();
   }
 }

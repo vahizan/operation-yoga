@@ -1,40 +1,32 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
-import createMongoConnection from "../../../../connector/createMongoConnection";
-import {
-  getInstructors,
-  InstructorsResponse,
-} from "../../../../helpers/admin/instructors";
-import { IUserReadOnly } from "../../../../model/User.model";
+import { getInstructors } from "../../../../helpers/admin/getInstructors";
 import { UserType } from "../../../../enum/UserType";
 import { getUserById } from "../../../../helpers/admin/getUserById";
+import PrismaClient from "../../../../connector/Prisma/prismaClient";
+import { auth } from "../../../../auth";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<IUserReadOnly[] | { error: string }>
+  res: NextApiResponse<any | { error: string }>
 ) {
-  const { method, query } = req;
+  const { method } = req;
+  const session = await auth();
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!query?.user_id) {
+  if (!session) {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
-  const mongoConnector = createMongoConnection();
+  const mongoClient = PrismaClient;
 
-  const connection = await mongoConnector.connect();
-
-  if (!connection) {
+  if (!mongoClient) {
     return res.status(403).json({ error: "Unauthorized" });
   }
-  const user: IUserReadOnly | undefined = await getUserById(
-    query?.user_id as string,
-    connection
-  );
+  const user = await getUserById(session?.user?.id as string);
 
   if (!user) {
     res.status(404).json({ error: `Not Found` });
@@ -44,23 +36,20 @@ export default async function handler(
     res.status(403).json({ error: `Not Admin` });
   }
 
-  let instructors: InstructorsResponse | undefined;
+  let instructors: any | undefined;
 
   try {
-    instructors = await getInstructors(connection);
-    const users: IUserReadOnly[] = instructors.data.map(
-      (item) =>
-        ({
-          name: item.name,
-          type: item.type,
-          id: item._id,
-        } as IUserReadOnly)
+    instructors = await getInstructors();
+    const users = instructors.data.map(
+      (item: { name: any; type: any; _id: any }) => ({
+        name: item.name,
+        type: item.type,
+        id: item._id,
+      })
     );
 
     res.status(200).json(users);
   } catch (err) {
     res.status(500).json({ error: (err as unknown as Error).message });
-  } finally {
-    await mongoConnector.disconnect();
   }
 }

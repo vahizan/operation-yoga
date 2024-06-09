@@ -1,27 +1,13 @@
-import { Connection } from "mongoose";
-import { IUserReadOnly, USER_MODEL_NAME } from "../../model/User.model";
+import PrismaClient from "../../connector/Prisma/prismaClient";
 
-export const getUserById = async (
-  id: string,
-  connection: Connection
-): Promise<IUserReadOnly | undefined> => {
-  if (!connection) {
+export const getUserById = async (id: string): Promise<any | undefined> => {
+  const mongoPrisma = PrismaClient;
+  if (!mongoPrisma) {
     throw new Error("Connection Invalid");
   }
 
   try {
-    return (await connection
-      .model(USER_MODEL_NAME)
-      .findById(id)
-      .select([
-        "name",
-        "email",
-        "_id",
-        "type",
-        "phone",
-        "createdAt",
-        "isVerified",
-      ])) as IUserReadOnly;
+    return mongoPrisma.user.findUnique({ where: { id } });
   } catch (err) {
     return undefined;
   }

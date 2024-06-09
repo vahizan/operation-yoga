@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../ui/Layout";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { createLessonTemplate } from "../../hooks/api";
-import { ILessonTemplate } from "../../model/admin/LessonTemplate.model";
 import { useSession } from "next-auth/react";
 
 export const CreateLessonTemplate = () => {
-  const [lessonTemplateData, setLessonTemplateData] =
-    useState<ILessonTemplate>();
+  const [lessonTemplateData, setLessonTemplateData] = useState<any>();
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>();
 

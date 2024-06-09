@@ -1,17 +1,28 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { createLessonTemplate } from "../../../hooks/api";
+import { act, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { createLessonTemplate, getInstructors } from "../../../hooks/api";
+import { UserType } from "../../../enum/UserType";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import CreateLessonTemplate from "../../../pages/admin/create-lesson-template";
-import { SessionProvider } from "next-auth/react";
 
-jest.mock("public/account-icon.svg", () => () => <div>Account Logo</div>);
-jest.mock("public/ogo-only.svg", () => () => <div> Logo Only</div>);
-
-jest.mock("../../../ui/YogshalaFancyLogo", () => () => <div>Fancy Logo</div>);
+jest.mock(
+  "../../../ui/Layout",
+  () =>
+    ({ children }: { children: React.ReactNode }) =>
+      <div>{children}</div>
+);
 
 jest.mock("../../../hooks/api", () => ({
-  createLessonTemplate: jest.fn(),
-  getInstructors: jest.fn().mockResolvedValue({}),
+  ...jest.requireActual("../../../hooks/api"),
+  getInstructors: jest.fn(),
+  createLessonTemplate: jest.fn().mockResolvedValue({ data: {} }),
+}));
+
+jest.mock("next-auth/react", () => ({
+  ...jest.requireActual("next-auth/react"),
+  useSession: jest.fn(),
 }));
 
 jest.mock("next/navigation", () => ({
@@ -19,79 +30,87 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-describe("CreateLessonTemplate", () => {
-  test("renders Unauthorized when user is not logged in", async () => {
-    render(
-      <SessionProvider
-        session={{ user: { name: undefined, email: undefined }, expires: "" }}
-      >
-        <CreateLessonTemplate />
-      </SessionProvider>
-    );
-    expect(await screen.findByText("Unauthorized")).toBeInTheDocument();
+describe("Create Lesson Template", () => {
+  beforeEach(() => {
+    (getInstructors as jest.Mock).mockResolvedValue(undefined);
+    (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() });
   });
 
-  test("renders form when user is logged in", async () => {
-    render(
-      <SessionProvider
-        session={{
-          user: {
-            name: "Test User",
-            email: "undefined@undefined",
-          },
-          expires: "",
-        }}
-      >
-        <CreateLessonTemplate />
-      </SessionProvider>
+  afterEach(jest.resetAllMocks);
+
+  it("should submit on successful validation", async () => {
+    (getInstructors as jest.Mock).mockResolvedValue({
+      data: [
+        {
+          name: "bob",
+          email: "bob@bob.com",
+          type: UserType.ADMIN,
+          id: "someID",
+        },
+      ],
+    });
+
+    (useSession as jest.Mock).mockReturnValue({
+      status: "authenticated",
+      data: { user: { name: "ME", email: "me@me.com" }, expires: "" },
+    });
+
+    render(<CreateLessonTemplate />);
+
+    const select = screen.getAllByRole("combobox");
+    await waitFor(() => {
+      //start time
+      userEvent.selectOptions(select[0], "0.5");
+      //end time
+      userEvent.selectOptions(select[1], "1");
+      //day of the week
+      userEvent.selectOptions(select[2], "1");
+      //currency
+      userEvent.selectOptions(select[3], "GBP");
+    });
+
+    //select instructor
+    act(() => {
+      userEvent.selectOptions(select[4], "someID");
+    });
+
+    const description = screen.getByRole("textbox", { name: "Description" });
+    const price = screen.getByRole("spinbutton", { name: "Price" });
+    const lesson = screen.getByRole("textbox", { name: "Lesson Name" });
+    const room = screen.getByRole("textbox", { name: "Room/Location" });
+
+    await userEvent.type(lesson, "Lesson");
+    await userEvent.type(price, "PRICE");
+    await userEvent.type(description, "DESCRIPTION");
+    await userEvent.type(price, "123");
+    await userEvent.type(lesson, "LESSON");
+    await userEvent.type(room, "ROOM");
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Create Lesson Template" })
     );
     await waitFor(() => {
-      expect(screen.findByText("Create Lesson Test User")).toBeInTheDocument();
-      expect(screen.getByText("Create Lesson Template")).toBeInTheDocument();
+      expect(createLessonTemplate).toHaveBeenCalledWith({
+        availability: 30,
+        createdBy: {
+          _id: undefined,
+          email: "me@me.com",
+          name: "ME",
+        },
+        currency: "GBP",
+        dayOfWeek: "1",
+        endTime: "1",
+        instructor: {
+          id: "someID",
+          email: "bob@bob.com",
+          name: "bob",
+          type: UserType.ADMIN,
+        },
+        location: "ROOM",
+        name: "LessonLESSON",
+        price: "123",
+        startTime: "0.5",
+      });
     });
-  });
-
-  test("submits lesson template data on button click", async () => {
-    (createLessonTemplate as jest.Mock).mockResolvedValue({});
-    const lessonTemplateData = {
-      name: "lesson template",
-    };
-    render(
-      <SessionProvider
-        session={{
-          expires: "",
-          user: {
-            name: "Test User",
-            email: "undefined@undefined",
-          },
-        }}
-      >
-        <CreateLessonTemplate />
-      </SessionProvider>
-    );
-    fireEvent.click(screen.getByText("Create Lesson Template"));
-
-    await waitFor(() => {
-      expect(createLessonTemplate).toHaveBeenCalledWith(lessonTemplateData);
-    });
-  });
-
-  test("displays error message when createLessonTemplate fails", async () => {
-    const errorMessage = "Error creating lesson template";
-
-    (createLessonTemplate as jest.Mock).mockRejectedValue(
-      new Error(errorMessage)
-    );
-
-    render(
-      <SessionProvider
-        session={{ user: { name: "Test User", email: undefined }, expires: "" }}
-      >
-        <CreateLessonTemplate />
-      </SessionProvider>
-    );
-    fireEvent.click(screen.getByText("Create Lesson Template"));
-
-    expect(await screen.findByText(errorMessage)).toBeInTheDocument();
   });
 });

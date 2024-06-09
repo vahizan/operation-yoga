@@ -1,5 +1,4 @@
 import { FC } from "react";
-import { ILessonTemplateWithId } from "../../../model/admin/LessonTemplate.model";
 import { timeOptions } from "../../../ui/Form/constants";
 
 const convertToDayOfWeek: Record<number, string> = {
@@ -17,7 +16,7 @@ const getTime = (time: number): { name: string; value: number } | undefined => {
   return found ? found[0] : undefined;
 };
 
-export const Template: FC<ILessonTemplateWithId> = ({
+export const Template: FC<any> = ({
   id,
   instructor,
   createdBy,

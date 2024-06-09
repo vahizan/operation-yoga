@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getLessonTemplates } from "../../hooks/api";
-import { ILessonTemplateWithId } from "../../model/admin/LessonTemplate.model";
+import { getAdminLessons } from "../../hooks/api";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const Templates: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
-  const [templates, setTemplates] = useState<ILessonTemplateWithId[]>();
+  const [templates, setTemplates] = useState<any[]>();
   const [templatesFetchError, setTemplatesFetchError] = useState<string>();
 
   const session = useSession();
@@ -19,7 +18,7 @@ const Templates: React.FC = () => {
       router.push("/404");
     }
 
-    getLessonTemplates({
+    getAdminLessons({
       limit: 10,
       page: 0,
       userId: session?.data?.user?.id as string,
