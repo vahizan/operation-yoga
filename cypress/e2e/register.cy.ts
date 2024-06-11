@@ -47,6 +47,18 @@ describe("Register", () => {
     cy.get("p").contains("Welcome");
     });
 
+  it("should throw error on password mismatch", () => {
+    cy.get("a").contains("Register").click();
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq("/register");
+    });
+    cy.get("input[name=email]").type("email");
+    cy.get("input[name=password]").type("password");
+    cy.get("input[name=confirmPassword]").type("password1");
+    cy.get("button").contains("Register").click();
+    cy.get("p").contains("Passwords do not match");
+    } );
+
     it("should timeout on network error", () => {
         cy.server();
         cy.route({
