@@ -6,6 +6,7 @@ import type { NextAuthConfig } from "next-auth";
 export default {
   providers: [
     Credentials({
+      name: "UserAndPassword",
       credentials: {
         email: { label: "Email", type: "email", placeholder: "Email" },
         password: { label: "Password", type: "password" },

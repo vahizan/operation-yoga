@@ -22,13 +22,14 @@ const LoginForm: FC = () => {
       return;
     }
 
-    await signIn("credentials", {
+    await signIn("UserAndPassword", {
       redirect: true,
       callbackUrl: "/",
       email,
       password,
     })
-      .catch(() => {
+      .catch((err) => {
+        console.log("error", err);
         setError("Invalid username or password. Please try again");
       })
       .finally(() => {

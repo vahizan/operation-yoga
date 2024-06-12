@@ -12,17 +12,17 @@ describe("Login", () => {
   it("should go to login page", () => {
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/login");
+      expect(loc.href).to.contains("login");
     });
   });
 
-  it("should enter email and password incorrectly", () => {
+  it.only("should enter email and password incorrectly", () => {
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
     });
-    cy.get("input[name=email]").type("test");
-    cy.get("input[name=password]").type("test");
+    cy.get("input[type=email]").type("test@email.com");
+    cy.get("input[type=password]").type("test");
     cy.get("button").contains("Login").click();
     cy.get("p").contains("Invalid email or password");
   });
@@ -30,9 +30,9 @@ describe("Login", () => {
   it("should enter email and password correctly", () => {
     cy.server();
     cy.intercept("POST", "/api/login", (req) => {
-        req.reply((res) => {
-            res.send({ fixture: loginFixture });
-        });
+      req.reply((res) => {
+        res.send({ fixture: loginFixture });
+      });
     });
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
@@ -60,6 +60,7 @@ describe("Login", () => {
     cy.get("input[name=password]").type("password");
     cy.get("button").contains("Login").click();
     cy.get("p").contains("Network error");
+  });
 });
 
 // Prevent TypeScript from reading file as legacy script

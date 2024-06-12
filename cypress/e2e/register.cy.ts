@@ -32,9 +32,9 @@ describe("Register", () => {
   it("should enter user details correctly", () => {
     cy.server();
     cy.intercept("POST", "/api/register", (req) => {
-        req.reply((res) => {
-            res.send({ fixture: registerFixture });
-        });
+      req.reply((res) => {
+        res.send({ fixture: registerFixture });
+      });
     });
     cy.get("a").contains("Register").click();
     cy.location().should((loc) => {
@@ -45,7 +45,7 @@ describe("Register", () => {
     cy.get("input[name=confirmPassword]").type("password");
     cy.get("button").contains("Register").click();
     cy.get("p").contains("Welcome");
-    });
+  });
 
   it("should throw error on password mismatch", () => {
     cy.get("a").contains("Register").click();
@@ -57,26 +57,27 @@ describe("Register", () => {
     cy.get("input[name=confirmPassword]").type("password1");
     cy.get("button").contains("Register").click();
     cy.get("p").contains("Passwords do not match");
-    } );
+  });
 
-    it("should timeout on network error", () => {
-        cy.server();
-        cy.route({
-            method: "POST",
-            url: "/api/register",
-            status: 500,
-            response: {},
-        });
-        cy.get("a").contains("Register").click();
-        cy.location().should((loc) => {
-            expect(loc.pathname).to.eq("/register");
-        });
-        cy.get("input[name=email]").type("  ");
-        cy.get("input[name=password]").type("password");
-        cy.get("input[name=confirmPassword]").type("password");
-        cy.get("button").contains("Register").click();
-        cy.get("p").contains("Network error");
-      });
+  it("should timeout on network error", () => {
+    cy.server();
+    cy.route({
+      method: "POST",
+      url: "/api/register",
+      status: 500,
+      response: {},
+    });
+    cy.get("a").contains("Register").click();
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq("/register");
+    });
+    cy.get("input[name=email]").type("  ");
+    cy.get("input[name=password]").type("password");
+    cy.get("input[name=confirmPassword]").type("password");
+    cy.get("button").contains("Register").click();
+    cy.get("p").contains("Network error");
+  });
+});
 
 // Prevent TypeScript from reading file as legacy script
 export {};
