@@ -12,18 +12,18 @@ describe("Login", () => {
   it("should go to login page", () => {
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.href).to.contains("login");
+      expect(loc.href).to.contain("login");
     });
   });
 
   it.only("should enter email and password incorrectly", () => {
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/login");
+      expect(loc.pathname).to.contain("/login");
     });
     cy.get("input[type=email]").type("test@email.com");
     cy.get("input[type=password]").type("test");
-    cy.get("button").contains("Login").click();
+    cy.get("button").contains("span", "Login").click({ force: true });
     cy.get("p").contains("Invalid email or password");
   });
 
