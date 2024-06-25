@@ -1,16 +1,25 @@
 "use client";
 
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useState } from "react";
 import styles from "./loginForm.module.scss";
 import Link from "next/link";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
-import { signIn } from "next-auth/react";
+import { signIn, SignInResponse } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const params = useSearchParams();
+
+  const [error, setError] = useState<string>();
   const [isLoggingIn, setLoggingIn] = useState<boolean>();
+
+  useEffect(() => {
+    if (params?.get("error")) {
+      setError("Invalid username or password. Please try again");
+    }
+  }, [params]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -23,14 +32,15 @@ const LoginForm: FC = () => {
     }
 
     await signIn("UserAndPassword", {
-      redirect: true,
-      callbackUrl: "/",
       email,
       password,
     })
-      .catch((err) => {
-        console.log("error", err);
-        setError("Invalid username or password. Please try again");
+      .then((response: SignInResponse | undefined) => {
+        if (!response || response?.error) {
+          window.location.href = "/login?error=invalid-credentials";
+        } else {
+          setLoggingIn(false);
+        }
       })
       .finally(() => {
         setLoggingIn(false);
@@ -38,7 +48,12 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <form className={styles.loginForm} onSubmit={handleSubmit}>
+    <div className={styles.loginForm}>
+      {error && (
+        <div data-testid="login-error" className={"error"}>
+          {error}
+        </div>
+      )}
       <div className={styles.formGroup}>
         <label htmlFor="email">Email</label>
         <input
@@ -69,11 +84,10 @@ const LoginForm: FC = () => {
         </Link>
       </div>
 
-      <button disabled={isLoggingIn} type="submit">
+      <button disabled={isLoggingIn} onClick={handleSubmit} type="submit">
         {isLoggingIn ? <BouncingDotsLoader /> : <span>Login</span>}
       </button>
-      {error && <div className={"error"}>{error}</div>}
-    </form>
+    </div>
   );
 };
 

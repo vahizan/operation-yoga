@@ -16,31 +16,38 @@ describe("Login", () => {
     });
   });
 
-  it.only("should enter email and password incorrectly", () => {
+  it("should enter email and password incorrectly", () => {
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
       expect(loc.pathname).to.contain("/login");
     });
     cy.get("input[type=email]").type("test@email.com");
     cy.get("input[type=password]").type("test");
+
     cy.get("button").contains("span", "Login").click({ force: true });
-    cy.get("p").contains("Invalid email or password");
+    cy.get("[data-testid='login-error']").contains(
+      "Invalid username or password."
+    );
   });
 
-  it("should enter email and password correctly", () => {
+  it.only("should enter email and password correctly", () => {
+    cy.get("a").contains("Login").click();
     cy.server();
-    cy.intercept("POST", "/api/login", (req) => {
+    cy.intercept(/\/api\/auth\/signin.+/, (req) => {
       req.reply((res) => {
-        res.send({ fixture: loginFixture });
+        res.send({ body: loginFixture });
       });
     });
-    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/login");
+      expect(loc.pathname).to.contain("/login");
     });
-    cy.get("input[name=email]").type("email@email.com");
-    cy.get("input[name=password]").type("password");
-    cy.get("button").contains("Login").click();
+    cy.get("input[type=email]").type("test@email.com");
+    cy.get("input[type=password]").type("test");
+
+    cy.get("button").contains("span", "Login").click({ force: true });
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.contain("/");
+    });
     cy.get("p").contains("Welcome back");
   });
 
