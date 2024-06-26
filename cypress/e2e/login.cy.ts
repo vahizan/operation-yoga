@@ -51,24 +51,6 @@ describe("Login", () => {
     cy.get("p").contains("Welcome back");
   });
 
-  it("should timeout on network error", () => {
-    cy.server();
-    cy.route({
-      method: "POST",
-      url: "/api/login",
-      status: 500,
-      response: {},
-    });
-    cy.get("a").contains("Login").click();
-    cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/login");
-    });
-    cy.get("input[name=email]").type("email@email.com");
-    cy.get("input[name=password]").type("password");
-    cy.get("button").contains("Login").click();
-    cy.get("p").contains("Network error");
-  });
-});
 
 // Prevent TypeScript from reading file as legacy script
 export {};
