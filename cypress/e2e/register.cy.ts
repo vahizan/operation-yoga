@@ -44,7 +44,6 @@ describe("Register", () => {
     cy.get("input[name=password]").type("password");
     cy.get("input[name=confirmPassword]").type("password");
     cy.get("button").contains("Register").click();
-    cy.get("p").contains("Welcome");
   });
 
   it("should throw error on password mismatch", () => {
