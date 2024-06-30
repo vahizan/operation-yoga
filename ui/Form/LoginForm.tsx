@@ -73,7 +73,11 @@ const LoginForm: FC = () => {
         />
       </div>
       <div className={styles.additionalLinks}>
-        <Link className={styles.additionalLinks__signupLink} href={"/signup"}>
+        <Link
+          data-testid="signup"
+          className={styles.additionalLinks__signupLink}
+          href={"/signup"}
+        >
           Signup
         </Link>
         <Link

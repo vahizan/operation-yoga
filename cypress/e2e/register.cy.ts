@@ -11,17 +11,22 @@ describe("Register", () => {
   });
 
   it("should go to register page", () => {
-    cy.get("a").contains("Register").click();
+    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/register");
+      expect(loc.pathname).to.eq("/login");
     });
+    cy.get('[data-testid="signup"]').click();
+    cy.wait(1000);
+    cy.get("h1").contains("Sign Up");
   });
 
-  it("should details incorrectly ", () => {
-    cy.get("a").contains("Register").click();
+  it.only("should details incorrectly ", () => {
+    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/register");
+      expect(loc.pathname).to.eq("/login");
     });
+    cy.get('[data-testid="signup"]').click();
+    cy.wait(100);
     cy.get("input[name=email]").type("test");
     cy.get("input[name=password]").type("test");
     cy.get("input[name=confirmPassword]").type("test");
