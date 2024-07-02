@@ -20,35 +20,49 @@ describe("Register", () => {
     cy.get("h1").contains("Sign Up");
   });
 
-  it.only("should details incorrectly ", () => {
+  it("should handle unauthorized error ", () => {
+    cy.server();
+    cy.intercept("POST", "/api/auth/signup", (req) => {
+      req.reply((res) => {
+        res.send({ statusCode: 403, fixture: registerFixture });
+      });
+    });
     cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
     });
     cy.get('[data-testid="signup"]').click();
     cy.wait(100);
-    cy.get("input[name=email]").type("test");
+    cy.get("input[name=name]").type("namae miyoji");
+    cy.get("input[name=email]").type("test@email.com");
     cy.get("input[name=password]").type("test");
     cy.get("input[name=confirmPassword]").type("test");
-    cy.get("button").contains("Register").click();
-    cy.get("p").contains("Invalid email or password");
+    cy.get("button").contains("Sign Up").click();
+    cy.get("div").contains("An error occurred. Please try again.");
   });
 
-  it("should enter user details correctly", () => {
+  it.only("should enter user details correctly", () => {
     cy.server();
-    cy.intercept("POST", "/api/register", (req) => {
+    cy.intercept("POST", "/api/auth/signup", (req) => {
       req.reply((res) => {
-        res.send({ fixture: registerFixture });
+        res.send({ statusCode: 200, fixture: registerFixture });
       });
     });
-    cy.get("a").contains("Register").click();
+    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/register");
+      expect(loc.pathname).to.eq("/login");
     });
-    cy.get("input[name=email]").type("  ");
+    cy.get('[data-testid="signup"]').click();
+    cy.wait(100);
+    cy.get("input[name=name]").type("namae miyoji");
+    cy.get("input[name=email]").type("test@email.com");
     cy.get("input[name=password]").type("password");
     cy.get("input[name=confirmPassword]").type("password");
-    cy.get("button").contains("Register").click();
+    cy.get("button").contains("Sign Up").click();
+    cy.location().should((loc) => {
+      expect(loc.pathname).to.eq("/login");
+    });
+    cy.get("div").contains("You've successfully signed up. Please login");
   });
 
   it("should throw error on password mismatch", () => {
