@@ -47,13 +47,13 @@ const SignupForm = () => {
 
       if (response.data) {
         // SignupForm successful, redirect to the login page
-        await router.push("/login");
+        await router.push("/login?signup=success");
       } else {
         const data = await response.data.json();
         setError(data.message);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred. Please try again later.");
     } finally {
       setSigningUp(false);
     }

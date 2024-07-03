@@ -38,10 +38,10 @@ describe("Register", () => {
     cy.get("input[name=password]").type("test");
     cy.get("input[name=confirmPassword]").type("test");
     cy.get("button").contains("Sign Up").click();
-    cy.get("div").contains("An error occurred. Please try again.");
+    cy.get("div").contains("An error occurred. Please try again later.");
   });
 
-  it.only("should enter user details correctly", () => {
+  it("should enter signup details correctly", () => {
     cy.server();
     cy.intercept("POST", "/api/auth/signup", (req) => {
       req.reply((res) => {
@@ -52,8 +52,8 @@ describe("Register", () => {
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
     });
+    cy.wait(1000);
     cy.get('[data-testid="signup"]').click();
-    cy.wait(100);
     cy.get("input[name=name]").type("namae miyoji");
     cy.get("input[name=email]").type("test@email.com");
     cy.get("input[name=password]").type("password");
@@ -62,38 +62,44 @@ describe("Register", () => {
     cy.location().should((loc) => {
       expect(loc.pathname).to.eq("/login");
     });
-    cy.get("div").contains("You've successfully signed up. Please login");
+    cy.get('[data-testid="login-message"]').contains(
+      "You've successfully signed up. Please login"
+    );
   });
 
   it("should throw error on password mismatch", () => {
-    cy.get("a").contains("Register").click();
+    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/register");
+      expect(loc.pathname).to.eq("/login");
     });
-    cy.get("input[name=email]").type("email");
+    cy.wait(1000);
+    cy.get('[data-testid="signup"]').click();
+    cy.get("input[name=name]").type("namae miyoji");
+    cy.get("input[name=email]").type("email@email.com");
     cy.get("input[name=password]").type("password");
     cy.get("input[name=confirmPassword]").type("password1");
-    cy.get("button").contains("Register").click();
-    cy.get("p").contains("Passwords do not match");
+    cy.get("button").contains("Sign Up").click();
+    cy.get("div").contains("Passwords don't match");
   });
 
   it("should timeout on network error", () => {
     cy.server();
-    cy.route({
-      method: "POST",
-      url: "/api/register",
-      status: 500,
-      response: {},
+    cy.intercept("POST", "/api/auth/signup", (req) => {
+      req.reply((res) => {
+        res.send({ statusCode: 500, fixture: registerFixture });
+      });
     });
-    cy.get("a").contains("Register").click();
+    cy.get("a").contains("Login").click();
     cy.location().should((loc) => {
-      expect(loc.pathname).to.eq("/register");
+      expect(loc.pathname).to.eq("/login");
     });
-    cy.get("input[name=email]").type("  ");
+    cy.get('[data-testid="signup"]').click();
+    cy.get("input[name=name]").type("namae miyoji");
+    cy.get("input[name=email]").type("test@email.com");
     cy.get("input[name=password]").type("password");
     cy.get("input[name=confirmPassword]").type("password");
-    cy.get("button").contains("Register").click();
-    cy.get("p").contains("Network error");
+    cy.get("button").contains("Sign Up").click();
+    cy.get("div").contains("An error occurred. Please try again later.");
   });
 });
 

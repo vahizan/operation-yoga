@@ -14,10 +14,14 @@ const LoginForm: FC = () => {
 
   const [error, setError] = useState<string>();
   const [isLoggingIn, setLoggingIn] = useState<boolean>();
-
+  const [message, setMessage] = useState<string>();
+  const SIGNUP_SUCCESS = "success";
   useEffect(() => {
     if (params?.get("error")) {
-      setError("Invalid username or password. Please try again");
+      setError("Invalid username or password. Please try again later");
+    }
+    if (params?.get("signup") === SIGNUP_SUCCESS) {
+      setMessage("You've successfully signed up. Please login");
     }
   }, [params]);
 
@@ -52,6 +56,11 @@ const LoginForm: FC = () => {
       {error && (
         <div data-testid="login-error" className={"error"}>
           {error}
+        </div>
+      )}
+      {message && (
+        <div data-testid="login-message" className={"message"}>
+          {message}
         </div>
       )}
       <div className={styles.formGroup}>

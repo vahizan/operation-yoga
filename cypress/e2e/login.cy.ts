@@ -30,7 +30,7 @@ describe("Login", () => {
     );
   });
 
-  it.only("should enter email and password correctly", () => {
+  it("should enter email and password correctly", () => {
     cy.get("a").contains("Login").click();
     cy.server();
     cy.intercept(/\/api\/auth\/signin.+/, (req) => {
@@ -50,7 +50,7 @@ describe("Login", () => {
     });
     cy.get("p").contains("Welcome back");
   });
-
+});
 
 // Prevent TypeScript from reading file as legacy script
 export {};
