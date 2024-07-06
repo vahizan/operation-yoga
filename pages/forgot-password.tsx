@@ -26,8 +26,16 @@ export const ForgotPassword: FC = () => {
       .then((res) => {
         setMessage(res.data?.message);
       })
-      .catch(() => {
-        setMessage("Error please try again later");
+      .catch((err) => {
+        const axiosErrResponse = err as AxiosError;
+        const errResponseData = axiosErrResponse?.response?.data as unknown as {
+          message: string;
+        };
+        if (errResponseData?.message) {
+          setMessage(errResponseData.message);
+        } else {
+          setMessage("Error please try again later");
+        }
       })
       .finally(() => {
         setLoading(false);

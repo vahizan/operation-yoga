@@ -1,3 +1,5 @@
+"use client";
+
 import LoginForm from "../ui/Form/LoginForm";
 import { FC } from "react";
 import Layout from "../ui/Layout";
