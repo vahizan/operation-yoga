@@ -17,19 +17,14 @@
     @include formGroup();
   }
 
-  .additionalLinks {
-    display: flex;
-    justify-content: space-between;
-    &__forgotLink, &__signupLink {
-      align-self: flex-end;
-      text-align: right;
-      @include autoFontSize(20);
-      padding: 20px;
-      text-decoration-color: $font-color-secondary;
-      text-decoration: underline;
-    }
+  .forgotLink {
+    align-self: flex-end;
+    text-align: right;
+    @include autoFontSize(13);
+    padding: 20px;
+    text-decoration-color: $font-color-secondary;
+    text-decoration: underline;
   }
-
   button {
     @include autoFontSize(16);
     &:hover {

@@ -1,10 +1,19 @@
-import { authorizeLogin, getTokenPayload } from "../authenticationHelper";
+import {
+  authorizeLogin,
+  getTokenPayload,
+  hasSession,
+} from "../authenticationHelper";
+import { getServerSession } from "next-auth";
+import { NextApiRequest, NextApiResponse } from "next";
+import { authOptions } from "../../pages/api/auth/[...nextauth]";
 import { comparePassword } from "../loginHelper";
 import { verify } from "jsonwebtoken";
-import { prismaMock } from "../../prismaMockSingleton";
+import createMongoConnection from "../../connector/createMongoConnection";
 
-jest.mock("bcryptjs");
+jest.mock("bcrypt");
+jest.mock("mongoose");
 jest.mock("../loginHelper");
+jest.mock("../../connector/createMongoConnection");
 
 jest.mock("jsonwebtoken", () => ({
   ...jest.requireActual("jsonwebtoken"),
@@ -30,65 +39,73 @@ describe("authenticationHelper", () => {
     delete process.env.MONGODB_URI;
     delete process.env.MONGO_DB_NAME;
   });
-
   describe("authorizeLogin", () => {
     it("should return null if credentials are missing", async () => {
-      const result = await authorizeLogin({
-        email: undefined,
-        password: undefined,
-      });
+      const result = await authorizeLogin(undefined);
       expect(result).toBeNull();
     });
 
-    it("should return null if user is not found", async () => {
-      prismaMock.user.findFirst.mockResolvedValue(null);
+    it("should return null if connection fails", async () => {
+      const mockUsers = {
+        findOne: jest.fn().mockResolvedValue("jo"),
+      };
+      const mockConnection = {
+        model: jest.fn().mockReturnValue(mockUsers),
+      };
+      const mockConnector = {
+        connect: jest.fn().mockResolvedValue(mockConnection),
+        disconnect: jest.fn(),
+      };
+
+      (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
 
       const result = await authorizeLogin({
         email: "test@example.com",
         password: "password",
       });
       expect(result).toBeNull();
+      expect(mockConnector.connect).toHaveBeenCalled();
     });
 
-    it("should return null if user or account is not found", async () => {
-      prismaMock.user.findFirst.mockResolvedValue({ id: 1 } as any);
-      prismaMock.account.findFirst.mockResolvedValue(null);
+    it("should return null if user is not found or password is invalid", async () => {
+      const mockComparePassword = jest.fn(() => false);
+      (comparePassword as jest.Mock).mockReturnValue(mockComparePassword);
+
+      const mockUsers = {
+        findOne: jest.fn().mockResolvedValue("hi"),
+      };
+      const mockConnection = {
+        model: jest.fn().mockReturnValue(mockUsers),
+      };
+      const mockConnector = {
+        connect: jest.fn().mockResolvedValue(mockConnection),
+        disconnect: jest.fn(),
+      };
+
+      (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
 
       const result = await authorizeLogin({
         email: "test@example.com",
         password: "password",
       });
       expect(result).toBeNull();
-    });
-
-    it("should return null password is invalid", async () => {
-      const mockComparePassword = jest.fn().mockResolvedValue(false);
-      (comparePassword as jest.Mock).mockImplementation(mockComparePassword);
-
-      prismaMock.user.findFirst.mockResolvedValue({ id: 1 } as any);
-      prismaMock.account.findFirst.mockResolvedValue({
-        passwordHash: "hash",
-      } as any);
-
-      const result = await authorizeLogin({
-        email: "test@example.com",
-        password: "password",
-      });
-
-      expect(result).toBeNull();
+      expect(mockConnector.connect).toHaveBeenCalled();
       expect(mockComparePassword).toHaveBeenCalled();
     });
 
     it("should return user details if credentials are valid", async () => {
-      prismaMock.user.findFirst.mockResolvedValue({
-        id: 1,
-        name: "Test User",
-        email: "test@example.com",
-      } as any);
+      const mockUsers = {
+        findOne: jest.fn().mockResolvedValue("hi"),
+      };
+      const mockConnection = {
+        model: jest.fn().mockReturnValue(mockUsers),
+      };
+      const mockConnector = {
+        connect: jest.fn().mockResolvedValue(mockConnection),
+        disconnect: jest.fn(),
+      };
 
-      prismaMock.account.findFirst.mockResolvedValue({
-        passwordHash: "hash",
-      } as any);
+      (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
 
       const mockComparePassword = jest.fn(() => true);
       (comparePassword as jest.Mock).mockReturnValue(mockComparePassword);
@@ -102,6 +119,37 @@ describe("authenticationHelper", () => {
         email: "test@example.com",
         name: "Test User",
       });
+      expect(mockConnector.connect).toHaveBeenCalled();
+    });
+  });
+
+  describe("hasSession", () => {
+    it("should return true if session exists", async () => {
+      const mockGetServerSession = jest.fn(() => ({ sessionId: "123" }));
+      (getServerSession as jest.Mock).mockImplementationOnce(
+        mockGetServerSession
+      );
+
+      const req = {} as NextApiRequest;
+      const res = {} as NextApiResponse;
+
+      const result = await hasSession(req, res);
+      expect(result).toBe(true);
+      expect(mockGetServerSession).toHaveBeenCalledWith(req, res, authOptions);
+    });
+
+    it("should return false if session does not exist", async () => {
+      const mockGetServerSession = jest.fn(() => null);
+      (getServerSession as jest.Mock).mockImplementationOnce(
+        mockGetServerSession
+      );
+
+      const req = {} as NextApiRequest;
+      const res = {} as NextApiResponse;
+
+      const result = await hasSession(req, res);
+      expect(result).toBe(false);
+      expect(mockGetServerSession).toHaveBeenCalledWith(req, res, authOptions);
     });
   });
 

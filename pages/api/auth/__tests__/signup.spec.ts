@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../signup";
-import { prismaMock } from "../../../../prismaMockSingleton";
+import MongoDatabaseConnection from "../../../../connector/MongoDatabaseConnection";
+
+jest.mock("../../../../connector/MongoDatabaseConnection");
 
 const mockRequest = (): NextApiRequest =>
   <NextApiRequest>{
@@ -19,34 +21,22 @@ const mockResponse = (): NextApiResponse => {
   return res as NextApiResponse;
 };
 
-describe("Signup Handler Test", () => {
+describe("API Handler Tests", () => {
   beforeEach(() => {
+    // Mock environment variables if necessary
     process.env.MONGODB_URI = "your-mock-mongodb-uri";
     process.env.MONGO_DB_NAME = "your-mock-db-name";
   });
 
   afterEach(() => {
+    // Clear mocked environment variables
     delete process.env.MONGODB_URI;
     delete process.env.MONGO_DB_NAME;
   });
 
-  it("should return 404 if method is invalid", async () => {
-    const req = mockRequest();
-    req.body.name = "";
-    const res = mockResponse();
-
-    await handler(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({
-      message: "Method Invalid",
-    });
-  });
-
   it("should return 400 if required fields are missing", async () => {
     const req = mockRequest();
-    req.method = "POST";
-    req.body.name = "";
+    req.body.name = ""; // Set a required field to an empty string
     const res = mockResponse();
 
     await handler(req, res);
@@ -57,17 +47,33 @@ describe("Signup Handler Test", () => {
     });
   });
 
-  it("should return 400 if a user with the same email already exists", async () => {
+  it("should return 403 if unable to connect to MongoDB", async () => {
     const req = mockRequest();
-    req.method = "POST";
-    req.body.email = "example@email.com";
     const res = mockResponse();
 
-    prismaMock.user.findFirst.mockResolvedValue({
-      id: 1,
-      name: "John Doe",
-      email: "example@email.com",
-    } as any);
+    await handler(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(403);
+    expect(res.json).toHaveBeenCalledWith({ message: "Unauthorized" });
+  });
+
+  it("should return 400 if a user with the same email already exists", async () => {
+    const req = mockRequest();
+    const res = mockResponse();
+
+    // Mock the Mongoose findOne method to return an existing user
+    const mockUsers = {
+      findOne: jest.fn().mockResolvedValue({ email: req.body.email }),
+    };
+    const mockConnection = {
+      model: jest.fn().mockReturnValue(mockUsers),
+    };
+    const mockConnector = {
+      connect: jest.fn().mockResolvedValue(mockConnection),
+      disconnect: jest.fn(),
+    };
+
+    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
 
     await handler(req, res);
 
@@ -79,15 +85,22 @@ describe("Signup Handler Test", () => {
 
   it("should return 200 and create a new user successfully", async () => {
     const req = mockRequest();
-    req.method = "POST";
     const res = mockResponse();
 
-    prismaMock.user.findFirst.mockResolvedValue(null);
-    prismaMock.user.create.mockResolvedValue({
-      id: 1,
-      name: "John Doe",
-      email: "",
-    } as any);
+    // Mock the Mongoose create method to return a successful response
+    const mockUsers = {
+      findOne: jest.fn().mockResolvedValue(null),
+      create: jest.fn().mockResolvedValue("User created"),
+    };
+    const mockConnection = {
+      model: jest.fn().mockReturnValue(mockUsers),
+    };
+    const mockConnector = {
+      connect: jest.fn().mockResolvedValue(mockConnection),
+      disconnect: jest.fn(),
+    };
+
+    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
 
     await handler(req, res);
 
@@ -99,12 +112,24 @@ describe("Signup Handler Test", () => {
 
   it("should return 500 if an error occurs during user creation", async () => {
     const req = mockRequest();
-    req.method = "POST";
     const res = mockResponse();
 
-    prismaMock.user.findFirst.mockResolvedValue(null);
+    // Mock the Mongoose create method to throw an error
+    const mockUsers = {
+      findOne: jest.fn().mockResolvedValue(null),
+      create: jest
+        .fn()
+        .mockRejectedValue(() => new Error("User creation error")),
+    };
+    const mockConnection = {
+      model: jest.fn().mockReturnValue(mockUsers),
+    };
+    const mockConnector = {
+      connect: jest.fn().mockResolvedValue(mockConnection),
+      disconnect: jest.fn(),
+    };
 
-    prismaMock.user.create.mockRejectedValue(new Error("User creation error"));
+    (MongoDatabaseConnection as jest.Mock).mockReturnValue(mockConnector);
 
     await handler(req, res);
 
@@ -116,10 +141,14 @@ describe("Signup Handler Test", () => {
 
   it("should return 500 if an error occurs during database connection", async () => {
     const req = mockRequest();
-    req.method = "POST";
     const res = mockResponse();
 
-    prismaMock.user.findFirst.mockRejectedValue(new Error("Database error"));
+    (MongoDatabaseConnection as jest.Mock).mockReturnValue({
+      connect: () => {
+        throw new Error("Database connection error");
+      },
+      disconnect: jest.fn(),
+    });
 
     await handler(req, res);
 

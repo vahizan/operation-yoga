@@ -1,5 +1,3 @@
-import { UserType } from "../../../enum/UserType";
-
 export interface IArticlePost {
   name: string;
   description: string;
@@ -51,10 +49,4 @@ export interface ILessonQuery {
   startTime?: Date;
   endTime?: Date;
   dayOfTheWeek: string;
-}
-
-export interface IUser {
-  name: string;
-  email: string;
-  id: string;
 }

@@ -1,68 +1,52 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import jwt from "jsonwebtoken";
 import AuthenticationStatusCode from "../../../helpers/AuthenticationStatusCode";
+import { USER_MODEL_NAME } from "../../../model/User.model";
 import { sendPasswordResetEmail } from "../../../helpers/passwordResetEmail";
+import createMongoConnection from "../../../connector/createMongoConnection";
 import EnquireTemplate from "../enquire/email-templates/EnquireTemplate";
-import PrismaClient from "../../../connector/Prisma/prismaClient";
-import { ProviderType } from "../../../enum/ProviderType";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<{ message: string; code: string | number }>
+  res: NextApiResponse<{ message: string }>
 ) {
   const { email } = req.body;
   try {
-    const mongoPrismaClient = PrismaClient;
+    const mongoConnector = createMongoConnection();
+    const connection = await mongoConnector.connect();
 
-    if (!mongoPrismaClient) {
-      return res.status(500).json({
-        message: "connection error",
-        code: AuthenticationStatusCode.CONNECTION_FAILED,
-      });
+    if (!connection) {
+      return res.status(500).json({ message: "connection error" });
     }
 
-    const user = await mongoPrismaClient.user.findFirst({
-      where: { email },
+    const user = await connection.model(USER_MODEL_NAME).findOne({
+      email: email,
     });
 
     if (!user) {
-      return res.status(404).json({
-        message: "User doesn't exist",
-        code: AuthenticationStatusCode.USER_NOT_EXIST,
-      });
+      return res.status(404).json({ message: "user doesn't exist" });
     }
 
     const secret = process.env.PROVIDER_EMAIL_VERIFICATION_SECRET;
     if (!secret) {
-      return res.status(500).json({
-        message: "Unable to get secret",
-        code: AuthenticationStatusCode.VERIFICATION_FAILED,
-      });
+      return res.status(500).json({ message: "Unable to get secret" });
     }
 
     const token = jwt.sign({ id: user?.id }, secret, {
       expiresIn: "1d",
     });
-
-    const currentDate = new Date();
-    const oneDayAhead = new Date(currentDate);
-    oneDayAhead.setDate(currentDate.getDate() + 1);
-
-    mongoPrismaClient.verificationToken
-      .create({
-        data: {
-          userId: user?.id,
-          identifier: ProviderType.CREDENTIALS,
-          token,
-          expires: oneDayAhead,
+    connection
+      .model(USER_MODEL_NAME)
+      .updateOne(
+        {
+          email,
         },
-      })
-
+        {
+          verifyToken: token,
+        }
+      )
       .catch(() => {
-        return res.status(500).json({
-          message: "unable to update user",
-          code: AuthenticationStatusCode.UPDATE_USER_DETAILS_FAILED,
-        });
+        return res.status(500).json({ message: "unable to update user" });
       });
 
     const protocol = req.headers["x-forwarded-proto"] || "http";
@@ -83,25 +67,13 @@ export default async function handler(
       ),
     });
 
-    if (result === AuthenticationStatusCode.EMAIL_FAILED) {
-      return res.status(500).json({
-        message: "Internal server error.",
-        code: AuthenticationStatusCode.EMAIL_FAILED,
-      });
-    } else if (result == AuthenticationStatusCode.USER_NOT_EXIST) {
-      return res.status(200).json({
-        message: "User doesn't exist",
-        code: AuthenticationStatusCode.USER_NOT_EXIST,
-      });
+    if (result !== AuthenticationStatusCode.SUCCESS) {
+      return res.status(500).json({ message: "Internal server error." });
     }
-    return res.status(200).json({
-      message: "Password reset email has been sent.",
-      code: AuthenticationStatusCode.SUCCESS,
-    });
+    return res
+      .status(200)
+      .json({ message: "Password reset email has been sent." });
   } catch (error) {
-    return res.status(500).json({
-      message: "Internal server error.",
-      code: AuthenticationStatusCode.INTERNAL_SERVER_ERROR,
-    });
+    return res.status(500).json({ message: "Internal server error." });
   }
 }

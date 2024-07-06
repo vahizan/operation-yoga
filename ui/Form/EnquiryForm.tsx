@@ -2,39 +2,22 @@ import { ChangeEvent, useEffect, useState } from "react";
 import styles from "./enquiryForm.module.scss";
 import { sendEmail } from "../../hooks/api";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
-import { InputField } from "../Field/InputField";
-import { AreaField } from "../Field/AreaField";
-import { isValidEmail, isValidPhone } from "../Field/validators";
 
-const FIELD_NAMES = {
-  name: "Name",
-  email: "Email",
-  subject: "Subject",
-  message: "Message",
-  phone: "Phone",
-};
-
-const FIELD_KEYS = {
-  name: "name",
-  email: "email",
-  subject: "subject",
-  message: "message",
-  phone: "phone",
-};
 interface FormValues {
   name: string;
   email: string;
   subject: string;
   message: string;
+  phoneExt?: string;
   phone?: string;
 }
 
-const initialState = {
+const initialState: FormValues = {
   name: "",
   subject: "",
   email: "",
   message: "",
-  phone: "",
+  phoneExt: "",
 };
 function timeoutFunc<T>(
   callback: (val: T | undefined) => void,
@@ -43,50 +26,23 @@ function timeoutFunc<T>(
 ) {
   setTimeout(() => callback(val), seconds);
 }
-
 const EnquiryForm = () => {
-  const [formValues, setFormValues] =
-    useState<Record<string, string>>(initialState);
-  const [errors, setErrors] = useState<Record<string, string>>(initialState);
+  const [formValues, setFormValues] = useState<FormValues>(initialState);
+  const [errors, setErrors] = useState<FormValues>(initialState);
   const [isSubmitted, setSubmitted] = useState(false);
   const [isSendSuccess, setSendSuccess] = useState<boolean>();
   const [sendError, setSendError] = useState<boolean>();
-  const [isUpdateErrorMessages, setUpdateErrorMessages] = useState<boolean>();
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+    validateForm();
     setFormValues({ ...formValues, [name]: value });
-    validateField(value);
-  };
-
-  const validateField = (fieldKey: string) => {
-    if (!formValues[fieldKey] && fieldKey !== FIELD_KEYS.phone) {
-      setErrors({
-        ...initialState,
-        [fieldKey]: `${FIELD_NAMES[fieldKey as keyof FormValues]} is required`,
-      });
-      return;
-    }
-
-    if (fieldKey === FIELD_KEYS.email && !isValidEmail(formValues[fieldKey])) {
-      setErrors({ ...initialState, [fieldKey]: "Email is invalid" });
-      return;
-    }
-
-    if (
-      fieldKey === FIELD_KEYS.phone &&
-      formValues[fieldKey] &&
-      !isValidPhone(formValues[fieldKey])
-    ) {
-      setErrors({ ...initialState, [fieldKey]: "Phone number is invalid" });
-      return;
-    }
   };
 
   const validateForm = () => {
-    const newErrors = { ...initialState };
+    const newErrors: FormValues = { ...initialState };
 
     if (!formValues.name) {
       newErrors.name = "Name is required";
@@ -98,13 +54,10 @@ const EnquiryForm = () => {
 
     if (!formValues.email) {
       newErrors.email = "Email is required";
-    } else if (!isValidEmail(formValues?.email)) {
+    } else if (!/^\S+@\S+\.\S+$/.test(formValues.email)) {
       newErrors.email = "Email is invalid";
     }
 
-    if (formValues.phone && !isValidPhone(formValues?.phone)) {
-      newErrors.phone = "Phone number is invalid";
-    }
     if (!formValues.message) {
       newErrors.message = "Message is required";
     }
@@ -113,8 +66,8 @@ const EnquiryForm = () => {
     return Object.values(newErrors).every((value) => value === "");
   };
 
-  const handleBlur = (fieldKey: string) => () => {
-    validateField(fieldKey);
+  const handleBlur = () => {
+    validateForm();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -143,7 +96,7 @@ const EnquiryForm = () => {
             subject: "",
             message: "",
             email: "",
-            phone: "",
+            phoneExt: "",
             name: "",
           });
         })
@@ -158,13 +111,6 @@ const EnquiryForm = () => {
   }, [isSubmitted]);
 
   useEffect(() => {
-    if (isUpdateErrorMessages) {
-      validateForm();
-    }
-    setUpdateErrorMessages(false);
-  }, [isUpdateErrorMessages]);
-
-  useEffect(() => {
     timeoutFunc(setSendSuccess, 3000);
   }, [isSendSuccess]);
 
@@ -174,60 +120,65 @@ const EnquiryForm = () => {
 
   return (
     <form className={styles.enquiryForm} onSubmit={handleSubmit}>
-      <InputField
-        name={"name"}
-        label={"Name"}
-        type="text"
-        value={formValues.name}
-        onBlur={handleBlur(FIELD_KEYS.name)}
-        onChange={handleChange}
-        errorMessage={errors.name}
-      />
-
-      <InputField
-        name={"email"}
-        label={"Email"}
-        type="email"
-        value={formValues.email}
-        onBlur={handleBlur(FIELD_KEYS.email)}
-        onChange={handleChange}
-        validator={isValidEmail}
-        errorMessage={errors.email}
-      />
-
-      <InputField
-        id={"subject"}
-        type={"text"}
-        name={"subject"}
-        label={"Subject"}
-        onBlur={handleBlur(FIELD_KEYS.subject)}
-        onChange={handleChange}
-        placeholder="Subject"
-        value={formValues.subject}
-        errorMessage={errors.subject}
-      />
-
-      <InputField
-        id={"phone"}
-        type={"text"}
-        name={"phone"}
-        label={"Phone"}
-        onBlur={handleBlur(FIELD_KEYS.phone)}
-        onChange={handleChange}
-        placeholder="Phone"
-        value={formValues.phone}
-        errorMessage={errors.phone}
-      />
-      <AreaField
-        label={"Message"}
-        placeholder={"Enter your message"}
-        id={"message"}
-        name={"message"}
-        value={formValues.message}
-        onBlur={handleBlur(FIELD_KEYS.message)}
-        onChange={handleChange}
-        errorMessage={errors.message}
-      />
+      <div className={styles.enquiryForm__field}>
+        <label htmlFor="name">Name</label>
+        <input
+          placeholder="Name"
+          type="text"
+          id="name"
+          name="name"
+          value={formValues.name}
+          onBlur={handleBlur}
+          onChange={handleChange}
+        />
+        {errors.name && (
+          <div className={errorMessageClassName}>{errors.name}</div>
+        )}
+      </div>
+      <div className={styles.enquiryForm__field}>
+        <label htmlFor="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Email"
+          value={formValues.email}
+          onBlur={handleBlur}
+          onChange={handleChange}
+        />
+        {errors.email && (
+          <div className={errorMessageClassName}>{errors.email}</div>
+        )}
+      </div>
+      <div className={styles.enquiryForm__field}>
+        <label htmlFor="subject">Subject</label>
+        <input
+          type="text"
+          id="subject"
+          name="subject"
+          placeholder="Subject"
+          value={formValues.subject}
+          onBlur={handleBlur}
+          onChange={handleChange}
+        />
+        {errors.subject && (
+          <span className={errorMessageClassName}>{errors.subject}</span>
+        )}
+      </div>
+      <div className={styles.enquiryForm__textAreaField}>
+        <label htmlFor="message">Message</label>
+        <textarea
+          placeholder="Enter your message"
+          id="message"
+          name="message"
+          value={formValues.message}
+          onBlur={handleBlur}
+          onChange={handleChange}
+        />
+        {errors.message && (
+          <span className={errorMessageClassName}>{errors.message}</span>
+        )}
+      </div>
       <button
         className={styles.enquiryForm__submit}
         disabled={Boolean(

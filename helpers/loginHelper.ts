@@ -1,26 +1,17 @@
-import bcrypt from "bcryptjs";
+import bcrypt from "bcrypt";
 
 export const hashPassword = async (password: string, saltRounds = 10) => {
   try {
-    const pepper = process.env.PEPPER;
-    const pepperedPassword = password + pepper;
-    return await bcrypt.hash(pepperedPassword, saltRounds);
+    const salt = await bcrypt.genSalt(saltRounds);
+    return await bcrypt.hash(password, salt);
   } catch (error) {
     return null;
   }
 };
 
-export const comparePassword = async (
-  password: string | undefined,
-  hash: string
-) => {
-  if (!password) {
-    return false;
-  }
+export const comparePassword = async (password: string, hash: string) => {
   try {
-    const pepper = process.env.PEPPER;
-    const saltedInput = password + pepper;
-    return await bcrypt.compare(saltedInput, hash);
+    return await bcrypt.compare(password, hash);
   } catch (error) {
     return false;
   }
