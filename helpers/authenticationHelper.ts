@@ -1,37 +1,45 @@
-import { USER_MODEL_NAME } from "../model/User.model";
-import { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
 import { comparePassword } from "./loginHelper";
-import createMongoConnection from "../connector/createMongoConnection";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import PrismaClient from "../connector/Prisma/prismaClient";
+import { ProviderType } from "../enum/ProviderType";
 
 export const authorizeLogin = async (
-  credentials: Record<string, string> | undefined
+  credentials: Partial<Record<"email" | "password", unknown>>
 ) => {
   {
-    console.log("CREDENTIALS");
     if (!credentials?.email || !credentials.password) {
       return null;
     }
 
-    const mongoConnector = createMongoConnection();
+    const mongoConnector = PrismaClient;
 
-    const connection = await mongoConnector.connect();
-    if (!connection) {
+    if (!mongoConnector) {
       return null;
     }
-    const user = await connection.model(USER_MODEL_NAME).findOne({
-      email: credentials.email,
+    const user = await mongoConnector.user.findFirst({
+      where: {
+        email: credentials?.email as string,
+      },
     });
 
     if (!user) {
       return null;
     }
 
+    const account = await mongoConnector.account.findFirst({
+      where: {
+        userId: user?.id,
+        provider: ProviderType.CREDENTIALS,
+      },
+    });
+
+    if (!account) {
+      return null;
+    }
+
     const isValidPassword = await comparePassword(
-      credentials.password,
-      user.password
+      credentials?.password as string,
+      account.passwordHash || ""
     );
 
     if (!isValidPassword) {
@@ -42,13 +50,10 @@ export const authorizeLogin = async (
       id: user.id,
       email: user.email,
       name: user.name,
+      userType: account.type,
+      scope: account?.scope,
     };
   }
-};
-
-export const hasSession = async (req: NextApiRequest, res: NextApiResponse) => {
-  const session = await getServerSession(req, res, authOptions);
-  return !!session;
 };
 
 export const getTokenPayload = (

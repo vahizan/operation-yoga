@@ -1,8 +1,9 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../forgot-password";
 import { sendPasswordResetEmail } from "../../../../helpers/passwordResetEmail";
-import createMongoConnection from "../../../../connector/createMongoConnection";
 import AuthenticationStatusCode from "../../../../helpers/AuthenticationStatusCode";
+import { prismaMock } from "../../../../prismaMockSingleton";
+import { UserType } from "../../../../enum/UserType";
 
 const mockReq: Partial<NextApiRequest> = {
   body: {
@@ -14,19 +15,16 @@ const mockReq: Partial<NextApiRequest> = {
   },
 } as Partial<NextApiRequest>;
 
+jest.mock("@prisma/client");
 jest.mock("jsonwebtoken", () => ({
   sign: jest.fn(() => "mocked_token"),
 }));
-
-jest.mock("../../../../connector/createMongoConnection");
 
 jest.mock("../../../../helpers/passwordResetEmail", () => ({
   sendPasswordResetEmail: jest.fn(() =>
     Promise.resolve(AuthenticationStatusCode.SUCCESS)
   ),
 }));
-
-jest.mock("../../../../connector/MongoDatabaseConnection");
 
 jest.mock(
   "../../enquire/email-templates/EnquireTemplate",
@@ -35,80 +33,87 @@ jest.mock(
   }
 );
 
-describe("handler", () => {
+describe("forgot-password handler", () => {
   const mockJson = jest.fn();
   const mockStatus = jest.fn().mockReturnValue({ json: mockJson });
   let mockRes = { status: mockStatus } as Partial<NextApiResponse>;
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it("should send password reset email and return success", async () => {
     process.env.PROVIDER_EMAIL_VERIFICATION_SECRET = "your-email-secret";
 
-    const mockUsers = {
-      findOne: jest.fn().mockResolvedValue("jo"),
-      updateOne: jest.fn().mockResolvedValue(true),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockUsers),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
+    prismaMock.user.findFirst.mockResolvedValue({
+      id: "user-id",
+      email: "test@example.com",
+      type: UserType.CUSTOMER,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    } as any);
 
-    (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
+    prismaMock.verificationToken.create.mockResolvedValue({} as any);
+
     await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
 
-    expect(createMongoConnection).toHaveBeenCalledTimes(1);
+    expect(mockStatus).toHaveBeenCalledWith(200);
     expect(mockJson).toHaveBeenCalledWith({
       message: "Password reset email has been sent.",
+      code: AuthenticationStatusCode.SUCCESS,
     });
-    expect(mockStatus).toHaveBeenCalledWith(200);
 
     expect(sendPasswordResetEmail).toHaveBeenCalledWith({
       email: "test@example.com",
       subject: "You've requested to reset your password",
       body: "Click on the link to reset password",
-      html: "<p>Please click on this link to reset your password: http://example.com?verifyToken=mocked_token</p><p>Email: test@example.com</p>",
+      html: "<p>Please click on this link to reset your password: http://example.com/reset-password/mocked_token</p><p>Email: test@example.com</p>",
     });
   });
 
-  it("should handle database connection error", async () => {
-    const mockConnector = {
-      connect: jest.fn().mockReturnValue(undefined),
-      disconnect: jest.fn(),
-    };
-
-    (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
+  it("should handle user not found", async () => {
+    prismaMock.user.findFirst.mockResolvedValue(null);
 
     await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
 
-    expect(createMongoConnection).toHaveBeenCalledTimes(1);
-    expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith({ message: "connection error" });
+    expect(mockStatus).toHaveBeenCalledWith(404);
+    expect(mockJson).toHaveBeenCalledWith({
+      message: "User doesn't exist",
+      code: AuthenticationStatusCode.USER_NOT_EXIST,
+    });
   });
 
-  it("should handle user error", async () => {
-    const mockUsers = {
-      findOne: jest.fn().mockReturnValue(undefined),
-    };
-    const mockConnection = {
-      model: jest.fn().mockReturnValue(mockUsers),
-    };
-    const mockConnector = {
-      connect: jest.fn().mockResolvedValue(mockConnection),
-      disconnect: jest.fn(),
-    };
+  it("should handle internal server error on unexpected exceptions", async () => {
+    prismaMock.user.findFirst.mockRejectedValue(new Error("Unexpected error"));
+    await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
 
-    (createMongoConnection as jest.Mock).mockReturnValue(mockConnector);
+    expect(mockStatus).toHaveBeenCalledWith(500);
+    expect(mockJson).toHaveBeenCalledWith({
+      message: "Internal server error.",
+      code: AuthenticationStatusCode.INTERNAL_SERVER_ERROR,
+    });
+  });
+
+  it("should handle email sending failure", async () => {
+    process.env.PROVIDER_EMAIL_VERIFICATION_SECRET = "your-email-secret";
+
+    prismaMock.user.findFirst.mockResolvedValue({
+      id: "user-id",
+      email: "test@example.com",
+    } as any);
+
+    prismaMock.verificationToken.create.mockResolvedValue({} as any);
+
+    (sendPasswordResetEmail as jest.Mock).mockReturnValue(
+      AuthenticationStatusCode.EMAIL_FAILED
+    );
 
     await handler(mockReq as NextApiRequest, mockRes as NextApiResponse);
 
-    expect(createMongoConnection).toHaveBeenCalledTimes(1);
     expect(mockStatus).toHaveBeenCalledWith(500);
-    expect(mockJson).toHaveBeenCalledWith({ message: "user doesn't exist" });
+    expect(mockJson).toHaveBeenCalledWith({
+      message: "Internal server error.",
+      code: AuthenticationStatusCode.EMAIL_FAILED,
+    });
   });
 });

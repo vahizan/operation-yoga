@@ -26,6 +26,17 @@ describe("Navigation", () => {
       cy.get("body").click("topRight");
       cy.get('[data-test-id="drawer"]').should("not.be.visible"); // verify that the drawer is now visible
     });
+
+    it("should close nav drawer on link click", () => {
+      const hamburgerButton = cy.get('[data-test-id="hamburger-button"]');
+      hamburgerButton.click();
+      cy.get('[data-test-id="drawer"]').should("be.visible"); // verify that the drawer is now visible
+      cy.get("a").contains("Location").click("topRight");
+      cy.location().should((loc) => {
+        expect(loc.pathname).to.eq("/location");
+      });
+      cy.get('[data-test-id="drawer"]').should("not.be.visible"); // verify that the drawer is now visible
+    });
   });
 });
 
