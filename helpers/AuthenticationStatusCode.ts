@@ -5,6 +5,9 @@ enum AuthenticationStatusCode {
   INVALID_CREDENTIALS,
   SUCCESS,
   EMAIL_FAILED,
+  VERIFICATION_FAILED,
+  UPDATE_USER_DETAILS_FAILED,
+  INTERNAL_SERVER_ERROR,
 }
 
 export default AuthenticationStatusCode;

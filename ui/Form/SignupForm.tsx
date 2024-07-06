@@ -9,6 +9,7 @@ const SignupForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [isSigningUp, setSigningUp] = useState<boolean>();
@@ -21,6 +22,12 @@ const SignupForm = () => {
 
     if (!name || !email || !password) {
       setError("Please fill in all required fields.");
+      setSigningUp(false);
+      return;
+    }
+
+    if (confirmPassword !== password) {
+      setError("Passwords don't match");
       setSigningUp(false);
       return;
     }
@@ -40,13 +47,13 @@ const SignupForm = () => {
 
       if (response.data) {
         // SignupForm successful, redirect to the login page
-        await router.push("/login");
+        await router.push("/login?signup=success");
       } else {
         const data = await response.data.json();
         setError(data.message);
       }
     } catch (error) {
-      setError("An error occurred. Please try again.");
+      setError("An error occurred. Please try again later.");
     } finally {
       setSigningUp(false);
     }
@@ -85,6 +92,16 @@ const SignupForm = () => {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <div className={styles.formGroup}>
+          <label htmlFor={"confirmPassword"}>Confirm Password:</label>
+          <input
+            name={"confirmPassword"}
+            id={"confirmPassword"}
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </div>
         <div className={styles.formGroup}>
