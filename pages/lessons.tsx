@@ -18,6 +18,10 @@ export default function Lessons() {
   const [date, setDate] = useState<Value>(currDate);
   const [day, setDay] = useState<number>(currDate.getDay());
 
+  const { data, apiCallErrorMessage, apiLoading } = useApi<
+    Record<string, string>,
+    Array<ISession>
+  >(getSchedule, [day, date], { dayOfTheWeek: day.toString() });
   const lessonsRef = useRef<HTMLDivElement>(null);
 
   const handleDateChange = (value: Value) => {

@@ -3,10 +3,7 @@ import { render, fireEvent, waitFor } from "@testing-library/react";
 import LoginForm from "../LoginForm";
 import { signIn } from "next-auth/react";
 
-jest.mock("next-auth/react", () => ({
-  ...jest.requireActual("next-auth/react"),
-  signIn: jest.fn(),
-}));
+jest.mock("next-auth/react");
 
 describe("LoginForm", () => {
   it("should display error message when form is submitted with empty fields", async () => {
@@ -20,7 +17,8 @@ describe("LoginForm", () => {
   });
 
   it("should display error message when login fails", async () => {
-    (signIn as jest.Mock).mockRejectedValue({ error: "Invalid credentials" });
+    const signInMock = jest.fn(() => ({ error: "Invalid credentials" }));
+    (signIn as jest.Mock).mockImplementationOnce(signInMock);
 
     const { getByText, getByLabelText } = render(<LoginForm />);
 
@@ -32,20 +30,18 @@ describe("LoginForm", () => {
     fireEvent.submit(getByText("Login"));
 
     await waitFor(() => {
-      expect(signIn).toHaveBeenCalledWith("credentials", {
-        redirect: true,
-        callbackUrl: "/",
+      expect(signInMock).toHaveBeenCalledWith("credentials", {
+        redirect: false,
         email: "test@example.com",
         password: "password",
       });
-      expect(
-        getByText("Invalid username or password. Please try again")
-      ).toBeInTheDocument();
+      expect(getByText("Invalid credentials")).toBeInTheDocument();
     });
   });
 
   it("should not display error message when login succeeds", async () => {
-    (signIn as jest.Mock).mockResolvedValue({ error: null });
+    const signInMock = jest.fn(() => ({ error: null }));
+    (signIn as jest.Mock).mockImplementationOnce(signInMock);
 
     const { getByText, getByLabelText, queryByText } = render(<LoginForm />);
 
@@ -57,15 +53,12 @@ describe("LoginForm", () => {
     fireEvent.submit(getByText("Login"));
 
     await waitFor(() => {
-      expect(signIn).toHaveBeenCalledWith("credentials", {
-        redirect: true,
-        callbackUrl: "/",
+      expect(signInMock).toHaveBeenCalledWith("credentials", {
+        redirect: false,
         email: "test@example.com",
         password: "password",
       });
-      expect(
-        queryByText("Invalid username or password. Please try again")
-      ).toBeNull();
+      expect(queryByText("Invalid credentials")).toBeNull();
     });
   });
 });

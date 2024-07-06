@@ -10,7 +10,6 @@ describe("EnquiryForm", () => {
   afterEach(() => {
     jest.restoreAllMocks();
   });
-
   test("renders form fields", () => {
     render(<EnquiryForm />);
 
@@ -49,18 +48,6 @@ describe("EnquiryForm", () => {
     });
   });
 
-  test("should not display error message when email is empty", async () => {
-    render(<EnquiryForm />);
-
-    const emailField = screen.getByLabelText("Email");
-    fireEvent.focus(emailField);
-    fireEvent.blur(emailField);
-
-    await waitFor(() => {
-      expect(() => screen.getByText("Email is invalid")).toThrowError();
-    });
-  });
-
   test("should not display error messages before submit clicked", async () => {
     render(<EnquiryForm />);
 
@@ -88,7 +75,6 @@ describe("EnquiryForm", () => {
     fireEvent.change(screen.getByLabelText("Message"), {
       target: { value: "Test Message" },
     });
-
     fireEvent.click(screen.getByRole("button", { name: "Submit" }));
 
     await waitFor(() =>

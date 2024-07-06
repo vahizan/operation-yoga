@@ -2,76 +2,44 @@
 
 exports[`SignupForm renders the form 1`] = `
 <div>
-  <div
-    class="signupFormContainer"
-  >
+  <div>
     <form>
-      <div
-        class="formGroup"
-      >
-        <label
-          for="name"
-        >
-          Name:
-        </label>
+      <label>
+        Name:
         <input
-          id="name"
-          name="name"
           type="text"
           value=""
         />
-      </div>
-      <div
-        class="formGroup"
-      >
-        <label
-          for="email"
-        >
-          Email:
-        </label>
+      </label>
+      <br />
+      <label>
+        Email:
         <input
-          id="email"
-          name="email"
           type="email"
           value=""
         />
-      </div>
-      <div
-        class="formGroup"
-      >
-        <label
-          for="password"
-        >
-          Password:
-        </label>
+      </label>
+      <br />
+      <label>
+        Password:
         <input
-          id="password"
-          name="password"
           type="password"
           value=""
         />
-      </div>
-      <div
-        class="formGroup"
-      >
-        <label
-          for="phone"
-        >
-          Phone Number (Optional):
-        </label>
+      </label>
+      <br />
+      <label>
+        Phone Number (Optional):
         <input
-          id="phone"
-          name="phone"
           type="text"
           value=""
         />
-      </div>
+      </label>
+      <br />
       <button
         type="submit"
       >
-        <span>
-          Sign Up
-        </span>
+        Sign Up
       </button>
     </form>
   </div>

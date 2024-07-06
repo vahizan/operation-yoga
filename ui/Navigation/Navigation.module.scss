@@ -42,6 +42,7 @@
   }
 }
 
+
 .navigationContainer {
   top: 0;
   right: 0;
@@ -149,8 +150,9 @@
   &__root {
     @include autoFontSize(24);
     &__children {
-      padding: 0;
       @include autoFontSize(18);
+      padding-left: 20px;
+      padding-right: 20px;
     }
   }
 

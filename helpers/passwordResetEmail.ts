@@ -1,6 +1,7 @@
+import { USER_MODEL_NAME } from "../model/User.model";
 import AuthenticationStatusCode from "./AuthenticationStatusCode";
 import { sendEmail } from "./sendEmail";
-import PrismaClient from "../connector/Prisma/prismaClient";
+import createMongoConnection from "../connector/createMongoConnection";
 
 interface EmailInfo {
   email: string;
@@ -16,15 +17,14 @@ export const sendPasswordResetEmail = async (
       return AuthenticationStatusCode.INVALID_CREDENTIALS;
     }
 
-    const mongoConnector = PrismaClient;
+    const mongoConnector = createMongoConnection();
+    const connection = await mongoConnector.connect();
 
-    if (!mongoConnector) {
+    if (!connection) {
       return AuthenticationStatusCode.CONNECTION_FAILED;
     }
-    const user = await mongoConnector.user.findFirst({
-      where: {
-        email: emailInfo.email,
-      },
+    const user = await connection.model(USER_MODEL_NAME).findOne({
+      email: emailInfo.email,
     });
 
     if (!user) {
@@ -39,7 +39,10 @@ export const sendPasswordResetEmail = async (
         emailInfo.html
       );
     } catch (err) {
+      console.log(err);
       return AuthenticationStatusCode.EMAIL_FAILED;
+    } finally {
+      mongoConnector?.disconnect();
     }
 
     return AuthenticationStatusCode.SUCCESS;
