@@ -35,10 +35,8 @@ export default async function handler(
         .status(400)
         .json({ message: "A user with this email already exists." });
     }
+
     const hashedPass = await hashPassword(password, 12);
-    if (!hashedPass) {
-      res.status(500).json({ message: "An error occurred. Please try again." });
-    }
 
     const userProps = { name, email };
     const newUser = req.body?.phone
@@ -62,6 +60,10 @@ export default async function handler(
 
     return res.status(201).json({ message: "User created successfully." });
   } catch (error) {
-    res.status(500).json({ message: "An error occurred. Please try again." });
+    const err = error as Error;
+    console.error(err.message);
+    res
+      .status(500)
+      .json({ message: "An error occurred. Please try again later." });
   }
 }

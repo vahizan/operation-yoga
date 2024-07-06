@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import styles from "./signupForm.module.scss";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
@@ -53,7 +53,13 @@ const SignupForm = () => {
         setError(data.message);
       }
     } catch (error) {
-      setError("An error occurred. Please try again later.");
+      const axiosErr = error as AxiosError;
+      if (axiosErr.response?.data) {
+        const data = axiosErr.response.data as unknown as { message: string };
+        setError(data.message);
+      } else {
+        setError("An error occurred please try again later");
+      }
     } finally {
       setSigningUp(false);
     }
