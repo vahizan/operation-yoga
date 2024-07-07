@@ -4,22 +4,6 @@ import type { NextAuthConfig } from "next-auth";
 import axios from "axios";
 import { authorizeLogin } from "@/helpers/authenticationHelper";
 
-async function login(credentials: any) {
-  try {
-    return await axios.post("/api/auth/login", credentials).then((res: any) => {
-      const { user } = res;
-      return {
-        name: user.name,
-        email: user.email,
-        image: user.profile_photo,
-        accessToken: res.access_token,
-      };
-    });
-  } catch (e) {
-    throw new Error("Something went wrong.");
-  }
-}
-
 export default {
   providers: [
     Credentials({
