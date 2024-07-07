@@ -4,7 +4,6 @@ import { getTokenPayload } from "../../../helpers/authenticationHelper";
 import { hashPassword } from "../../../helpers/loginHelper";
 import PrismaClient from "../../../connector/Prisma/prismaClient";
 import { ProviderType } from "../../../enum/ProviderType";
-import { ProviderAccountId } from "../../../enum/ProviderAccountId";
 
 export default async function handler(
   req: NextApiRequest,
@@ -85,18 +84,22 @@ export default async function handler(
       return res.status(403).json({ message: "Password couldn't be changed" });
     }
 
-    await connection.account.update({
+    const account = await connection.account.findFirst({
       where: {
-        userId: user?.id,
-        provider_providerAccountId: {
-          provider: ProviderType.CREDENTIALS,
-          providerAccountId: ProviderAccountId.CREDENTIALS,
-        },
-      },
-      data: {
-        passwordHash,
+        userId: user.id,
       },
     });
+
+    if (account) {
+      await connection.account.update({
+        where: {
+          id: account.id,
+        },
+        data: {
+          passwordHash: passwordHash,
+        },
+      });
+    }
 
     await connection.verificationToken.delete({
       where: {
