@@ -1,11 +1,9 @@
-"use client";
-
 import { FC, FormEvent, useEffect, useState } from "react";
 import styles from "./loginForm.module.scss";
 import Link from "next/link";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
-import { signIn, SignInResponse } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
+import { signIn, SignInResponse } from "next-auth/react";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
@@ -35,15 +33,18 @@ const LoginForm: FC = () => {
       return;
     }
 
-    await signIn("UserAndPassword", {
+    await signIn("credentials", {
       email,
       password,
+      callbackUrl: "/",
+      redirect: false,
     })
-      .then((response: SignInResponse | undefined) => {
-        if (!response || response?.error) {
+      .then(({ error, url }: any) => {
+        if (url) {
+          window.location.href = url;
+        }
+        if (error) {
           window.location.href = "/login?error=invalid-credentials";
-        } else {
-          setLoggingIn(false);
         }
       })
       .finally(() => {
@@ -52,7 +53,7 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <div className={styles.loginForm}>
+    <form onSubmit={handleSubmit} className={styles.loginForm}>
       {error && (
         <div data-testid="login-error" className={"error"}>
           {error}
@@ -97,10 +98,10 @@ const LoginForm: FC = () => {
         </Link>
       </div>
 
-      <button disabled={isLoggingIn} onClick={handleSubmit} type="submit">
+      <button disabled={isLoggingIn} type="submit">
         {isLoggingIn ? <BouncingDotsLoader /> : <span>Login</span>}
       </button>
-    </div>
+    </form>
   );
 };
 

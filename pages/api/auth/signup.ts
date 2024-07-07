@@ -36,7 +36,7 @@ export default async function handler(
         .json({ message: "A user with this email already exists." });
     }
 
-    const hashedPass = await hashPassword(password, 12);
+    const hashedPass = await hashPassword(password);
 
     const userProps = { name, email };
     const newUser = req.body?.phone

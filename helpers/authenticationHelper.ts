@@ -16,7 +16,7 @@ export const authorizeLogin = async (
     if (!mongoConnector) {
       return null;
     }
-    const user = await mongoConnector.user.findFirst({
+    const user = await mongoConnector.user.findUnique({
       where: {
         email: credentials?.email as string,
       },
@@ -34,7 +34,7 @@ export const authorizeLogin = async (
     });
 
     if (!account) {
-      return null;
+      return { data: "ACCOUNT NO" };
     }
 
     const isValidPassword = await comparePassword(
