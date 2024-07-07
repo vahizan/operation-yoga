@@ -1,10 +1,9 @@
-"use client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import axios, { AxiosError } from "axios";
-import Layout from "../../ui/Layout";
+import Layout from "../ui/Layout";
 import styles from "./resetPassword.module.scss";
-import BouncingDotsLoader from "../../ui/Loader/BouncingDotsLoader";
+import BouncingDotsLoader from "../ui/Loader/BouncingDotsLoader";
 
 const ResetPassword = () => {
   const [password, setPassword] = useState("");

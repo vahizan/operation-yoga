@@ -71,7 +71,7 @@ export default async function handler(
     const host = req.headers["x-forwarded-host"] || req.headers.host;
 
     // Construct the site URL using the protocol and host
-    const siteUrl = `${protocol}://${host}/reset-password/${token}`;
+    const siteUrl = `${protocol}://${host}/reset-password?verifyToken=${token}`;
 
     const result = await sendPasswordResetEmail({
       email: email,
