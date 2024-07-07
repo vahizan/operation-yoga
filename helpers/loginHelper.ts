@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-export const hashPassword = async (password: string, saltRounds = 10) => {
+export const hashPassword = async (password: string, saltRounds = 12) => {
   try {
     const pepper = process.env.PEPPER;
     const pepperedPassword = password + pepper;
