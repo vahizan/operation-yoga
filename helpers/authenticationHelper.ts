@@ -34,7 +34,7 @@ export const authorizeLogin = async (
     });
 
     if (!account) {
-      return { data: "ACCOUNT NO" };
+      return null;
     }
 
     const isValidPassword = await comparePassword(

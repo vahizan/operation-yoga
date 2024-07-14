@@ -7,11 +7,10 @@ import NavigationButton from "./Button/NavigationButton";
 import Link from "next/link";
 import YogshalaFancyLogo from "./YogshalaFancyLogo";
 import Certification from "./Certfication";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import AccountIcon from "public/account-icon.svg";
 import MainLogo from "../public/logo-only.svg";
-
-const AUTHENTICATED = "authenticated";
+import { AUTHENTICATED } from "@/ui/constants";
 
 export default function Layout({ children }: { children: ReactNode }) {
   const [isAtTop, setIsAtTop] = useState<boolean>(true);
@@ -29,15 +28,13 @@ export default function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   const { status, data } = useSession();
+  console.log("data", data);
   return (
     <>
       <Head>
         <title>Yoga Time</title>
         <meta name="description" content="Yogshala" />
-        <link
-          rel="icon"
-          href="/Users/vahizanvijayanathan/Desktop/Dev/Personal Projects/operation-yoga/public/favicon.ico"
-        />
+        <link rel="icon" href="public/favicon.ico" />
       </Head>
       <div className={styles.container}>
         <div
@@ -98,6 +95,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             ) : (
               <div className={styles.header__rightContent__loginContainer}>
                 <NavigationButton text={"Login"} url={"/login"} />
+                <NavigationButton text={"Signup"} url={"/signup"} />
               </div>
             )}
           </div>

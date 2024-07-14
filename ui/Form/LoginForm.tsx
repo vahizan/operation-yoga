@@ -3,7 +3,8 @@ import styles from "./loginForm.module.scss";
 import Link from "next/link";
 import BouncingDotsLoader from "../Loader/BouncingDotsLoader";
 import { useSearchParams } from "next/navigation";
-import { signIn, SignInResponse } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { AUTHENTICATED, SIGNUP_SUCCESS } from "@/ui/constants";
 
 const LoginForm: FC = () => {
   const [email, setEmail] = useState("");
@@ -13,7 +14,8 @@ const LoginForm: FC = () => {
   const [error, setError] = useState<string>();
   const [isLoggingIn, setLoggingIn] = useState<boolean>();
   const [message, setMessage] = useState<string>();
-  const SIGNUP_SUCCESS = "success";
+  const { status, data } = useSession();
+
   useEffect(() => {
     if (params?.get("error")) {
       setError("Invalid username or password. Please try again later");
@@ -26,6 +28,12 @@ const LoginForm: FC = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoggingIn(true);
+
+    if (status === AUTHENTICATED) {
+      setMessage("You're already signed in");
+      setLoggingIn(false);
+      return;
+    }
 
     if (!email || !password) {
       setError("Please fill in all fields");

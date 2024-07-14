@@ -3,6 +3,16 @@ import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import axios from "axios";
 import { authorizeLogin } from "@/helpers/authenticationHelper";
+import { UserType } from "./enum/UserType";
+import { JWT } from "@auth/core/jwt";
+
+interface User {
+  scope: string;
+  userType: UserType;
+  name: string;
+  id: string;
+  email: string;
+}
 
 export default {
   providers: [
@@ -35,16 +45,32 @@ export default {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 432000, // 5 days
+  },
   callbacks: {
-    async jwt({ user, token }) {
+    session: ({ session, token }) => {
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          userType: token.userType,
+        },
+      };
+    },
+    jwt: ({ token, user }) => {
       if (user) {
-        token.user = user;
+        const u = user as unknown as any;
+        return {
+          ...token,
+          id: u.id,
+          email: user.email,
+          userType: u?.userType,
+        };
       }
       return token;
-    },
-    async session({ session, token }: any) {
-      session.user = token.user;
-      return session;
     },
   },
   debug: process.env.NODE_ENV === "development",
