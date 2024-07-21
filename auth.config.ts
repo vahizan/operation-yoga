@@ -1,7 +1,6 @@
 import Resend from "@auth/core/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import axios from "axios";
 import { authorizeLogin } from "@/helpers/authenticationHelper";
 import { UserType } from "./enum/UserType";
 import { JWT } from "@auth/core/jwt";
@@ -50,24 +49,28 @@ export default {
     maxAge: 432000, // 5 days
   },
   callbacks: {
-    session: ({ session, token }) => {
+    session: ({ session, token }: { session: any; token: any }) => {
       return {
-        ...session,
+        expires: session?.expires,
         user: {
-          ...session.user,
-          id: token.id,
-          userType: token.userType,
+          ...token,
+          image: session?.image,
         },
       };
     },
-    jwt: ({ token, user }) => {
+    jwt: ({
+      token,
+      user,
+    }: {
+      account: any;
+      profile: any;
+      user: any;
+      token: JWT;
+    }) => {
       if (user) {
-        const u = user as unknown as any;
         return {
           ...token,
-          id: u.id,
-          email: user.email,
-          userType: u?.userType,
+          ...user,
         };
       }
       return token;

@@ -50,7 +50,7 @@ export default async function handler(
     await mongoPrisma.account.create({
       data: {
         userId: user.id,
-        type: ProviderType.CREDENTIALS,
+        type: UserType.CUSTOMER,
         provider: ProviderType.CREDENTIALS,
         providerAccountId: ProviderAccountId.CREDENTIALS,
         passwordHash: hashedPass,
