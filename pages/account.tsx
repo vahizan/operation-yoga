@@ -2,6 +2,7 @@ import { signOut, useSession } from "next-auth/react";
 import Layout from "../ui/Layout";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "@/ui/Protected/ProtectedRoute";
 
 export default function Account() {
   const [isRedirectToHome, setRedirectToHome] = useState(false);
@@ -14,7 +15,7 @@ export default function Account() {
   const router = useRouter();
   const session = useSession();
   return (
-    <>
+    <ProtectedRoute>
       <Layout>
         {session.data?.user ? (
           <button
@@ -33,6 +34,6 @@ export default function Account() {
         )}
         {signOutError && <div>{signOutError}</div>}
       </Layout>
-    </>
+    </ProtectedRoute>
   );
 }

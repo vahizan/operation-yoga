@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 
 const AdminRoute: FC<PropsWithChildren> = ({ children }) => {
   const { data, status } = useSession();
-  return null;
+  if()
 };
 
 export default AdminRoute;
