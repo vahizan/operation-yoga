@@ -5,8 +5,9 @@ import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
 import { useSession } from "next-auth/react";
+import withAdmin from "../../hoc/withAdmin";
 
-export function CreateLesson() {
+const CreateLesson = () => {
   const session = useSession();
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
@@ -54,6 +55,6 @@ export function CreateLesson() {
       </>
     </Layout>
   );
-}
+};
 
-export default CreateLesson;
+export default withAdmin(CreateLesson);

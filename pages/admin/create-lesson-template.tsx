@@ -3,6 +3,7 @@ import Layout from "../../ui/Layout";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { createLessonTemplate } from "../../hooks/api";
 import { useSession } from "next-auth/react";
+import withAdmin from "../../hoc/withAdmin";
 
 export const CreateLessonTemplate = () => {
   const [lessonTemplateData, setLessonTemplateData] = useState<any>();
@@ -43,4 +44,4 @@ export const CreateLessonTemplate = () => {
   );
 };
 
-export default CreateLessonTemplate;
+export default withAdmin(CreateLessonTemplate);

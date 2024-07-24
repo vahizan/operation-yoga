@@ -2,16 +2,7 @@ import Resend from "@auth/core/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
 import { authorizeLogin } from "@/helpers/authenticationHelper";
-import { UserType } from "./enum/UserType";
 import { JWT } from "@auth/core/jwt";
-
-interface User {
-  scope: string;
-  userType: UserType;
-  name: string;
-  id: string;
-  email: string;
-}
 
 export default {
   providers: [

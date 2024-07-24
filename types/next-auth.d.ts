@@ -1,6 +1,5 @@
-import NextAuth, { DefaultSession } from "types/next-auth";
+import { DefaultSession } from "types/next-auth";
 import { UserType } from "../enum/UserType";
-import { DefaultJWT } from "@auth/core/jwt";
 
 declare module "types/next-auth" {
   /**
