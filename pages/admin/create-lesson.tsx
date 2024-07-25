@@ -4,11 +4,13 @@ import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
-import { useSession } from "next-auth/react";
 import withAdmin from "../../hoc/withAdmin";
+import { InferGetServerSidePropsType } from "next";
+import { getSession } from "next-auth/react";
 
-const CreateLesson = () => {
-  const session = useSession();
+function CreateLesson({
+  session,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
     useState<LessonTemplateFormData>();
@@ -23,8 +25,8 @@ const CreateLesson = () => {
   return (
     <Layout>
       <>
-        <h1>Create Lesson {session?.data?.user?.name}</h1>
-        {session?.data?.user ? (
+        <h1>Create Lesson</h1>
+        {session?.user ? (
           <>
             <LessonTemplateForm
               onSubmit={setLessonTemplateData}
@@ -55,6 +57,11 @@ const CreateLesson = () => {
       </>
     </Layout>
   );
+}
+
+export const getServerSideProps = async () => {
+  const session = await getSession();
+  return { props: { session } };
 };
 
 export default withAdmin(CreateLesson);

@@ -34,7 +34,6 @@ const LessonSchedule: React.FC = () => {
       });
   }, [session]);
 
-  //need to do an aggregation to get createdBy data and instructor data
   return (
     <>
       <div>Lessons</div>
