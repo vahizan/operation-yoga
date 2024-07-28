@@ -12,45 +12,49 @@ function CreateLesson({
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSubmit, setSubmit] = useState<boolean>(false);
-  const [lessonTemplateData, setLessonTemplateData] =
-    useState<LessonTemplateFormData>();
+  const [lessonData, setLessonData] = useState<LessonTemplateFormData>();
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
 
   useEffect(() => {
-    if (lessonTemplateData) {
+    if (lessonData) {
       //create lesson out
     }
-  }, [lessonTemplateData]);
+  }, [lessonData]);
   return (
     <Layout>
       <>
         <h1>Create Lesson</h1>
         {session?.user ? (
-          <>
-            <LessonTemplateForm
-              onSubmit={setLessonTemplateData}
-              setSubmit={setSubmit}
-              isSubmit={isSubmit}
-            />
-            <DatepickerWithLabel
-              id={"start-date-range"}
-              label={"Start Date"}
-              selectedDate={new Date()}
-              onChange={(date) => setStartDate(date)}
-              errorMessage={""}
-            />
-            <DatepickerWithLabel
-              id={"end-date-range"}
-              label={"End Date "}
-              selectedDate={new Date()}
-              onChange={(date) => setEndDate(date)}
-              errorMessage={""}
-            />
-            <button onClick={() => setSubmit(true)} type="submit">
-              Create Lesson
-            </button>
-          </>
+          <div>
+            <div className={"top"}>
+              <span>Select from existing templates</span>
+            </div>
+            <div className={"bottom"}>
+              <LessonTemplateForm
+                onSubmit={setLessonTemplateData}
+                setSubmit={setSubmit}
+                isSubmit={isSubmit}
+              />
+              <DatepickerWithLabel
+                id={"start-date-range"}
+                label={"Start Date"}
+                selectedDate={new Date()}
+                onChange={(date) => setStartDate(date)}
+                errorMessage={""}
+              />
+              <DatepickerWithLabel
+                id={"end-date-range"}
+                label={"End Date "}
+                selectedDate={new Date()}
+                onChange={(date) => setEndDate(date)}
+                errorMessage={""}
+              />
+              <button onClick={() => setSubmit(true)} type="submit">
+                Create Lesson
+              </button>
+            </div>
+          </div>
         ) : (
           <div>Unauthorized User</div>
         )}
