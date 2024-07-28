@@ -51,7 +51,7 @@ export const validateInput = (
   }
 
   if (!selectedInstructorId) {
-    errorValues.instructorName = "Instructor name is required";
+    errorValues.instructor = "Instructor is required";
   }
 
   return errorValues;

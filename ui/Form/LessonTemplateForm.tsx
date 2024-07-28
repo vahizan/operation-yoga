@@ -118,7 +118,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
 
     const user = session?.data?.user;
     if (!user?.email) {
-      router.push("/404");
+      router.push("/unauthorized");
       return;
     }
 
@@ -126,22 +126,21 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       (instructor) => instructor.id === selectedInstructorId
     );
 
-    const lessonTemplateBody: any = {
+    const lessonTemplateBody: LessonTemplateFormData = {
       availability: formData?.availability || MIN_AVAILABILITY,
-      endTime: endTime || 1,
-      dayOfWeek: dayOfWeek || 1,
-      startTime: startTime || 0,
-      location: formData?.roomLocation,
-      price: formData?.price || 0,
-      createdBy: {
-        _id: user?.id,
-        name: user?.name,
-        email: user?.email,
-      },
+      endTime: endTime,
+      dayOfWeek: dayOfWeek,
+      startTime: startTime,
+      location: formData?.location,
+      room: formData?.room,
+      price: formData?.price,
+      createdBy: user?.id,
       currency: currency || "",
       instructor: selectedUser,
-      name: formData?.lessonName || "default-name",
+      title: formData?.lessonName || "untitled lesson template",
+      description: formData?.description,
     };
+
     onSubmit(lessonTemplateBody);
 
     setSubmit(false);
@@ -172,6 +171,18 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   };
 
   const [formData, setFormData] = useState<LessonTemplateFormData>({
+    createdBy: "",
+    currency: "",
+    dayOfWeek: 0,
+    description: "",
+    endTime: 0,
+    instructor: { name: "", id: "" },
+    lessonName: "",
+    location: "",
+    price: 0,
+    room: "",
+    startTime: 0,
+    title: "",
     availability: MIN_AVAILABILITY,
   });
 
@@ -218,13 +229,21 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       <div>
         <InputField
           disabled={isReadOnly}
-          label={"Room/Location"}
-          name={"roomLocation"}
-          value={formData.roomLocation}
+          label={"Room"}
+          name={"room"}
+          value={formData.room}
           onChange={handleInputChange}
-          errorMessage={errors.roomLocation}
+          errorMessage={errors.room}
         />
       </div>
+      <InputField
+        disabled={isReadOnly}
+        label={"Location"}
+        name={"location"}
+        value={formData.location}
+        onChange={handleInputChange}
+        errorMessage={errors.location}
+      />
       <div>
         <InputField
           disabled={isReadOnly}

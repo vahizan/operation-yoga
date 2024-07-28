@@ -599,16 +599,30 @@ exports[`LessonTemplateForm renders form fields 1`] = `
         class="inputField"
       >
         <label
-          for="roomLocation"
+          for="room"
         >
-          Room/Location
+          Room
         </label>
         <input
-          id="roomLocation"
-          name="roomLocation"
+          id="room"
+          name="room"
           value=""
         />
       </div>
+    </div>
+    <div
+      class="inputField"
+    >
+      <label
+        for="location"
+      >
+        Location
+      </label>
+      <input
+        id="location"
+        name="location"
+        value=""
+      />
     </div>
     <div>
       <div
@@ -623,7 +637,7 @@ exports[`LessonTemplateForm renders form fields 1`] = `
           id="price"
           name="price"
           type="number"
-          value=""
+          value="0"
         />
       </div>
       <span>
