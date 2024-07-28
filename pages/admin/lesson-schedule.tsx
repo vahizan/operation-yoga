@@ -5,6 +5,7 @@ import { getInstructorLessonSchedule } from "../../hooks/api";
 import { useRouter } from "next/navigation";
 import { ILesson } from "../api/interfaces";
 import { useSession } from "next-auth/react";
+import withAdmin from "../../hoc/withAdmin";
 
 const LessonSchedule: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
@@ -33,7 +34,6 @@ const LessonSchedule: React.FC = () => {
       });
   }, [session]);
 
-  //need to do an aggregation to get createdBy data and instructor data
   return (
     <>
       <div>Lessons</div>
@@ -51,4 +51,4 @@ const LessonSchedule: React.FC = () => {
   );
 };
 
-export default LessonSchedule;
+export default withAdmin(LessonSchedule);

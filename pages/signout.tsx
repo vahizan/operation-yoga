@@ -1,9 +1,7 @@
 import { FC } from "react";
 import Layout from "../ui/Layout";
-import { signOut } from "next-auth/react";
 
-const Signout: FC = () => {
-  signOut({ callbackUrl: "/signOut", redirect: true });
+const signout: FC = () => {
   return (
     <Layout>
       <div>You've successfully signed out.</div>
@@ -11,4 +9,4 @@ const Signout: FC = () => {
   );
 };
 
-export default Signout;
+export default signout;

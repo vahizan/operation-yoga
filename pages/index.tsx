@@ -24,17 +24,17 @@ export default function Home() {
     <Layout>
       <main>
         <div className={styles.heroContainer}>
-          <Hero
-            desktopVideoUrl={
-              "https://d399a6wtv3gpjg.cloudfront.net/hero-video-desktop.mp4"
-            }
-            mobileVideoUrl={
-              "https://d399a6wtv3gpjg.cloudfront.net/hero-video-mobile.mp4"
-            }
-            videoAlt={"instructor teaching yoga by the ganges"}
-            content={"Veda Yogshala and Spa"}
-            cta={"/schedule"}
-          />
+          {/*<Hero*/}
+          {/*  desktopVideoUrl={*/}
+          {/*    "https://d399a6wtv3gpjg.cloudfront.net/hero-video-desktop.mp4"*/}
+          {/*  }*/}
+          {/*  mobileVideoUrl={*/}
+          {/*    "https://d399a6wtv3gpjg.cloudfront.net/hero-video-mobile.mp4"*/}
+          {/*  }*/}
+          {/*  videoAlt={"instructor teaching yoga by the ganges"}*/}
+          {/*  content={"Veda Yogshala and Spa"}*/}
+          {/*  cta={"/schedule"}*/}
+          {/*/>*/}
         </div>
         <h1 className={styles.secondTitle}>
           VEDA <span>YOGA</span> <span>CENTRE</span>

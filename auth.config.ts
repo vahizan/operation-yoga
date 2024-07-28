@@ -1,8 +1,8 @@
 import Resend from "@auth/core/providers/resend";
 import Credentials from "next-auth/providers/credentials";
 import type { NextAuthConfig } from "next-auth";
-import axios from "axios";
 import { authorizeLogin } from "@/helpers/authenticationHelper";
+import { JWT } from "@auth/core/jwt";
 
 export default {
   providers: [
@@ -35,16 +35,36 @@ export default {
       from: process.env.EMAIL_FROM,
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 432000, // 5 days
+  },
   callbacks: {
-    async jwt({ user, token }) {
+    session: ({ session, token }: { session: any; token: any }) => {
+      return {
+        expires: session?.expires,
+        user: {
+          ...token,
+          image: session?.image,
+        },
+      };
+    },
+    jwt: ({
+      token,
+      user,
+    }: {
+      account: any;
+      profile: any;
+      user: any;
+      token: JWT;
+    }) => {
       if (user) {
-        token.user = user;
+        return {
+          ...token,
+          ...user,
+        };
       }
       return token;
-    },
-    async session({ session, token }: any) {
-      session.user = token.user;
-      return session;
     },
   },
   debug: process.env.NODE_ENV === "development",

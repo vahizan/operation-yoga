@@ -1,7 +1,8 @@
 import React from "react";
 import Layout from "../../ui/Layout";
+import withAuth from "../../hoc/withAuth";
 
-export const Bookings = () => {
+export const Lessons = () => {
   return (
     <Layout>
       <>
@@ -11,4 +12,4 @@ export const Bookings = () => {
   );
 };
 
-export default Bookings;
+export default withAuth(Lessons);
