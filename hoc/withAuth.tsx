@@ -12,7 +12,7 @@ const withAuth = <P extends object>(
     useEffect(() => {
       if (status === "loading") return;
       if (!isUser) {
-        redirect("/login");
+        redirect("/unauthorized");
       }
     }, [status, isUser]);
 
