@@ -24,37 +24,38 @@ function CreateLesson({
   }, [lessonTemplateData]);
   return (
     <Layout>
-      <>
+      <div>
         <h1>Create Lesson</h1>
-        {session?.user ? (
-          <>
-            <LessonTemplateForm
-              onSubmit={setLessonTemplateData}
-              setSubmit={setSubmit}
-              isSubmit={isSubmit}
-            />
-            <DatepickerWithLabel
-              id={"start-date-range"}
-              label={"Start Date"}
-              selectedDate={new Date()}
-              onChange={(date) => setStartDate(date)}
-              errorMessage={""}
-            />
-            <DatepickerWithLabel
-              id={"end-date-range"}
-              label={"End Date "}
-              selectedDate={new Date()}
-              onChange={(date) => setEndDate(date)}
-              errorMessage={""}
-            />
-            <button onClick={() => setSubmit(true)} type="submit">
-              Create Lesson
-            </button>
-          </>
-        ) : (
-          <div>Unauthorized User</div>
-        )}
-      </>
+
+        <LessonTemplateForm
+          onSubmit={setLessonTemplateData}
+          setSubmit={setSubmit}
+          isSubmit={isSubmit}
+        />
+        <DatepickerWithLabel
+          id={"start-date-range"}
+          label={"Start Date"}
+          selectedDate={new Date()}
+          onChange={(date) => setStartDate(date)}
+          errorMessage={""}
+        />
+        <DatepickerWithLabel
+          id={"end-date-range"}
+          label={"End Date "}
+          selectedDate={new Date()}
+          onChange={(date) => setEndDate(date)}
+          errorMessage={""}
+        />
+        <button onClick={() => setSubmit(true)} type="submit">
+          Create Lesson
+        </button>
+      </div>
+      <div>Divider</div>
+      <div className={"existingTemplate"}>
+        <h2>Create from existing template</h2>
+        {/* List top 5 templates */}
+        {/*  Pagination Section */}
+      </div>
     </Layout>
   );
 }

@@ -7,7 +7,7 @@ import { ILesson } from "../api/interfaces";
 import { useSession } from "next-auth/react";
 import withAdmin from "../../hoc/withAdmin";
 
-const LessonSchedule: React.FC = () => {
+const Schedule: React.FC = () => {
   const [limits, setLimits] = useState<number>(10);
   const [instructorLessons, setInstructorLessons] = useState<ILesson[]>();
   const [instructorLessonsError, setInstructorLessonsError] =
@@ -19,7 +19,7 @@ const LessonSchedule: React.FC = () => {
 
   useEffect(() => {
     if (session?.data?.user) {
-      router.push("/404");
+      router.push("/unauthorized");
     }
 
     getInstructorLessonSchedule({
@@ -51,4 +51,4 @@ const LessonSchedule: React.FC = () => {
   );
 };
 
-export default withAdmin(LessonSchedule);
+export default withAdmin(Schedule);
