@@ -53,7 +53,7 @@ function CreateLesson({
       <div>Divider</div>
       <div className={"existingTemplate"}>
         <h2>Create from existing template</h2>
-        {/* List top 5 templates */}
+        {/* TemplateList top 5 templates */}
         {/*  Pagination Section */}
       </div>
     </Layout>
