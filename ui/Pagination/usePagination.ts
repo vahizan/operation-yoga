@@ -25,23 +25,33 @@ export function usePagination<T>({
 
   useEffect(() => {
     axios
-      .get(fetchUrl)
+      .get(`${fetchUrl}?page=${currentPage}&limit=${currentLimit}`)
       .then((response) => {
         setData(response.data);
       })
       .catch((e) => {
         const axiosError = e as AxiosError;
-        if (axiosError?.response) {
-          //setErrorMessage(axiosError?.response?.data?.message);
+        if (axiosError?.response?.data) {
+          setErrorMessage(
+            (axiosError.response.data as { message: string }).message as string
+          );
         }
       });
-  });
+  }, [currentPage, currentLimit]);
 
-  const previous = () => {};
+  const previous = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-  const next = () => {};
+  const next = () => {
+    setCurrentPage(currentPage + 1);
+  };
 
-  const updatePage = (page: number) => {};
+  const updatePage = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return {
     data,
