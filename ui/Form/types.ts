@@ -25,7 +25,7 @@ export interface LessonTemplateFormData {
   currency?: string;
   instructor: { name: string; id: string };
   availability?: number;
-  dayOfWeek?: number;
+  dayOfWeek?: number[];
   title?: string;
 }
 

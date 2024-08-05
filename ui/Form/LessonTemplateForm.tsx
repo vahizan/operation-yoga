@@ -129,7 +129,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
     const lessonTemplateBody: LessonTemplateFormData = {
       availability: formData?.availability || MIN_AVAILABILITY,
       endTime: endTime,
-      dayOfWeek: dayOfWeek,
+      dayOfWeek: [dayOfWeek],
       startTime: startTime,
       location: formData?.location,
       room: formData?.room,
@@ -173,7 +173,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   const [formData, setFormData] = useState<LessonTemplateFormData>({
     createdBy: "",
     currency: "",
-    dayOfWeek: 0,
+    dayOfWeek: [0],
     description: "",
     endTime: 0,
     instructor: { name: "", id: "" },
