@@ -30,10 +30,11 @@ const MultiSelect: React.FC<SelectProps> = (props) => {
   const [selectedOptions, setSelectedOptions] = useState(toMap(options));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
     const option = selectedOptions[e.target.value];
     const newOption = { ...option, checked: !option.checked };
-    setSelectedOptions({ ...selectedOptions, newOption });
+    const newValue = { ...selectedOptions, newOption };
+    setSelectedOptions(newValue);
+    onChange(newValue);
   };
 
   return (
@@ -45,6 +46,7 @@ const MultiSelect: React.FC<SelectProps> = (props) => {
             {...selectProps}
             displayName={option.name}
             onChange={handleChange}
+            defaultChecked={option.checked}
             id={`${option.name}-${option.value}`}
           />
         );

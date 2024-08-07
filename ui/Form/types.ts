@@ -8,7 +8,7 @@ export interface LessonTemplateFormDataValidation {
   lessonName?: string;
   instructor?: string;
   availability?: string;
-  dayOfWeek?: string;
+  daysOfWeek?: string;
   currency?: string;
   title?: string;
 }
@@ -25,7 +25,7 @@ export interface LessonTemplateFormData {
   currency?: string;
   instructor: { name: string; id: string };
   availability?: number;
-  dayOfWeek?: number[];
+  daysOfWeek?: number[];
   title?: string;
 }
 

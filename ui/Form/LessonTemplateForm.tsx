@@ -14,6 +14,8 @@ import {
 import { validateInput } from "./helpers";
 import { Currency } from "../../model/admin/enums";
 import { useSession } from "next-auth/react";
+import MultiSelect from "@/ui/MultiSelect/MultiSelect";
+import { da } from "date-fns/locale";
 
 interface LessonTemplateFormProps {
   instructors?: any[];
@@ -65,7 +67,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   const [selectedInstructorId, setSelectedInstructorId] = useState<string>();
   const [startTime, setStartTime] = useState<number>();
   const [endTime, setEndTime] = useState<number>();
-  const [dayOfWeek, setDayOfWeek] = useState<number>();
+  const [daysOfWeek, setDaysOfWeek] = useState<Array<number>>();
   const [currency, setCurrency] = useState<string>();
 
   const [errors, setErrors] = useState<
@@ -106,7 +108,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
     }
 
     const validationErrors = validateInput(
-      { ...formData, startTime, endTime, dayOfWeek },
+      { ...formData, startTime, endTime, daysOfWeek },
       currency as Currency,
       selectedInstructorId
     );
@@ -129,7 +131,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
     const lessonTemplateBody: LessonTemplateFormData = {
       availability: formData?.availability || MIN_AVAILABILITY,
       endTime: endTime,
-      dayOfWeek: [dayOfWeek],
+      daysOfWeek: daysOfWeek,
       startTime: startTime,
       location: formData?.location,
       room: formData?.room,
@@ -173,7 +175,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
   const [formData, setFormData] = useState<LessonTemplateFormData>({
     createdBy: "",
     currency: "",
-    dayOfWeek: [0],
+    daysOfWeek: [0],
     description: "",
     endTime: 0,
     instructor: { name: "", id: "" },
@@ -217,13 +219,13 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       </div>
 
       <div>
-        <SelectDropdown
+        <MultiSelect
           disabled={isReadOnly}
           labelValue={"Day of the Week"}
           options={dayOfWeekOptions}
-          onChange={setDayOfWeek}
+          onChange={setDaysOfWeek}
         />
-        {errors.dayOfWeek && <span>{errors.dayOfWeek}</span>}
+        {errors.daysOfWeek && <span>{errors.daysOfWeek}</span>}
       </div>
 
       <div>

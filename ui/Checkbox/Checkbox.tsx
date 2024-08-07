@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React, { FC, HTMLAttributes } from "react";
 
-interface Props extends HTMLInputElement {
+interface Props extends HTMLAttributes<HTMLInputElement> {
   id: string;
   displayName: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
