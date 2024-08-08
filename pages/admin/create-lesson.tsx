@@ -7,6 +7,7 @@ import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
 import withAdmin from "../../hoc/withAdmin";
 import { InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
+import TemplateList from "@/ui/List/TemplateList";
 
 function CreateLesson({
   session,
@@ -53,7 +54,8 @@ function CreateLesson({
       <div>Divider</div>
       <div className={"existingTemplate"}>
         <h2>Create from existing template</h2>
-        {/* TemplateList top 5 templates */}
+        <TemplateList />
+
         {/*  Pagination Section */}
       </div>
     </Layout>
