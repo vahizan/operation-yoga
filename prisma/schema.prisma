@@ -87,13 +87,13 @@ model Authenticator {
   @@unique([userId, credentialID])
 }
 
-model AdminLesson {
+model AdminLessonTemplate {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
   availableSlots  Int
   name          String
-  startTime     Int
-  endTime       Int
-  dayOfWeek     Int
+  startTime     DateTime
+  endTime       DateTime
+  daysOfWeek    Int[]
   instructorId  String  @db.ObjectId
   lessonCreatorId   String?  @db.ObjectId
   room          String?
@@ -110,8 +110,8 @@ model Lesson {
   instructorId    String  @db.ObjectId
   instructorName  String
   instructorImage String?
-  room            String?
-  location        String?
+  room            String
+  location        String
   price           Float
   currency        Currency  @default(USD)
 }

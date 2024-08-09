@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getLessonTemplatesById } from "../../../../helpers/admin/templatesHelper";
-import AdminLessonQuery from "../../interfaces/AdminLessonQuery";
+import { getAdminUserLessonTemplates } from "../../../../helpers/admin/templatesHelper";
 import PrismaClient from "../../../../connector/Prisma/prismaClient";
+import AdminLessonQuery from "@/pages/api/interfaces/AdminLessonQuery";
 
 export default async function handler(
   req: NextApiRequest,
@@ -29,8 +29,7 @@ export default async function handler(
   const page = q?.page || 1;
   const limit = q?.limit || 10;
   try {
-    const lessonTemplates = await getLessonTemplatesById(page, limit, {
-      id: q?.id,
+    const lessonTemplates = await getAdminUserLessonTemplates(page, limit, {
       instructorId: q?.userId,
     });
     res.status(200).json(lessonTemplates);

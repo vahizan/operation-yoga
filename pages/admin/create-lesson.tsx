@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../../ui/Layout";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 
@@ -8,13 +8,15 @@ import withAdmin from "../../hoc/withAdmin";
 import { InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import TemplateList from "@/ui/List/TemplateList";
+import axios from "axios";
 
 function CreateLesson({
   session,
+  templates,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
-    useState<LessonTemplateFormData>();
+    useState<LessonTemplateFormData>(templates);
   const [startDate, setStartDate] = useState<Date | null>();
   const [endDate, setEndDate] = useState<Date | null>();
 
@@ -54,7 +56,7 @@ function CreateLesson({
       <div>Divider</div>
       <div className={"existingTemplate"}>
         <h2>Create from existing template</h2>
-        <TemplateList />
+        <TemplateList data={templates} />
 
         {/*  Pagination Section */}
       </div>
@@ -64,7 +66,9 @@ function CreateLesson({
 
 export const getServerSideProps = async () => {
   const session = await getSession();
-  return { props: { session } };
+  const getTemplates = await axios("/api/admin/lesson-templates");
+  const data = getTemplates.data;
+  return { props: { session, templates: data } };
 };
 
 export default withAdmin(CreateLesson);
