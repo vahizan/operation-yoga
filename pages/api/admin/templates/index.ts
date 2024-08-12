@@ -16,7 +16,7 @@ export default async function handler(
   }
 
   if (!q?.userId) {
-    res.status(400);
+    res.status(400).json({ error: "User ID is required" });
     return;
   }
 

@@ -17,8 +17,8 @@ function CreateLesson({
   const [isSubmit, setSubmit] = useState<boolean>(false);
   const [lessonTemplateData, setLessonTemplateData] =
     useState<LessonTemplateFormData>(templates);
-  const [startDate, setStartDate] = useState<Date | null>();
-  const [endDate, setEndDate] = useState<Date | null>();
+  const [startTime, setStartTime] = useState<Date>(new Date());
+  const [endTime, setEndTime] = useState<Date>(new Date());
 
   useEffect(() => {
     if (lessonTemplateData) {
@@ -37,16 +37,20 @@ function CreateLesson({
         />
         <DatepickerWithLabel
           id={"start-date-range"}
-          label={"Start Date"}
-          selectedDate={new Date()}
-          onChange={(date) => setStartDate(date)}
+          label={"Start Time"}
+          selectedDate={startTime}
+          onChange={(date) => {
+            if (date) setStartTime(date);
+          }}
           errorMessage={""}
         />
         <DatepickerWithLabel
           id={"end-date-range"}
-          label={"End Date "}
+          label={"End Time "}
           selectedDate={new Date()}
-          onChange={(date) => setEndDate(date)}
+          onChange={(date) => {
+            if (date) setEndTime(date);
+          }}
           errorMessage={""}
         />
         <button onClick={() => setSubmit(true)} type="submit">
@@ -66,8 +70,8 @@ function CreateLesson({
 
 export const getServerSideProps = async () => {
   const session = await getSession();
-  const getTemplates = await axios("/api/admin/lesson-templates");
-  const data = getTemplates.data;
+  const getTemplates = await fetch("http:localhost:3000/api/admin/templates");
+  const data = await getTemplates.json();
   return { props: { session, templates: data } };
 };
 
