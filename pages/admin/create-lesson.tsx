@@ -70,7 +70,9 @@ function CreateLesson({
 
 export const getServerSideProps = async () => {
   const session = await getSession();
-  const getTemplates = await fetch("http:localhost:3000/api/admin/templates");
+  const getTemplates = await fetch(
+    `http:localhost:3000/api/admin/templates/${session?.user?.id}`
+  );
   const data = await getTemplates.json();
   return { props: { session, templates: data } };
 };

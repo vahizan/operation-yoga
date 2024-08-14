@@ -20,7 +20,7 @@ export const getLessonTemplatesById = async (
   });
 
   try {
-    return await mongoClient.adminLesson.findMany({
+    return await mongoClient.adminLessonTemplate.findMany({
       where: cleanedFilters,
       take: limit,
       skip: limit * (page - 1),
@@ -45,7 +45,7 @@ export const getAdminUserLessonTemplates = async (
   });
 
   try {
-    return await mongoClient.adminLesson.findMany({
+    return await mongoClient.adminLessonTemplate.findMany({
       where: cleanedFilters,
       take: limit,
       skip: limit * (page - 1),
