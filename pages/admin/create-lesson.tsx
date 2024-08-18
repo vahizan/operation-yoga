@@ -9,7 +9,10 @@ import { InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import TemplateList from "@/ui/List/TemplateList";
 import axios from "axios";
+import Pagination from "@/ui/Pagination/Pagination";
+import { usePagination } from "@/ui/Pagination/usePagination";
 
+const fetchUrl = `http:localhost:3000/api/admin/templates/`;
 function CreateLesson({
   session,
   templates,
@@ -19,7 +22,8 @@ function CreateLesson({
     useState<LessonTemplateFormData>(templates);
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
-
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentLimit, setCurrentLimit] = useState<number>(0);
   useEffect(() => {
     if (lessonTemplateData) {
       //create lesson out
@@ -61,8 +65,11 @@ function CreateLesson({
       <div className={"existingTemplate"}>
         <h2>Create from existing template</h2>
         <TemplateList data={templates} />
-
-        {/*  Pagination Section */}
+        <Pagination
+          fetchUrl={`${fetchUrl}/${session?.user?.id}`}
+          page={currentPage}
+          limit={currentLimit}
+        />
       </div>
     </Layout>
   );
@@ -70,9 +77,7 @@ function CreateLesson({
 
 export const getServerSideProps = async () => {
   const session = await getSession();
-  const getTemplates = await fetch(
-    `http:localhost:3000/api/admin/templates/${session?.user?.id}`
-  );
+  const getTemplates = await fetch(`${fetchUrl}/${session?.user?.id}`);
   const data = await getTemplates.json();
   return { props: { session, templates: data } };
 };
