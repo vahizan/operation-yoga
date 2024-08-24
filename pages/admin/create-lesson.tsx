@@ -5,14 +5,18 @@ import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
 import withAdmin from "../../hoc/withAdmin";
-import { InferGetServerSidePropsType } from "next";
-import { getSession } from "next-auth/react";
+import {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+  PreviewData,
+} from "next";
 import TemplateList from "@/ui/List/TemplateList";
-import axios from "axios";
 import Pagination from "@/ui/Pagination/Pagination";
-import { usePagination } from "@/ui/Pagination/usePagination";
+import { auth } from "../../auth";
+import { ParsedUrlQuery } from "querystring";
 
 const fetchUrl = `http:localhost:3000/api/admin/templates/`;
+
 function CreateLesson({
   session,
   templates,
@@ -75,10 +79,13 @@ function CreateLesson({
   );
 }
 
-export const getServerSideProps = async () => {
-  const session = await getSession();
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
+) => {
+  const session = await auth(context);
   const getTemplates = await fetch(`${fetchUrl}/${session?.user?.id}`);
   const data = await getTemplates.json();
+  console.log("data", data);
   return { props: { session, templates: data } };
 };
 

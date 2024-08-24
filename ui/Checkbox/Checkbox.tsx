@@ -13,14 +13,20 @@ export const Checkbox: FC<Props> = (props) => {
   return label ? (
     <>
       <label htmlFor={displayName}>{label}</label>
-      <input id={id} onChange={onChange} type="checkbox">
-        {displayName}
-      </input>
+      <input
+        id={id}
+        onChange={onChange}
+        type="checkbox"
+        defaultValue={displayName}
+      />
     </>
   ) : (
-    <input id={id} onChange={onChange} type="checkbox">
-      {displayName}
-    </input>
+    <input
+      id={id}
+      onChange={onChange}
+      type="checkbox"
+      defaultValue={displayName}
+    />
   );
 };
 
