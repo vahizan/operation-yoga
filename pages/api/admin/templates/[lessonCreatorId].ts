@@ -1,22 +1,22 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getLessonTemplatesById } from "../../../../helpers/admin/templatesHelper";
-import AdminLessonQuery from "../../interfaces/AdminLessonQuery";
 import PrismaClient from "../../../../connector/Prisma/prismaClient";
+import AdminLessonTemplateQuery from "@/pages/api/interfaces/AdminLessonTemplateQuery";
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<any[] | { error: string }>
 ) {
   const { method, query } = req;
-  const q = query as unknown as AdminLessonQuery;
+  const q = query as unknown as AdminLessonTemplateQuery;
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!q?.userId) {
-    res.status(400).json({ error: "User ID is required" });
+  if (!q?.lessonCreatorId) {
+    res.status(400);
     return;
   }
 
@@ -30,8 +30,7 @@ export default async function handler(
   const limit = q?.limit || 10;
   try {
     const lessonTemplates = await getLessonTemplatesById(page, limit, {
-      id: q?.id,
-      instructorId: q?.userId,
+      lessonCreatorId: q?.lessonCreatorId,
     });
     res.status(200).json(lessonTemplates);
   } catch (err) {

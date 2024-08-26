@@ -21,7 +21,7 @@ export default async function handler(
   }
 
   try {
-    const results = await mongoPrismaClient.adminLesson.create(reqBody);
+    const results = await mongoPrismaClient.adminLessonTemplate.create(reqBody);
     res.status(200).json(results);
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });

@@ -3,8 +3,18 @@ import PrismaClient from "../../connector/Prisma/prismaClient";
 export interface TemplateFilters {
   instructorId?: string;
   lessonCreatorId?: string;
-  id?: string;
+  ids?: string | string[];
 }
+
+const cleanedFilters = (filters: TemplateFilters): Record<string, any> => {
+  const cleanedFilters: Record<string, any> = {};
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value) {
+      cleanedFilters[key] = value;
+    }
+  });
+  return cleanedFilters;
+};
 
 export const getLessonTemplatesById = async (
   limit: number,
@@ -12,16 +22,10 @@ export const getLessonTemplatesById = async (
   filters: TemplateFilters
 ): Promise<any[]> => {
   const mongoClient = PrismaClient;
-  const cleanedFilters: Record<string, any> = {};
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value) {
-      cleanedFilters[key] = value;
-    }
-  });
 
   try {
     return await mongoClient.adminLessonTemplate.findMany({
-      where: cleanedFilters,
+      where: cleanedFilters(filters),
       take: limit,
       skip: limit * (page - 1),
     });
@@ -31,24 +35,17 @@ export const getLessonTemplatesById = async (
   }
 };
 
-export const getAdminUserLessonTemplates = async (
-  limit: number,
-  page: number,
-  filters: TemplateFilters
-): Promise<any[]> => {
+export const removeLessonTemplates = async (
+  templateIds: string[]
+): Promise<any[] | void> => {
   const mongoClient = PrismaClient;
-  const cleanedFilters: Record<string, any> = {};
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value) {
-      cleanedFilters[key] = value;
-    }
-  });
-
   try {
-    return await mongoClient.adminLessonTemplate.findMany({
-      where: cleanedFilters,
-      take: limit,
-      skip: limit * (page - 1),
+    await mongoClient.adminLessonTemplate.deleteMany({
+      where: {
+        id: {
+          in: templateIds,
+        },
+      },
     });
   } catch (err) {
     const error = err as Error;

@@ -1,7 +1,7 @@
 import { ILesson, ISession } from "../pages/api/interfaces";
 import Email from "./interfaces/Email";
 import axios from "axios";
-import AdminLessonQuery from "../pages/api/interfaces/AdminLessonQuery";
+import AdminLessonTemplateQuery from "@/pages/api/interfaces/AdminLessonTemplateQuery";
 import { IPaginatedQuery } from "../pages/api/interfaces/IPaginatedQuery";
 
 export const getSchedule = async (
@@ -28,19 +28,17 @@ export const updateLessonTemplate = async (body: any): Promise<any> => {
 };
 
 export const getAdminLessons = async (
-  filters: AdminLessonQuery
+  filters: AdminLessonTemplateQuery
 ): Promise<{ data: any[] }> => {
   let query = "";
   if (filters.userId) {
     query += `userId=${filters.userId}`;
   }
-  if (filters.id) {
-    query += `&templateId=${filters.id}`;
-  }
-  if (filters.lessonCreatorId) {
-    query += `createdById=${filters.lessonCreatorId}`;
+  if (filters.ids) {
+    query += `&ids=${JSON.stringify(filters.ids)}`;
   }
 
+  // const val = new URLSearchParams(filters).toString();
   return await axios.get(
     `/api/admin/templates?${query}&limit=${filters.limit || 10}&page=${
       filters.page

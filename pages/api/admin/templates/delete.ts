@@ -1,22 +1,25 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getAdminUserLessonTemplates } from "../../../../helpers/admin/templatesHelper";
+import {
+  getLessonTemplatesById,
+  removeLessonTemplates,
+} from "../../../../helpers/admin/templatesHelper";
+import AdminLessonTemplateQuery from "../../interfaces/AdminLessonTemplateQuery";
 import PrismaClient from "../../../../connector/Prisma/prismaClient";
-import AdminLessonQuery from "@/pages/api/interfaces/AdminLessonQuery";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<any[] | { error: string }>
+  res: NextApiResponse<string | { error: string }>
 ) {
   const { method, query } = req;
-  const q = query as unknown as AdminLessonQuery;
+  const q = query as unknown as AdminLessonTemplateQuery;
 
   if (method !== "GET") {
     res.status(404).json({ error: "Method Invalid" });
     return;
   }
 
-  if (!q?.userId) {
-    res.status(400);
+  if (!q?.ids) {
+    res.status(400).json({ error: "Template ids are required" });
     return;
   }
 
@@ -26,13 +29,10 @@ export default async function handler(
     res.status(403).json({ error: "Unauthorized" });
     return;
   }
-  const page = q?.page || 1;
-  const limit = q?.limit || 10;
+
   try {
-    const lessonTemplates = await getAdminUserLessonTemplates(page, limit, {
-      instructorId: q?.userId,
-    });
-    res.status(200).json(lessonTemplates);
+    await removeLessonTemplates(!Array.isArray(q.ids) ? [q.ids] : q?.ids);
+    res.status(200).json(`${q.ids.length} templates removed`);
   } catch (err) {
     const error = err as Error;
     console.error(error.message);

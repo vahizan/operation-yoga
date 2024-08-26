@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import handler from "../[lessonCreatorId]";
+import handler from "../delete";
 import { prismaMock } from "../../../../../prismaMockSingleton";
 
-describe("API Get Template By CreatorId Handler Tests", () => {
+describe("API Delete Template by their ids - Handler Tests", () => {
   const jsonMock = jest.fn();
   const statusMock = jest.fn();
 
@@ -42,16 +42,16 @@ describe("API Get Template By CreatorId Handler Tests", () => {
     await expect(jsonMock).toHaveBeenCalledWith({ error: "Method Invalid" });
   });
 
-  it("should return 500 if an error occurs when getting templates", async () => {
+  it("should return 500 if an error occurs when removing templates", async () => {
     const req = mockRequest();
     req.query = {
-      lessonCreatorId: "543",
+      ids: "543",
       page: "!",
       limit: "a",
     };
     const res = mockResponse();
 
-    prismaMock.adminLessonTemplate.findMany.mockRejectedValue(
+    prismaMock.adminLessonTemplate.deleteMany.mockRejectedValue(
       new Error("Connection Invalid")
     );
 
@@ -105,29 +105,17 @@ describe("API Get Template By CreatorId Handler Tests", () => {
   it("should return 200 when admin lessons are received successfully", async () => {
     const req = mockRequest();
     req.query = {
-      page: "2",
-      limit: "10",
-      lessonCreatorId: "10",
+      ids: ["2"],
     };
     const res = mockResponse();
 
-    prismaMock.adminLessonTemplate.findMany.mockResolvedValue([
-      {
-        id: "1",
-        instructorId: "10",
-        lessonCreatorId: "10",
-      } as any,
-    ]);
+    prismaMock.adminLessonTemplate.deleteMany.mockResolvedValue({
+      count: 1,
+    });
 
     await handler(req, res);
 
     expect(res.status).toHaveBeenCalledWith(200);
-    await expect(jsonMock).toHaveBeenCalledWith([
-      {
-        id: "1",
-        instructorId: "10",
-        lessonCreatorId: "10",
-      },
-    ]);
+    await expect(jsonMock).toHaveBeenCalledWith("1 templates removed");
   });
 });

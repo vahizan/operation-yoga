@@ -14,25 +14,37 @@ import TemplateList from "@/ui/List/TemplateList";
 import Pagination from "@/ui/Pagination/Pagination";
 import { auth } from "../../auth";
 import { ParsedUrlQuery } from "querystring";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
-const fetchUrl = `http:localhost:3000/api/admin/templates/`;
+const fetchUrl = `/api/admin/templates`;
 
 function CreateLesson({
   session,
-  templates,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSubmit, setSubmit] = useState<boolean>(false);
-  const [lessonTemplateData, setLessonTemplateData] =
-    useState<LessonTemplateFormData>(templates);
+  const [lessonTemplateData, setLessonTemplateData] = useState<
+    LessonTemplateFormData[] | undefined
+  >();
   const [startTime, setStartTime] = useState<Date>(new Date());
   const [endTime, setEndTime] = useState<Date>(new Date());
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentLimit, setCurrentLimit] = useState<number>(0);
   useEffect(() => {
-    if (lessonTemplateData) {
-      //create lesson out
+    if (session?.user) {
+      console.log(session);
+      axios
+        .get(`${fetchUrl}/${session?.user?.id}`)
+        .then((res: AxiosResponse<LessonTemplateFormData[]>) => {
+          setLessonTemplateData(res.data);
+          console.log("res", res.data);
+        })
+        .catch((e) => {
+          const error = e as AxiosError;
+          console.log(error.message);
+          console.error(e);
+        });
     }
-  }, [lessonTemplateData]);
+  }, [session]);
   return (
     <Layout>
       <div>
@@ -66,15 +78,17 @@ function CreateLesson({
         </button>
       </div>
       <div>Divider</div>
-      <div className={"existingTemplate"}>
-        <h2>Create from existing template</h2>
-        <TemplateList data={templates} />
-        <Pagination
-          fetchUrl={`${fetchUrl}/${session?.user?.id}`}
-          page={currentPage}
-          limit={currentLimit}
-        />
-      </div>
+      {lessonTemplateData && (
+        <div className={"existingTemplate"}>
+          <h2>Create from existing template</h2>
+          <TemplateList data={lessonTemplateData} />
+          <Pagination
+            fetchUrl={`${fetchUrl}/${session?.user?.id}`}
+            page={currentPage}
+            limit={currentLimit}
+          />
+        </div>
+      )}
     </Layout>
   );
 }
@@ -83,10 +97,7 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
 ) => {
   const session = await auth(context);
-  const getTemplates = await fetch(`${fetchUrl}/${session?.user?.id}`);
-  const data = await getTemplates.json();
-  console.log("data", data);
-  return { props: { session, templates: data } };
+  return { props: { session } };
 };
 
 export default withAdmin(CreateLesson);
