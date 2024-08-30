@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../ui/Layout";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
-
 import { LessonTemplateFormData } from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
 import withAdmin from "../../hoc/withAdmin";
 import {
+  GetServerSideProps,
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
   PreviewData,
@@ -14,9 +14,10 @@ import TemplateList from "@/ui/List/TemplateList";
 import Pagination from "@/ui/Pagination/Pagination";
 import { auth } from "../../auth";
 import { ParsedUrlQuery } from "querystring";
+import { Session } from "next-auth";
 import axios, { AxiosError, AxiosResponse } from "axios";
 
-const fetchUrl = `/api/admin/templates`;
+const fetchUrl = `${process.env.BASE_URL}/api/admin/templates`;
 
 function CreateLesson({
   session,
@@ -29,9 +30,9 @@ function CreateLesson({
   const [endTime, setEndTime] = useState<Date>(new Date());
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentLimit, setCurrentLimit] = useState<number>(0);
+
   useEffect(() => {
     if (session?.user) {
-      console.log(session);
       axios
         .get(`${fetchUrl}/${session?.user?.id}`)
         .then((res: AxiosResponse<LessonTemplateFormData[]>) => {
@@ -40,16 +41,15 @@ function CreateLesson({
         })
         .catch((e) => {
           const error = e as AxiosError;
-          console.log(error.message);
           console.error(e);
         });
     }
   }, [session]);
+
   return (
     <Layout>
       <div>
         <h1>Create Lesson</h1>
-
         <LessonTemplateForm
           onSubmit={setLessonTemplateData}
           setSubmit={setSubmit}
@@ -93,11 +93,17 @@ function CreateLesson({
   );
 }
 
-export const getServerSideProps = async (
+export const getServerSideProps = (async (
   context: GetServerSidePropsContext<ParsedUrlQuery, PreviewData>
 ) => {
   const session = await auth(context);
-  return { props: { session } };
-};
+  return {
+    props: {
+      session,
+    },
+  };
+}) as GetServerSideProps<{
+  session: Session;
+}>;
 
 export default withAdmin(CreateLesson);

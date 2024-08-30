@@ -2,14 +2,7 @@ import { useSession } from "next-auth/react";
 import { ComponentType, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { UserType } from "../enum/UserType";
-
-export interface User {
-  scope: string;
-  userType: UserType;
-  name: string;
-  id: string;
-  email: string;
-}
+import { User } from "../types/User";
 
 const withAdmin = <P extends object>(
   WrappedComponent: ComponentType<P>

@@ -1,3 +1,4 @@
+"use server";
 import { UserType } from "../../enum/UserType";
 import PrismaClient from "../../connector/Prisma/prismaClient";
 

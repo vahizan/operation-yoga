@@ -2,10 +2,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import handler from "../index";
 import { prismaMock } from "../../../../../prismaMockSingleton";
 import { auth } from "../../../../../auth";
+import { UserType } from "../../../../../enum/UserType";
 
 jest.mock("../../../../../auth", () => ({
   auth: jest.fn().mockResolvedValue({
-    user: { id: "123" },
+    user: { id: "123", userType: "CUSTOMER" },
   }),
 }));
 
