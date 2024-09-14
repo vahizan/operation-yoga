@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  fireEvent,
-  getByRole,
-  render,
-  screen,
-  waitFor,
-} from "@testing-library/react";
-import Checkbox, { CheckboxProps } from "../Checkbox";
-import userEvent from "@testing-library/user-event";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import Checkbox from "../Checkbox";
 
 const mockOnChange = jest.fn();
 

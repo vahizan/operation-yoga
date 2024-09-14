@@ -1,9 +1,8 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import MultiSelectCheckbox, {
   MultiSelectCheckboxOption,
 } from "./MultiSelectCheckbox";
-import userEvent from "@testing-library/user-event";
 
 const options: MultiSelectCheckboxOption[] = [
   { name: "Option 1", value: "1" },
@@ -13,41 +12,44 @@ const options: MultiSelectCheckboxOption[] = [
 
 const mockOnChange = jest.fn();
 
-const renderComponent = (props = {}) => {
-  const defaultProps = {
-    options,
-    onChange: mockOnChange,
-  };
-
-  return render(
-    <MultiSelectCheckbox
-      labelValue={"Multi Select Example"}
-      {...defaultProps}
-      {...props}
-    />
-  );
-};
-
 describe("MultiSelectCheckbox", () => {
   beforeEach(jest.resetAllMocks);
 
   it("should render the component", () => {
-    const { getByText } = renderComponent();
+    const { getByText } = render(
+      <MultiSelectCheckbox
+        labelValue={"Multi Select Example"}
+        onChange={mockOnChange}
+        options={options}
+      />
+    );
     expect(getByText("Multi Select Example")).toBeInTheDocument();
   });
 
   it("should render the options", () => {
-    const { getByText } = renderComponent();
+    const { getByText } = render(
+      <MultiSelectCheckbox
+        labelValue={"Multi Select Example"}
+        onChange={mockOnChange}
+        options={options}
+      />
+    );
     options.forEach((option) => {
       expect(getByText(option.name)).toBeInTheDocument();
     });
   });
 
   it("should call the onChange function when an option is clicked", async () => {
-    const { getByText } = renderComponent();
-    const option = getByText("Option 1");
+    render(
+      <MultiSelectCheckbox
+        labelValue={"Multi Select Example"}
+        onChange={mockOnChange}
+        options={options}
+      />
+    );
+    const option = screen.getByTestId("Option 1-0");
 
-    await userEvent.click(option);
+    fireEvent.click(option);
 
     await waitFor(() => {
       expect(mockOnChange).toHaveBeenCalled();

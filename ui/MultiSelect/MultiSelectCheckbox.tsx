@@ -37,12 +37,11 @@ const MultiSelectCheckbox: React.FC<Props> = (props) => {
     setSelectedOptions(selectedOptions);
     onChange(selectedOptions);
   };
-  console.log("selectedOptions", selectedOptions);
 
   return (
     <>
       <label htmlFor={labelValue}>{labelValue}</label>
-      {Object.values(options).map((option) => {
+      {Object.values(options).map((option, i) => {
         return (
           <Checkbox
             {...checkboxProps}
@@ -50,7 +49,7 @@ const MultiSelectCheckbox: React.FC<Props> = (props) => {
             label={option.name}
             onChange={handleChange}
             defaultChecked={option.checked}
-            id={`${option.name}-${option.value}`}
+            id={`${option.name}-${i}`}
           />
         );
       })}
