@@ -14,8 +14,7 @@ import {
 import { validateInput } from "./helpers";
 import { Currency } from "../../model/admin/enums";
 import { useSession } from "next-auth/react";
-import MultiSelect from "@/ui/MultiSelect/MultiSelect";
-import { da } from "date-fns/locale";
+import MultiSelectCheckbox from "@/ui/MultiSelect/MultiSelectCheckbox";
 
 interface LessonTemplateFormProps {
   instructors?: any[];
@@ -27,7 +26,6 @@ interface LessonTemplateFormProps {
 }
 
 const dayOfWeekOptions = [
-  { name: "Select an option", value: -1 },
   { name: "Sunday", value: 7 },
   { name: "Monday", value: 1 },
   { name: "Tuesday", value: 2 },
@@ -219,7 +217,7 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
       </div>
 
       <div>
-        <MultiSelect
+        <MultiSelectCheckbox
           disabled={isReadOnly}
           labelValue={"Day of the Week"}
           options={dayOfWeekOptions}

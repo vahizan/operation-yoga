@@ -1,50 +1,53 @@
 import React, {
   Dispatch,
-  SelectHTMLAttributes,
+  HTMLAttributes,
   SetStateAction,
   useState,
 } from "react";
 import Checkbox from "@/ui/Checkbox/Checkbox";
 
-export interface SelectOption {
+export interface MultiSelectCheckboxOption {
   name: string;
   value: any;
   checked?: boolean;
 }
 
-interface SelectProps extends SelectHTMLAttributes<any> {
+interface Props extends HTMLAttributes<HTMLInputElement> {
   labelValue: string;
-  options: SelectOption[];
+  options: MultiSelectCheckboxOption[];
   onChange: Dispatch<SetStateAction<any>>;
 }
 
-const toMap = (options: SelectOption[]) => {
-  const optionsMap: Record<string, SelectOption> = {};
+const toMap = (options: MultiSelectCheckboxOption[]) => {
+  const optionsMap: Record<string, MultiSelectCheckboxOption> = {};
   options.forEach((option) => {
     optionsMap[option.name] = option;
   });
   return optionsMap;
 };
-const MultiSelect: React.FC<SelectProps> = (props) => {
-  const { options, onChange, labelValue, ...selectProps } = props;
+const MultiSelectCheckbox: React.FC<Props> = (props) => {
+  const { options, onChange, labelValue, ...checkboxProps } = props;
   const [selectedOptions, setSelectedOptions] = useState(toMap(options));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const option = selectedOptions[e.target.value];
-    const newOption = { ...option, checked: !option.checked };
-    const newValue = { ...selectedOptions, newOption };
-    setSelectedOptions(newValue);
-    onChange(newValue);
+
+    selectedOptions[e.target.value] = { ...option, checked: !option.checked };
+
+    setSelectedOptions(selectedOptions);
+    onChange(selectedOptions);
   };
+  console.log("selectedOptions", selectedOptions);
 
   return (
     <>
       <label htmlFor={labelValue}>{labelValue}</label>
-      {Object.values(selectedOptions).map((option) => {
+      {Object.values(options).map((option) => {
         return (
           <Checkbox
-            {...selectProps}
+            {...checkboxProps}
             displayName={option.name}
+            label={option.name}
             onChange={handleChange}
             defaultChecked={option.checked}
             id={`${option.name}-${option.value}`}
@@ -55,4 +58,4 @@ const MultiSelect: React.FC<SelectProps> = (props) => {
   );
 };
 
-export default MultiSelect;
+export default MultiSelectCheckbox;

@@ -1,32 +1,31 @@
 import React, { FC, HTMLAttributes } from "react";
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
+export interface CheckboxProps extends HTMLAttributes<HTMLInputElement> {
   id: string;
   displayName: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
 }
 
-//TODO: ADD unit tests
-export const Checkbox: FC<Props> = (props) => {
-  const { id, displayName, label, onChange } = props;
-  return label ? (
+export const Checkbox: FC<CheckboxProps> = ({
+  id,
+  displayName,
+  label,
+  onChange,
+  ...otherProps
+}) => {
+  return (
     <>
-      <label htmlFor={displayName}>{label}</label>
+      {label && <label htmlFor={displayName}>{label}</label>}
       <input
+        {...otherProps}
         id={id}
+        data-testid={id}
         onChange={onChange}
         type="checkbox"
-        defaultValue={displayName}
+        name={displayName}
       />
     </>
-  ) : (
-    <input
-      id={id}
-      onChange={onChange}
-      type="checkbox"
-      defaultValue={displayName}
-    />
   );
 };
 
