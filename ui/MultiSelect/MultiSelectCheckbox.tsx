@@ -1,6 +1,7 @@
 import React, {
   Dispatch,
   HTMLAttributes,
+  InputHTMLAttributes,
   SetStateAction,
   useState,
 } from "react";
@@ -12,7 +13,7 @@ export interface MultiSelectCheckboxOption {
   checked?: boolean;
 }
 
-interface Props extends HTMLAttributes<HTMLInputElement> {
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
   labelValue: string;
   options: MultiSelectCheckboxOption[];
   onChange: Dispatch<SetStateAction<any>>;

@@ -3,7 +3,7 @@ import Layout from "@/ui/Layout";
 import { useSession } from "next-auth/react";
 import { UserType } from "../enum/UserType";
 import { useRouter } from "next/navigation";
-import { User } from "../hoc/withAdmin";
+import { User } from "../types/User";
 
 export default function unauthorized() {
   const router = useRouter();

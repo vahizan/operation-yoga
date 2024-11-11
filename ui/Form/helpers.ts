@@ -33,8 +33,8 @@ export const validateInput = (
       "Invalid duration, start time cannot be greater than end time";
   }
 
-  if (!formData.dayOfWeek) {
-    errorValues.dayOfWeek =
+  if (!formData.daysOfWeek) {
+    errorValues.daysOfWeek =
       "Please specify the day of the week the lesson will take place";
   }
 
