@@ -6,6 +6,7 @@ export interface LessonTemplateFormDataValidation {
   location?: string;
   price?: string;
   lessonName?: string;
+  lessonDate?: string;
   instructor?: string;
   availability?: string;
   daysOfWeek?: string;
@@ -22,6 +23,7 @@ export interface LessonTemplateFormData {
   price?: number;
   createdBy?: string;
   lessonName?: string;
+  lessonDate?: Date;
   currency?: string;
   instructor: { name: string; id: string };
   availability?: number;

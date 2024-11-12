@@ -197,26 +197,6 @@ const LessonTemplateForm: React.FC<LessonTemplateFormProps> = ({
         errorMessage={errors.description}
       />
       <div>
-        <SelectDropdown
-          disabled={isReadOnly}
-          labelValue={"Start Time"}
-          options={timeOptions}
-          onChange={setStartTime}
-        />
-        {errors.startTime && <span>{errors.startTime}</span>}
-      </div>
-
-      <div>
-        <SelectDropdown
-          disabled={isReadOnly}
-          labelValue={"End Time"}
-          options={timeOptions}
-          onChange={setEndTime}
-        />
-        {errors.endTime && <span>{errors.endTime}</span>}
-      </div>
-
-      <div>
         <MultiSelectCheckbox
           disabled={isReadOnly}
           labelValue={"Day of the Week"}

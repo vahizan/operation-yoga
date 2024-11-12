@@ -1,6 +1,5 @@
 import React, {
   Dispatch,
-  HTMLAttributes,
   InputHTMLAttributes,
   SetStateAction,
   useState,
@@ -31,12 +30,19 @@ const MultiSelectCheckbox: React.FC<Props> = (props) => {
   const [selectedOptions, setSelectedOptions] = useState(toMap(options));
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const option = selectedOptions[e.target.value];
+    const option = selectedOptions[e.target.name];
 
-    selectedOptions[e.target.value] = { ...option, checked: !option.checked };
+    selectedOptions[e.target.name] = {
+      ...option,
+      checked: e.target.checked,
+    };
 
     setSelectedOptions(selectedOptions);
-    onChange(selectedOptions);
+
+    const values = Object.values(selectedOptions)
+      .filter((option) => option.checked)
+      .map((option) => option.value);
+    onChange(values);
   };
 
   return (
@@ -49,7 +55,7 @@ const MultiSelectCheckbox: React.FC<Props> = (props) => {
             displayName={option.name}
             label={option.name}
             onChange={handleChange}
-            defaultChecked={option.checked}
+            defaultChecked={option?.checked}
             id={`${option.name}-${i}`}
           />
         );

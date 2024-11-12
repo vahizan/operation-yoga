@@ -42,9 +42,9 @@ export const validateInput = (
     errorValues.price = "Price is required";
   }
 
-  if (!currency) {
-    errorValues.currency = "Currency is required";
-  }
+  // if (currency) {
+  //   errorValues.currency = "Currency must be valid";
+  // }
 
   if (!formData.lessonName) {
     errorValues.lessonName = "Lesson name is required";
@@ -52,6 +52,10 @@ export const validateInput = (
 
   if (!selectedInstructorId) {
     errorValues.instructor = "Instructor is required";
+  }
+
+  if (!formData.lessonDate) {
+    errorValues.instructor = "Lesson date is required";
   }
 
   return errorValues;

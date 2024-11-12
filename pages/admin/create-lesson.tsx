@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../ui/Layout";
 import LessonTemplateForm from "../../ui/Form/LessonTemplateForm";
-import { LessonTemplateFormData } from "../../ui/Form/types";
+import {
+  LessonTemplateFormData,
+  LessonTemplateFormDataValidation,
+} from "../../ui/Form/types";
 import DatepickerWithLabel from "../../ui/Calendar/DatepickerWithLabel";
 import withAdmin from "../../hoc/withAdmin";
 import {
@@ -16,6 +19,9 @@ import { auth } from "../../auth";
 import { ParsedUrlQuery } from "querystring";
 import { Session } from "next-auth";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import SelectDropdown from "@/ui/SelectDropdown/SelectDropdown";
+import { timeOptions } from "@/ui/Form/constants";
+import { validateInput } from "@/ui/Form/helpers";
 
 const fetchUrl = `${process.env.BASE_URL}/api/admin/templates`;
 
@@ -23,20 +29,25 @@ function CreateLesson({
   session,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [isSubmit, setSubmit] = useState<boolean>(false);
-  const [lessonTemplateData, setLessonTemplateData] = useState<
+  const [savedLessonTemplates, setSavedLessonTemplates] = useState<
     LessonTemplateFormData[] | undefined
   >();
-  const [startTime, setStartTime] = useState<Date>(new Date());
-  const [endTime, setEndTime] = useState<Date>(new Date());
+  const [lessonTemplateData, setLessonTemplateData] =
+    useState<LessonTemplateFormData>();
+  const [lessonDate, setLessonDate] = useState<Date>(new Date());
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [currentLimit, setCurrentLimit] = useState<number>(0);
-
+  const [startTime, setStartTime] = useState<number>();
+  const [endTime, setEndTime] = useState<number>();
+  const [errors, setErrors] = useState<
+    Partial<LessonTemplateFormDataValidation>
+  >({});
   useEffect(() => {
     if (session?.user) {
       axios
         .get(`${fetchUrl}/${session?.user?.id}`)
         .then((res: AxiosResponse<LessonTemplateFormData[]>) => {
-          setLessonTemplateData(res.data);
+          setSavedLessonTemplates(res.data);
           console.log("res", res.data);
         })
         .catch((e) => {
@@ -45,6 +56,13 @@ function CreateLesson({
         });
     }
   }, [session]);
+
+  useEffect(() => {
+    if (!isSubmit || !lessonTemplateData) {
+      return;
+    }
+    validateInput(lessonTemplateData, undefined, undefined);
+  }, [isSubmit]);
 
   return (
     <Layout>
@@ -56,32 +74,42 @@ function CreateLesson({
           isSubmit={isSubmit}
         />
         <DatepickerWithLabel
-          id={"start-date-range"}
-          label={"Start Time"}
-          selectedDate={startTime}
+          id={"lesson-date"}
+          label={"Lesson Date"}
+          selectedDate={lessonDate}
           onChange={(date) => {
-            if (date) setStartTime(date);
+            if (date) setLessonDate(date);
           }}
-          errorMessage={""}
+          errorMessage={errors?.lessonDate}
         />
-        <DatepickerWithLabel
-          id={"end-date-range"}
-          label={"End Time "}
-          selectedDate={new Date()}
-          onChange={(date) => {
-            if (date) setEndTime(date);
-          }}
-          errorMessage={""}
-        />
+        <div>
+          <SelectDropdown
+            labelValue={"Start Time"}
+            options={timeOptions}
+            onChange={setStartTime}
+          />
+          {errors.startTime && <span>{errors.startTime}</span>}
+        </div>
+
+        <div>
+          <SelectDropdown
+            labelValue={"End Time"}
+            options={timeOptions}
+            onChange={setEndTime}
+          />
+          {errors.endTime && <span>{errors.endTime}</span>}
+        </div>
+
         <button onClick={() => setSubmit(true)} type="submit">
           Create Lesson
         </button>
       </div>
+
       <div>Divider</div>
-      {lessonTemplateData && (
+      {savedLessonTemplates && (
         <div className={"existingTemplate"}>
           <h2>Create from existing template</h2>
-          <TemplateList data={lessonTemplateData} />
+          <TemplateList data={savedLessonTemplates} />
           <Pagination
             fetchUrl={`${fetchUrl}/${session?.user?.id}`}
             page={currentPage}

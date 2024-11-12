@@ -27,8 +27,8 @@ export default function Layout({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  const { status, data } = useSession();
-  console.log("data", data);
+  const { status } = useSession();
+
   return (
     <>
       <Head>
